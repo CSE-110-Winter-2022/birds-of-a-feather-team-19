@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Birdsofafeatherteam19">
         <activity
+            android:name=".AddClasses"
+            android:exported="false" />
+        <activity
+            android:name=".PhoteURL"
+            android:exported="false" />
+        <activity
             android:name=".UserNameActivity"
             android:exported="false" />
         <activity
