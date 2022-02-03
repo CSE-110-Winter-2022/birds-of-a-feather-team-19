@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhoteURL">
+    tools:context=".PhotoURL">
 
 
     <EditText
-        android:id="@+id/phote_url"
+        android:id="@+id/photo_url"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="Phote URL"
+        android:hint="Photo URL"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,13 +39,13 @@
         android:lineHeight="16sp"
         android:textSize="18sp"
         android:textStyle="bold"
+        tools:text="Please Submit Your Photo URL Below:"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/phote_url"
-        app:layout_constraintHorizontal_bias="0.169"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.339"
-        tools:text="Please Submit Your Photo URL Below:" />
+        app:layout_constraintVertical_bias="0.381" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

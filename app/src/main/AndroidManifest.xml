@@ -13,7 +13,7 @@
             android:name=".AddClasses"
             android:exported="false" />
         <activity
-            android:name=".PhoteURL"
+            android:name=".PhotoURL"
             android:exported="false" />
         <activity
             android:name=".UserNameActivity"
