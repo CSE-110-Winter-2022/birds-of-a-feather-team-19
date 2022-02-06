@@ -14,7 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/european_starling_1024x1024" />
+        app:srcCompat="@drawable/bird" />
 
     <EditText
         android:id="@+id/editTextUserName"

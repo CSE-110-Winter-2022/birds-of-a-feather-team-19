@@ -2,12 +2,10 @@ package com.example.birds_of_a_feather_team_19;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class PhotoURL extends AppCompatActivity {
     public String photoURL;
@@ -26,7 +24,7 @@ public class PhotoURL extends AppCompatActivity {
 
     public void onSubmitURL(View view) {
         setURL();
-        Intent intent = new Intent(this, AddClasses.class);
+        Intent intent = new Intent(this, AddClassActivity.class);
         intent.putExtra("photo_url", photoURL);
         startActivity(intent);
     }
