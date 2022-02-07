@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Birdsofafeatherteam19">
         <activity
             android:name=".AddClassActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".PhotoURL"
             android:exported="false" />
