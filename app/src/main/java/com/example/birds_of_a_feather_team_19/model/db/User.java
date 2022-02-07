@@ -16,4 +16,10 @@ public class User {
 
     @ColumnInfo(name = "photoUrl")
     public String photoUrl;
+
+//    public User(int userId, String name, String photoUrl) {
+//        this.userId = userId;
+//        this.name = name;
+//        this.photoUrl = photoUrl;
+//    }
 }

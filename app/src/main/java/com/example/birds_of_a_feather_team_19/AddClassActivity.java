@@ -35,14 +35,16 @@ public class AddClassActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
         user = db.userWithCoursesDao().get(userId);
 
-        setTitle(user.getName());
+//        setTitle(user.getName());
 
         Spinner yearSpinner = (Spinner) findViewById(R.id.spinnerYear);
         ArrayAdapter<CharSequence> yearAdapter =
                 ArrayAdapter.createFromResource(this, R.array.year, android.R.layout.simple_spinner_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(yearAdapter);
-        Spinner quarterSpinner = (Spinner) findViewById(R.id.spinnerYear);
+
+
+        Spinner quarterSpinner = (Spinner) findViewById(R.id.spinnerQuarter);
         ArrayAdapter<CharSequence> quarterAdapter =
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
         quarterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -55,28 +57,35 @@ public class AddClassActivity extends AppCompatActivity {
     public void onEnterClicked(View view) {
         String courseName = "";
         Spinner yearSpinner = (Spinner) findViewById(R.id.spinnerYear);
-        Spinner quarterSpinner = (Spinner) findViewById(R.id.spinnerYear);
+        Spinner quarterSpinner = (Spinner) findViewById(R.id.spinnerQuarter);
         TextView subject = (TextView) findViewById(R.id.editTextSubject);
         TextView courseNumber = (TextView) findViewById(R.id.editTextCourseNumber);
+        if (subject.getText().toString() == null || courseNumber.getText().toString() == null) {
+            return;
+        }
         courseName = yearSpinner.getSelectedItem().toString()
                 + quarterSpinner.getSelectedItem().toString()
                 + subject.getText().toString()
                 + courseNumber.getText().toString();
-        courseName.toLowerCase();
+        courseName = courseName.toLowerCase();
         courses.add(courseName);
     }
 
     public void onDoneClicked(View view) {
         /* for each element in courses, add to db;*/
-        int userId = user.getId();
+//        int userId = user.getId();
         for (String course : courses) {
+            System.out.println(course);
             int newCourseId = db.courseDao().maxId() + 1;
-            Course newCourse = new Course(newCourseId, userId, course);
+            Course newCourse = new Course(newCourseId, 0, course);
             db.courseDao().insert(newCourse);
             // System.out.println(userId + ", " + newCourseId + ", " + course);
         }
-        for (Course course : db.courseDao().getForUser(userId)) {
-            System.out.println(course.course);
-        }
+        // need to somehow implement user functionality
+//        for (Course course : db.courseDao().getForUser(0)) {
+//            System.out.println(course.course);
+//        }
+        // Intent intent .....
+        finish();
     }
 }

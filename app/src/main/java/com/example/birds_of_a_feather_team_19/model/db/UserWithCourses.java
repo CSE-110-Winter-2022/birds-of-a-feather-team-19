@@ -34,4 +34,6 @@ public class UserWithCourses implements IUser {
     public List<String> getCourses() {
         return this.courses;
     }
+
+
 }
