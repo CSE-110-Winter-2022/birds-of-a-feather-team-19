@@ -19,10 +19,10 @@ jobs:
         
       - name: Instrumentation Test
         uses: reactivecircus/android-emulator-runner@v2
-          with:
-            api-level: 30
-            profile: Nexus 6
-            script: ./gradlew connectedAndroidTest
+        with:
+          api-level: 30
+          profile: Nexus 6
+          script: ./gradlew connectedAndroidTest
 
       # Report the results
       - name: Android Test Report
