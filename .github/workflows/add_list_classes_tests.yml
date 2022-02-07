@@ -16,6 +16,13 @@ jobs:
       # Execute unit tests
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
+        
+      - name: Instrumentation Test
+        uses: reactivecircus/android-emulator-runner@v2
+          with:
+            api-level: 30
+            profile: Nexus 6
+            script: ./gradlew connectedAndroidTest
 
       # Report the results
       - name: Android Test Report
