@@ -2,7 +2,7 @@ name: Run Add List of Classes Tests
 on: [push]
 
 jobs:
-  test:
+  unit-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -17,14 +17,20 @@ jobs:
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
         
-      - name: Instrumentation Test
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 30
-          profile: Nexus 6
-          script: ./gradlew connectedAndroidTest
-
       # Report the results
       - name: Android Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+        
+  instrumentation-tests:
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          profile: Nexus 6
+          script: ./gradlew connectedCheck
