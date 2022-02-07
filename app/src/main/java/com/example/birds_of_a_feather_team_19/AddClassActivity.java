@@ -86,6 +86,23 @@ public class AddClassActivity extends AppCompatActivity {
 //            System.out.println(course.course);
 //        }
         // Intent intent .....
-        finish();
+        SharedPreferences sharedPreferences = getSharedPreferences("prefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+        editor.putStringSet("courses_list", courses);
+
+        editor.apply();
+
+        String s = "";
+
+        for (String str : courses) {
+            s += str + "\n";
+            System.out.println(str);
+        }
+        TextView courses_view = (TextView) findViewById(R.id.course_list_view);
+        courses_view.setText(s);
+
+//        finish();
     }
 }

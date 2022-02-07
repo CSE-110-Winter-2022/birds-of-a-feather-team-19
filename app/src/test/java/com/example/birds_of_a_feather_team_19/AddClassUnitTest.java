@@ -1,84 +1,66 @@
-//package com.example.birds_of_a_feather_team_19;
-//
-//import org.junit.Rule;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//
-//import static org.junit.Assert.*;
-//
-//import android.view.View;
-//import android.widget.Button;
-//import android.widget.EditText;
-//import android.widget.TextView;
-//
-//import androidx.lifecycle.Lifecycle;
-//import androidx.test.core.app.ActivityScenario;
-//import androidx.test.ext.junit.rules.ActivityScenarioRule;
-//import androidx.test.ext.junit.runners.AndroidJUnit4;
-//
-//@RunWith(AndroidJUnit4.class)
-//public class AddClassUnitTest {
-//    @Rule
-//    public ActivityScenarioRule<MainActivity> scenarioRule = new ActivityScenarioRule<>(MainActivity.class);
-//
-//    @Test
-//    public void test_starts_with_no_result() {
-//        // Create a "scenario" to move through the activity lifecycle.
-//        // https://developer.android.com/guide/components/activities/activity-lifecycle
-//        ActivityScenario<MainActivity> scenario = scenarioRule.getScenario();
-//
-//        // Make sure the activity is in the created state (so onCreated is called).
-//        scenario.moveToState(Lifecycle.State.CREATED);
-//
-//        // When it's ready, we're ready to test inside this lambda (anonymous inline function).
-//        scenario.onActivity(activity -> {
-//            // No calculations have been run yet, so there shouldn't be a result!
-//            assertFalse(activity.hasResult());
-//        });
-//    }
-//
-//    @Test
-//    public void test_adds_numbers_and_not_something_else() {
-//        // This is an INTEGRATION test, as we're testing multiple units!
-//        // This test SHOULD fail. You need to fix it as an exercise!
-//
-//        ActivityScenario<MainActivity> scenario = scenarioRule.getScenario();
-//
-//        scenario.moveToState(Lifecycle.State.CREATED);
-//
-//        scenario.onActivity(activity -> {
-//            EditText num1View = activity.findViewById(R.id.number1);
-//            EditText num2View = activity.findViewById(R.id.number2);
-//            Button equalsButton = activity.findViewById(R.id.equals_button);
-//            TextView resultView = activity.findViewById(R.id.result);
-//
-//            num1View.setText("13");
-//            num2View.setText("42");
-//            equalsButton.performClick();
-//            int result = Utils.toIntNullsafe(resultView.getText().toString());
-//            assertEquals(55, result);
-//        });
-//    }
-//}
-
 package com.example.birds_of_a_feather_team_19;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.*;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- *///
+import android.os.Build;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-@RunWith(JUnit4.class)
+import androidx.lifecycle.Lifecycle;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.ibm.icu.impl.duration.impl.Utils;
+
+@RunWith(AndroidJUnit4.class)
+@Config(sdk = Build.VERSION_CODES.P)
 public class AddClassUnitTest {
+    @Rule
+    public ActivityScenarioRule<AddClassActivity> scenarioRule = new ActivityScenarioRule<>(AddClassActivity.class);
+
+
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void test_adds_two_cse_classes() {
+        // This is an INTEGRATION test, as we're testing multiple units!
+        // This test SHOULD fail. You need to fix it as an exercise!
+
+        ActivityScenario<AddClassActivity> scenario = scenarioRule.getScenario();
+
+        scenario.moveToState(Lifecycle.State.CREATED);
+
+        scenario.onActivity(activity -> {
+
+            EditText subject = (EditText) activity.findViewById(R.id.editTextSubject);
+            EditText courseNumber = (EditText) activity.findViewById(R.id.editTextCourseNumber);
+
+            Button enterButton = activity.findViewById(R.id.buttonEnter);
+            Button doneButton = activity.findViewById(R.id.buttonDone);
+
+
+            subject.setText("CSE");
+            courseNumber.setText("42");
+
+            enterButton.performClick();
+
+            courseNumber.setText("110");
+
+            enterButton.performClick();
+
+            doneButton.performClick();
+
+            TextView resultView = activity.findViewById(R.id.course_list_view);
+
+            String result = (resultView.getText().toString());
+            assertEquals("2022springcse110\n2022springcse42\n", result);
+        });
     }
 }
