@@ -44,4 +44,9 @@ public class Course {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((Course) obj).getTitle().equals(this.title);
+    }
 }

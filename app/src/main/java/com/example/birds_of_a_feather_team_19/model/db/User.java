@@ -4,8 +4,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 @Entity(tableName = "users")
-public class User {
+public class User implements Comparable<User> {
+
+    private AppDatabase db;
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -17,12 +22,8 @@ public class User {
     @ColumnInfo(name = "photoURL")
     private String photoURL;
 
-    /*public User(String name, String photo) {
-        this.name = name;
-        this.photo = photo;
-    }*/
-
-    public User(int id, String name, String photoURL) {
+    public User(AppDatabase db, int id, String name, String photoURL) {
+        this.db = db;
         this.id = id;
         this.name = name;
         this.photoURL = photoURL;
@@ -50,5 +51,20 @@ public class User {
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    @Override
+    public int compareTo(User user) {
+        int classmates = 0;
+        Set<Course> courses = new TreeSet<>(db.courseDao().getForUser(this.id));
+        Set<Course> userCourses = new TreeSet<>(db.courseDao().getForUser(user.getId()));
+
+        for (Course course: courses) {
+            if (userCourses.contains(course)) {
+                classmates++;
+            }
+        }
+
+        return classmates;
     }
 }

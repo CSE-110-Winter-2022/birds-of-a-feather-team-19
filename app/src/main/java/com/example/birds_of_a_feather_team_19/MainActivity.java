@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
     /*private void checkBluetoothStatus() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH)) {
