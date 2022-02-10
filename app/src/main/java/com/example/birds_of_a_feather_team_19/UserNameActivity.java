@@ -30,7 +30,7 @@ public class UserNameActivity extends AppCompatActivity {
     }
 
     public void onConfirmClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextUserName)).getText().toString() == "") {
+        if (((TextView) findViewById(R.id.editTextUserName)).getText().toString().equals("")) {
             Utilities.showAlert(this, "Please enter a name");
             return;
         }

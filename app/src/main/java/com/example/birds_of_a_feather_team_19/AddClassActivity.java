@@ -38,11 +38,11 @@ public class AddClassActivity extends AppCompatActivity {
     }
 
     public void onEnterClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextSubject)).getText().toString() == "") {
+        if (((TextView) findViewById(R.id.editTextSubject)).getText().toString().equals("")) {
             Utilities.showAlert(this, "Please enter course subject");
             return;
         }
-        if (((TextView) findViewById(R.id.editTextNumber)).getText().toString() == "") {
+        if (((TextView) findViewById(R.id.editTextNumber)).getText().toString().equals("")) {
             Utilities.showAlert(this, "Please enter course number");
             return;
         }
