@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         }
         setTitle("Birds of a Feather");
 
-        List<Course> myCourses = db.courseDao().getForUser(1);
+        List<Course> myCourses = db.courseDao().getForUser(0);
         List<User> users = db.usersDao().getAll();
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
 
