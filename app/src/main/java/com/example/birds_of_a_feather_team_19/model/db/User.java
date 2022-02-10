@@ -14,12 +14,18 @@ public class User {
     @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "photo")
-    private String photo;
+    @ColumnInfo(name = "photoURL")
+    private String photoURL;
 
-    public User(String name, String photo) {
+    /*public User(String name, String photo) {
         this.name = name;
         this.photo = photo;
+    }*/
+
+    public User(int id, String name, String photoURL) {
+        this.id = id;
+        this.name = name;
+        this.photoURL = photoURL;
     }
 
     public int getId() {
@@ -38,11 +44,11 @@ public class User {
         this.name = name;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getPhotoURL() {
+        return photoURL;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
     }
 }

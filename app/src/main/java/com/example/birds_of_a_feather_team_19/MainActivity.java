@@ -1,13 +1,21 @@
 package com.example.birds_of_a_feather_team_19;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
-import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,46 +28,51 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        db = AppDatabase.singleton(this);
-        if (db.usersDao().count() == 0) {
-            Intent intent = new Intent(this, UserNameActivity.class);
-            startActivity(intent);
-        }
         setTitle("Birds of a Feather");
 
-        List<Course> myCourses = db.courseDao().getForUser(0);
-        System.out.println(myCourses.get(0));
-        List<User> users = db.usersDao().getAll();
-        usersRecyclerView = findViewById(R.id.recyclerViewUsers);
-
-        for (User user : users) {
-            boolean haveSameClass = false;
-            List<Course> studentCourses = db.courseDao().getForUser(user.getId());
-            for(Course course : studentCourses){
-                boolean courseSame = false;
-                for(Course myCourse : myCourses){
-                    if(myCourse.getTitle() == course.getTitle()){
-                        haveSameClass = true;
-                        courseSame = true;
-                        break;
-                    }
-                }
-                if(courseSame == false){
-                    db.courseDao().delete(course);
-                }
-            }
-            if(haveSameClass == false){
-                db.usersDao().delete(user);
-            }
-        }
-
         db = AppDatabase.singleton(this);
-        List<User> matchedUsers = db.usersDao().getAll();
+        List<User> users = new ArrayList<>();// db.usersDao().getAll();
+
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
-        usersViewAdapter = new UsersViewAdapter(matchedUsers);
+        usersViewAdapter = new UsersViewAdapter(users);
         usersRecyclerView.setAdapter(usersViewAdapter);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //checkBluetoothStatus();
+
+        if (db.usersDao().get(1) == null) {
+            Intent intent = new Intent(this, AddNameActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    /*private void checkBluetoothStatus() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH)) {
+                Utilities.showAlert(this, "This app requests permission to Bluetooth to connect you to other users. ");
+            }
+        }
+    }
+
+    */public void onStartStopClicked(View view) {
+        /*Button button = findViewById(R.id.buttonStartStop);
+        Intent intent = new Intent(MainActivity.this, BluetoothService.class);
+        if (button.getText().toString().equals("Start")) {
+            button.setText("Stop");
+            loadUsers();
+        }
+        else {
+            button.setText("Start");
+            stopService(intent);
+        }*/
+    }/*
+
+    private void loadUsers() {
+    }*/
 }

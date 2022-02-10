@@ -7,25 +7,24 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class UserNameActivity extends AppCompatActivity {
+public class AddNameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_name);
+        setContentView(R.layout.activity_add_name);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
         editor.putString("name", ((TextView) findViewById(R.id.editTextUserName)).getText().toString());
         editor.apply();
 
-        Intent intent = new Intent(this, UserPhotoActivity.class);
+        Intent intent = new Intent(this, AddPhotoURLActivity.class);
         startActivity(intent);
     }
 

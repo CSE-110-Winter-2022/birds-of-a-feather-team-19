@@ -34,6 +34,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.user_row, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -47,6 +48,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         return users.size();
     }
 
+/*
     public static Bitmap getBitmapFromURL(String src) {
         try {
             Log.e("src",src);
@@ -64,25 +66,26 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             return null;
         }
     }
+*/
 
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView userNameView;
-        private final ImageView userImage;
+        //private final ImageView userImage;
         private User user;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.userNameView = itemView.findViewById(R.id.user_row_name);
-            this.userImage = itemView.findViewById(R.id.user_image);
+            //this.userImage = itemView.findViewById(R.id.user_image);
             itemView.setOnClickListener(this);
         }
 
         public void setUser(User user) {
             this.user = user;
             this.userNameView.setText(user.getName());
-            this.userImage.setImageBitmap(getBitmapFromURL(user.getPhoto()));
+            //this.userImage.setImageBitmap(getBitmapFromURL(user.getPhoto()));
         }
         @Override
         public void onClick(View view) {
