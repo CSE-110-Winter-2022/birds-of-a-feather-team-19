@@ -31,20 +31,15 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Birds of a Feather");
 
         if (true) {
-
             Intent intent = new Intent(this, AddClassActivity.class);
             intent.putExtra("user_id", 1);
             startActivity(intent);
         }
-
         AppDatabase db = AppDatabase.singleton(this);
-        List<UserWithCourses> users = db.userWithCoursesDao().getAll();
-
+        List<User> users = db.UserDao().getAll();
         usersRecyclerView = findViewById(R.id.users_view);
-
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
-
         usersViewAdapter = new UsersViewAdapter(users);
         usersRecyclerView.setAdapter(usersViewAdapter);
     }

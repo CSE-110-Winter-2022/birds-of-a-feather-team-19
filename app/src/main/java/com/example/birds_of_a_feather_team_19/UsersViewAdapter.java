@@ -1,5 +1,6 @@
 package com.example.birds_of_a_feather_team_19;
 
+import android.app.Person;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -16,9 +17,9 @@ import com.example.birds_of_a_feather_team_19.model.db.UserWithCourses;
 import java.util.List;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
-    private final List<UserWithCourses> users;
+    private final List<User> users;
 
-    public UsersViewAdapter(List<UserWithCourses> users) {
+    public UsersViewAdapter(List<User> users) {
         super();
         this.users = users;
     }
@@ -47,15 +48,15 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView userNameView;
-        private UserWithCourses user;
+        private User user;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.userNameView = itemView.findViewById(R.id.user_name);
+            this.userNameView = itemView.findViewById(R.id.user_row_name);
             itemView.setOnClickListener(this);
         }
 
-        public void setUser(UserWithCourses user) {
+        public void setUser(User user) {
             this.user = user;
             this.userNameView.setText(user.getName());
         }
@@ -64,7 +65,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, UserDetailActivity.class);
-            intent.putExtra("user", this.user.getId());
+            intent.putExtra("user_id", this.user.getUserId());
             context.startActivity(intent);
         }
     }
