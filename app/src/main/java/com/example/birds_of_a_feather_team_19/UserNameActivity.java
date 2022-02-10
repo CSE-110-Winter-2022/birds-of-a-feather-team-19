@@ -7,7 +7,6 @@ import android.accounts.AccountManager;
 import android.os.Bundle;
 
 public class UserNameActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,10 +14,9 @@ public class UserNameActivity extends AppCompatActivity {
 
         AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
         Account[] listOfAccounts = manager.getAccountsByType("com.google");
-        String name = "";
-
+        String googleName;
         if(listOfAccounts.length > 0) {
-            name = listOfAccounts[0].name;
+            googleName = listOfAccounts[0].name;
         }
     }
 }
