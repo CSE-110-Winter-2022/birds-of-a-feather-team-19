@@ -13,12 +13,24 @@ public class Course {
     @ColumnInfo(name = "user_id")
     private int userId;
 
-    @ColumnInfo(name = "title")
-    private String title;
+    @ColumnInfo(name = "year")
+    private String year;
 
-    public Course(int userId, String title) {
+    @ColumnInfo(name = "quarter")
+    private String quarter;
+
+    @ColumnInfo(name = "subject")
+    private String subject;
+
+    @ColumnInfo(name = "number")
+    private String number;
+
+    public Course(int userId, String year, String quarter, String subject, String number) {
         this.userId = userId;
-        this.title = title;
+        this.year = year;
+        this.quarter = quarter;
+        this.subject = subject;
+        this.number = number;
     }
 
     public int getId() {
@@ -37,11 +49,20 @@ public class Course {
         this.userId = userId;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getYear() { return this.year; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setYear(String year) { this.year = year; }
+
+    public String getQuarter() { return this.quarter; }
+
+    public void setQuarter(String quarter) { this.quarter = quarter; }
+
+    public String getSubject() { return this.quarter; }
+
+    public void setSubject(String subject) { this.subject = subject; }
+
+    public String getNumber() { return this.number; }
+
+    public void setNumber(String number) { this.number = number; }
+
 }
