@@ -23,16 +23,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
+        db = AppDatabase.singleton(this);
         if (db.usersDao().count() == 0) {
             Intent intent = new Intent(this, UserNameActivity.class);
             startActivity(intent);
         }
-
-        setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
 
-        db = AppDatabase.singleton(this);
         List<Course> myCourses = db.courseDao().getForUser(1);
         List<User> users = db.usersDao().getAll();
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
@@ -58,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        db = AppDatabase.singleton(this);
         List<User> matchedUsers = db.usersDao().getAll();
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);

@@ -38,7 +38,6 @@ public class AddClassActivity extends AppCompatActivity {
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(yearAdapter);
 
-
         Spinner quarterSpinner = findViewById(R.id.spinnerQuarter);
         ArrayAdapter<CharSequence> quarterAdapter =
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
