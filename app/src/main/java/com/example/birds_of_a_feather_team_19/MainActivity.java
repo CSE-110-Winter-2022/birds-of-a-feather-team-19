@@ -61,16 +61,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     */public void onStartStopClicked(View view) {
-        /*Button button = findViewById(R.id.buttonStartStop);
+        Button button = findViewById(R.id.buttonStartStop);
         Intent intent = new Intent(MainActivity.this, BluetoothService.class);
         if (button.getText().toString().equals("Start")) {
-            button.setText("Stop");
-            loadUsers();
+            //button.setText("Stop");
+            //loadUsers();
+            List<User> users = db.userDao().getAll();
+
+            usersRecyclerView = findViewById(R.id.recyclerViewUsers);
+            usersLayoutManager = new LinearLayoutManager(this);
+            usersRecyclerView.setLayoutManager(usersLayoutManager);
+            usersViewAdapter = new UsersViewAdapter(users);
+            usersRecyclerView.setAdapter(usersViewAdapter);
         }
         else {
             button.setText("Start");
             stopService(intent);
-        }*/
+        }
     }/*
 
     private void loadUsers() {
