@@ -57,10 +57,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        List<User> matchedUsers = db.usersDao().getAll();
         usersRecyclerView = findViewById(R.id.users_view);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
-        usersViewAdapter = new UsersViewAdapter(users);
+        usersViewAdapter = new UsersViewAdapter(matchedUsers);
         usersRecyclerView.setAdapter(usersViewAdapter);
     }
 }
