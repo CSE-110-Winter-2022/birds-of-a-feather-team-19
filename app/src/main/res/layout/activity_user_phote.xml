@@ -4,48 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhotoURL">
+    tools:context=".UserPhotoActivity">
 
 
     <EditText
-        android:id="@+id/photo_url"
-        android:layout_width="350dp"
+        android:id="@+id/editTextUserPhoto"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Photo URL"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/url_btn"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="SUBMIT"
-        android:onClick="onSubmitURL"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.874" />
-
-    <TextView
+        android:id="@+id/buttonSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:height="24sp"
-        android:lineHeight="16sp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:text="Please Submit Your Photo URL Below:"
+        android:text="SUBMIT"
+        android:onClick="onSubmitClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.085"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.381" />
-
+        app:layout_constraintVertical_bias="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

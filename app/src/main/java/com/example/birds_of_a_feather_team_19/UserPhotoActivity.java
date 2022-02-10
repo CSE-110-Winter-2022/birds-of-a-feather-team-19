@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class UserNameActivity extends AppCompatActivity {
+public class UserPhotoActivity extends AppCompatActivity {
+    public String photoURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_name);
+        setContentView(R.layout.activity_user_phote);
     }
 
     @Override
@@ -22,19 +23,14 @@ public class UserNameActivity extends AppCompatActivity {
         super.onDestroy();
 
         SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-        editor.putString("name", ((TextView) findViewById(R.id.editTextUserName)).getText().toString());
+        editor.putString("photo", ((TextView) findViewById(R.id.editTextUserPhoto)).getText().toString());
         editor.apply();
 
-        Intent intent = new Intent(this, UserPhotoActivity.class);
+        Intent intent = new Intent(this, AddClassActivity.class);
         startActivity(intent);
     }
 
-    public void onConfirmClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextUserName)).getText().toString() == "") {
-            Utilities.showAlert(this, "Please enter a name");
-            return;
-        }
-
+    public void onSubmitClicked(View view) {
         finish();
     }
 }

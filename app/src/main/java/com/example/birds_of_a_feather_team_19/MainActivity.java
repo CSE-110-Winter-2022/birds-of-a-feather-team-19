@@ -21,18 +21,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setTitle("Birds of a Feather");
 
-        if (db.usersDao().get(0) == ) {
-            Intent intent = new Intent(this, AddClassActivity.class);
-            intent.putExtra("user_id", 1);
+        if (db.usersDao().count() == 0) {
+            Intent intent = new Intent(this, UserNameActivity.class);
             startActivity(intent);
         }
 
+        setContentView(R.layout.activity_main);
+        setTitle("Birds of a Feather");
+
         db = AppDatabase.singleton(this);
         List<User> users = db.usersDao().getAll();
-        usersRecyclerView = findViewById(R.id.users_view);
+        usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
         usersViewAdapter = new UsersViewAdapter(users);

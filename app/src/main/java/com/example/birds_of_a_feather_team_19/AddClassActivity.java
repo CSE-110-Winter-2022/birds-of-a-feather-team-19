@@ -77,9 +77,9 @@ public class AddClassActivity extends AppCompatActivity {
 //        int userId = user.getId();
         for (String course : courses) {
             System.out.println(course);
-            int newCourseId = db.courseDao().maxId() + 1;
-            Course newCourse = new Course(newCourseId, 0, course);
-            db.courseDao().insert(newCourse);
+            //int newCourseId = db.courseDao().maxId() + 1;
+            //Course newCourse = new Course(newCourseId, 0, course);
+            //db.courseDao().insert(newCourse);
             // System.out.println(userId + ", " + newCourseId + ", " + course);
         }
         // need to somehow implement user functionality
