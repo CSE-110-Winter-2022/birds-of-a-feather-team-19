@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
 
-        if (true) {
+        if (db.usersDao().get(0) == ) {
             Intent intent = new Intent(this, AddClassActivity.class);
             intent.putExtra("user_id", 1);
             startActivity(intent);
