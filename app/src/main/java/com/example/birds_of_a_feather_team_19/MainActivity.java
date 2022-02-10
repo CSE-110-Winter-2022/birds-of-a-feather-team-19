@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        AppDatabase db = AppDatabase.singleton(this);
+        db = AppDatabase.singleton(this);
         List<User> users = db.usersDao().getAll();
         usersRecyclerView = findViewById(R.id.users_view);
         usersLayoutManager = new LinearLayoutManager(this);
