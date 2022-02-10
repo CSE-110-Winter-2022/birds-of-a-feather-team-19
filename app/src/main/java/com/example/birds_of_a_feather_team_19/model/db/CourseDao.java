@@ -10,18 +10,18 @@ import java.util.List;
 @Dao
 public interface CourseDao {
     @Transaction
-    @Query("SELECT * FROM courses where user_id=:userId")
+    @Query("SELECT * FROM courses WHERE user_id=:userId")
     List<Course> getForUser(int userId);
 
     @Query("SELECT * FROM courses WHERE id=:id")
     Course get(int id);
 
-    @Query("SELECT COUNT(*) from courses")
-    int count();
+    // @Query("SELECT COUNT(*) from courses")
+    // int count();
 
     @Insert
     void insert(Course course);
 
-    @Query("SELECT MAX(id) from courses")
-    int maxId();
+    //@Query("SELECT MAX(id) from courses")
+    //int maxId();
 }

@@ -4,19 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
-import com.example.birds_of_a_feather_team_19.model.db.User;
-import com.example.birds_of_a_feather_team_19.model.db.UserWithCourses;
 
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
     protected RecyclerView usersRecyclerView;
