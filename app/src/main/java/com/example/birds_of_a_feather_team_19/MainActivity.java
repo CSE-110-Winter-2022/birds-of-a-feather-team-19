@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Birds of a Feather");
 
         db = AppDatabase.singleton(this);
-        List<User> users = new ArrayList<>();// db.usersDao().getAll();
+        List<User> users = new ArrayList<>();
 
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
@@ -64,10 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.buttonStartStop);
         Intent intent = new Intent(MainActivity.this, BluetoothService.class);
         if (button.getText().toString().equals("Start")) {
-            //button.setText("Stop");
-            //loadUsers();
             List<User> users = db.userDao().getAll();
-
             usersRecyclerView = findViewById(R.id.recyclerViewUsers);
             usersLayoutManager = new LinearLayoutManager(this);
             usersRecyclerView.setLayoutManager(usersLayoutManager);
@@ -78,8 +75,5 @@ public class MainActivity extends AppCompatActivity {
             button.setText("Start");
             stopService(intent);
         }
-    }/*
-
-    private void loadUsers() {
-    }*/
+    }
 }
