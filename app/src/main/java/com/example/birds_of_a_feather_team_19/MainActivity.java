@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
+import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,11 +33,36 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Birds of a Feather");
 
         db = AppDatabase.singleton(this);
+        List<Course> myCourses = db.courseDao().getForUser(1);
         List<User> users = db.usersDao().getAll();
+        usersRecyclerView = findViewById(R.id.recyclerViewUsers);
+
+        for (User user : users) {
+            boolean haveSameClass = false;
+            List<Course> studentCourses = db.courseDao().getForUser(user.getId());
+            for(Course course : studentCourses){
+                boolean courseSame = false;
+                for(Course myCourse : myCourses){
+                    if(myCourse == course){
+                        haveSameClass = true;
+                        courseSame = true;
+                        break;
+                    }
+                }
+                if(courseSame == false){
+                    db.courseDao().delete(course);
+                }
+            }
+            if(haveSameClass == false){
+                db.usersDao().delete(user);
+            }
+        }
+
+        List<User> matchedUsers = db.usersDao().getAll();
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
-        usersViewAdapter = new UsersViewAdapter(users);
+        usersViewAdapter = new UsersViewAdapter(matchedUsers);
         usersRecyclerView.setAdapter(usersViewAdapter);
     }
 }

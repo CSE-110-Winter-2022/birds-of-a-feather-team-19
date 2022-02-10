@@ -1,18 +1,14 @@
 package com.example.birds_of_a_feather_team_19;
 
-import android.app.Person;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.birds_of_a_feather_team_19.model.db.User;
-
 import java.util.List;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
@@ -29,7 +25,6 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.user_row, parent, false);
-
         return new ViewHolder(view);
     }
 

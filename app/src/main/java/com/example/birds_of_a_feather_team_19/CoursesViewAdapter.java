@@ -24,7 +24,6 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.course_row, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -38,10 +37,7 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
         return courses.size();
     }
 
-    public static class ViewHolder
-            extends RecyclerView.ViewHolder
-            //implements View.OnClickListener
-            {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView courseNameView;
         private Course course;
 
@@ -55,12 +51,5 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
             this.courseNameView.setText(course.getTitle());
         }
 
-//        @Override
-//        public void onClick(View view) {
-//            Context context = view.getContext();
-//            Intent intent = new Intent(context, UserDetailActivity.class);
-//            intent.putExtra("user_id", this.user.getId());
-//            context.startActivity(intent);
-//        }
     }
 }

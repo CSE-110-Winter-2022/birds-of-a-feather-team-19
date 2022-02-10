@@ -16,7 +16,6 @@ import java.util.List;
 public class UserDetailActivity extends AppCompatActivity {
     private AppDatabase db;
     private User user;
-
     private RecyclerView coursesRecyclerView;
     private RecyclerView.LayoutManager coursesLayoutManager;
     private CoursesViewAdapter coursesViewAdapter;
@@ -25,14 +24,11 @@ public class UserDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-
         Intent intent = getIntent();
         int userId = intent.getIntExtra("user_id", 0);
-
         db = AppDatabase.singleton(this);
         user = db.usersDao().get(userId);
         List<Course> courses = db.courseDao().getForUser(userId);
-
         // Set the title with the person.
         setTitle(user.getName());
 
