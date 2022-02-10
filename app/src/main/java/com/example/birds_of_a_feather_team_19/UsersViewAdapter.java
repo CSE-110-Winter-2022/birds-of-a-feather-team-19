@@ -31,7 +31,6 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.user_row, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -42,7 +41,6 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -70,7 +68,6 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             new DownloadImageTask(userImage)
                     .execute(user.getPhotoURL());
         }
-
 
         @Override
         public void onClick(View view) {
