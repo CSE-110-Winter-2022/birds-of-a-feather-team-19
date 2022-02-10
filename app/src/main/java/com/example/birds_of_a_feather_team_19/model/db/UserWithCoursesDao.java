@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserWithCoursesDao {
     @Transaction
     @Query("SELECT * FROM users")
-    List<UserWithCourses> getALL();
+    List<UserWithCourses> getAll();
 
     @Query("SELECT * FROM users WHERE id=:id")
     UserWithCourses get(int id);

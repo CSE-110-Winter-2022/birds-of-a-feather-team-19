@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.birds_of_a_feather_team_19.model.IUser;
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
@@ -69,6 +70,8 @@ public class AddClassActivity extends AppCompatActivity {
                 + courseNumber.getText().toString();
         courseName = courseName.toLowerCase();
         courses.add(courseName);
+
+        Toast.makeText(this, "Class added", Toast.LENGTH_SHORT).show();
     }
 
     public void onDoneClicked(View view) {
