@@ -3,15 +3,11 @@ package com.example.birds_of_a_feather_team_19;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Birds of a Feather");
 
         List<Course> myCourses = db.courseDao().getForUser(0);
+        System.out.println(myCourses.get(0));
         List<User> users = db.usersDao().getAll();
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
 
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             for(Course course : studentCourses){
                 boolean courseSame = false;
                 for(Course myCourse : myCourses){
-                    if(myCourse == course){
+                    if(myCourse.getTitle() == course.getTitle()){
                         haveSameClass = true;
                         courseSame = true;
                         break;
