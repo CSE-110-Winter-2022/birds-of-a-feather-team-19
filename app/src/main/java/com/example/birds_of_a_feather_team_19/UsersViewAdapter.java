@@ -10,9 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.birds_of_a_feather_team_19.model.db.User;
-import com.example.birds_of_a_feather_team_19.model.db.UserWithCourses;
-
 import java.util.List;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {

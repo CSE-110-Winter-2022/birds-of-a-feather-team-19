@@ -2,7 +2,6 @@ package com.example.birds_of_a_feather_team_19;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -11,11 +10,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.birds_of_a_feather_team_19.model.IUser;
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
