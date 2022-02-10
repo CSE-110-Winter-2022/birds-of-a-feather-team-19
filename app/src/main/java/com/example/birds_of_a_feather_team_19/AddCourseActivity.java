@@ -63,8 +63,9 @@ public class AddCourseActivity extends AppCompatActivity {
             Utilities.showAlert(this, "Please enter a course");
             return;
         }
+
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
-        db.usersDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photoURL", "")));
+        db.userDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photoURL", "")));
 
         for (String course : courses) {
             db.courseDao().insert(new Course(1, course));

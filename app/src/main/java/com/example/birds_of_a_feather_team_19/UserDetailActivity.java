@@ -27,7 +27,7 @@ public class UserDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int userId = intent.getIntExtra("user_id", 0);
         db = AppDatabase.singleton(this);
-        user = db.usersDao().get(userId);
+        user = db.userDao().get(userId);
         List<Course> courses = db.courseDao().getForUser(userId);
         // Set the title with the person.
         setTitle(user.getName());

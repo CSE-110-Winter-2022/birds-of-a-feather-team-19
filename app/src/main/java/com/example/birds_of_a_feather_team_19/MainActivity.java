@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         //checkBluetoothStatus();
 
-        if (db.usersDao().get(1) == null) {
+        if (db.userDao().get(1) == null) {
             Intent intent = new Intent(this, AddNameActivity.class);
             startActivity(intent);
         }

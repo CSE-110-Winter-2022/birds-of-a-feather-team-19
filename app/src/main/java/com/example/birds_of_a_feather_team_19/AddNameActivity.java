@@ -17,15 +17,9 @@ public class AddNameActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
-        editor.putString("name", ((TextView) findViewById(R.id.editTextUserName)).getText().toString());
-        editor.apply();
-
-        Intent intent = new Intent(this, AddPhotoURLActivity.class);
-        startActivity(intent);
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 
     public void onConfirmClicked(View view) {
@@ -34,6 +28,11 @@ public class AddNameActivity extends AppCompatActivity {
             return;
         }
 
-        finish();
+        SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
+        editor.putString("name", ((TextView) findViewById(R.id.editTextUserName)).getText().toString());
+        editor.apply();
+
+        Intent intent = new Intent(this, AddPhotoURLActivity.class);
+        startActivity(intent);
     }
 }
