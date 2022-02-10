@@ -1,5 +1,10 @@
 package com.example.birds_of_a_feather_team_19;
 
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
+import com.google.android.gms.nearby.messages.MessageListener;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +14,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     protected RecyclerView.LayoutManager usersLayoutManager;
     protected UsersViewAdapter usersViewAdapter;
     private AppDatabase db;
+    private static final String TAG = "Team-19-Nearby";
+    private MessageListener messageListener;
+    private Message message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +42,41 @@ public class MainActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
         List<User> users = new ArrayList<>();// db.usersDao().getAll();
 
+        MessageListener realListener = new MessageListener() {
+            @Override
+            public void onFound(@NonNull Message message) {
+                Log.d(TAG, "Found user: " + new String(message.getContent()));
+
+            }
+
+            @Override
+            public void onLost(@NonNull Message message) {
+                Log.d(TAG, "Lost user: " + new String(message.getContent()));
+
+            }
+        };
+
+        message = new Message("Hello world, this is user 0".getBytes());
+
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
         usersViewAdapter = new UsersViewAdapter(users);
         usersRecyclerView.setAdapter(usersViewAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Nearby.getMessagesClient(this).publish(message);
+        Nearby.getMessagesClient(this).subscribe(messageListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Nearby.getMessagesClient(this).unpublish(message);
+        Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 
     @Override

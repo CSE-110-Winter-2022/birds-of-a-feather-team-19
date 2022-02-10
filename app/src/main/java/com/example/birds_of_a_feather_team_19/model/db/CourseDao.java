@@ -19,6 +19,9 @@ public interface CourseDao {
     @Query("SELECT * FROM courses WHERE id=:id")
     Course get(int id);
 
+    @Query("SELECT * FROM courses WHERE year=:year AND term=:term AND subject=:subject AND number=:number")
+    int getClassmates(String year, String term, String subject, String number);
+
     // @Query("SELECT COUNT(*) from courses")
     // int count();
 

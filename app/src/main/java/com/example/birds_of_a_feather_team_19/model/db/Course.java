@@ -13,12 +13,24 @@ public class Course {
     @ColumnInfo(name = "user_id")
     private int userId;
 
-    @ColumnInfo(name = "title")
-    private String title;
+    @ColumnInfo(name = "year")
+    private String year;
 
-    public Course(int userId, String title) {
+    @ColumnInfo(name = "term")
+    private String term;
+
+    @ColumnInfo(name = "subject")
+    private String subject;
+
+    @ColumnInfo(name = "number")
+    private String number;
+
+    public Course(int userId, String year, String term, String subject, String number) {
         this.userId = userId;
-        this.title = title;
+        this.year = year;
+        this.term = term;
+        this.subject = subject;
+        this.number = number;
     }
 
     public int getId() {
@@ -37,16 +49,19 @@ public class Course {
         this.userId = userId;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getYear() { return this.year; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setYear(String year) { this.year = year; }
 
-    @Override
-    public boolean equals(Object obj) {
-        return ((Course) obj).getTitle().equals(this.title);
-    }
+    public String getTerm() { return this.term; }
+
+    public void setTerm(String term) { this.term = term; }
+
+    public String getSubject() { return this.subject; }
+
+    public void setSubject(String subject) { this.subject = subject; }
+
+    public String getNumber() { return this.number; }
+
+    public void setNumber(String number) { this.number = number; }
 }
