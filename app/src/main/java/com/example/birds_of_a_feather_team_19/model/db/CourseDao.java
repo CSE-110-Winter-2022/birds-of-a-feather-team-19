@@ -1,6 +1,7 @@
 package com.example.birds_of_a_feather_team_19.model.db;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -21,6 +22,9 @@ public interface CourseDao {
 
     @Insert
     void insert(Course course);
+
+    @Delete
+    void delete(Course course);
 
     //@Query("SELECT MAX(id) from courses")
     //int maxId();
