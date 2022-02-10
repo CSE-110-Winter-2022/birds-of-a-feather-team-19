@@ -30,8 +30,8 @@ public class UserDetailActivity extends AppCompatActivity {
         int userId = intent.getIntExtra("user_id", 0);
 
         db = AppDatabase.singleton(this);
-        user = db.UserDao().get(userId);
-        List<Course> courses = db.CourseDao().getForPerson(userId);
+        user = db.usersDao().get(userId);
+        List<Course> courses = db.courseDao().getForUser(userId);
 
         // Set the title with the person.
         setTitle(user.getName());
@@ -40,11 +40,8 @@ public class UserDetailActivity extends AppCompatActivity {
         coursesRecyclerView = findViewById(R.id.courses_view);
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
-
-        coursesViewAdapter = new CoursesViewAdapter(courses, (note) -> {
-            db.CourseDao().delete(note);
-        });
-        coursesRecyclerView.setAdapter(CoursesViewAdapter);
+        coursesViewAdapter = new CoursesViewAdapter(courses);
+        coursesRecyclerView.setAdapter(coursesViewAdapter);
     }
 
     public void onGoBackClicked(View view) {

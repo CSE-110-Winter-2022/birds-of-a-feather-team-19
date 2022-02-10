@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.birds_of_a_feather_team_19.model.db.User;
+
 import java.util.List;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
@@ -62,7 +64,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, UserDetailActivity.class);
-            intent.putExtra("user_id", this.user.getUserId());
+            intent.putExtra("user_id", this.user.getId());
             context.startActivity(intent);
         }
     }
