@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
+import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -19,7 +20,7 @@ import java.util.TreeSet;
 public class AddClassActivity extends AppCompatActivity {
     private Set<String> courses = new TreeSet<String>();
     private AppDatabase db;
-    private IUser user;
+    private User user;
 
 
 
@@ -31,7 +32,7 @@ public class AddClassActivity extends AppCompatActivity {
         int userId = getIntent().getIntExtra("user_id", 0);
 
         db = AppDatabase.singleton(this);
-        user = db.userDao().get(userId);
+        user = db.usersDao().get(userId);
 
 //        setTitle(user.getName());
 

@@ -40,7 +40,7 @@ public class UserDetailActivity extends AppCompatActivity {
         coursesRecyclerView = findViewById(R.id.courses_view);
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
-        coursesViewAdapter = new CoursesViewAdapter();
+        coursesViewAdapter = new CoursesViewAdapter(courses);
         coursesRecyclerView.setAdapter(coursesViewAdapter);
     }
 
