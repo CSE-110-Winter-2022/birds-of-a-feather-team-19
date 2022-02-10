@@ -7,19 +7,48 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "users")
 public class User {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public int userId;
+    private int id = 0;
 
     @ColumnInfo(name = "name")
-    public String name;
+    private String name;
 
-    @ColumnInfo(name = "photoUrl")
-    public String photoUrl;
+    @ColumnInfo(name = "photoURL")
+    private String photoURL;
 
-//    public User(int userId, String name, String photoUrl) {
-//        this.userId = userId;
-//        this.name = name;
-//        this.photoUrl = photoUrl;
-//    }
+    /*public User(String name, String photo) {
+        this.name = name;
+        this.photo = photo;
+    }*/
+
+    public User(int id, String name, String photoURL) {
+        this.id = id;
+        this.name = name;
+        this.photoURL = photoURL;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
+    }
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
+    }
 }

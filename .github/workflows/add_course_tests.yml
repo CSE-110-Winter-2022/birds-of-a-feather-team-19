@@ -1,4 +1,4 @@
-name: Run Add List of Classes Tests
+name: Run Add List of Courses Tests
 on: [push]
 
 jobs:

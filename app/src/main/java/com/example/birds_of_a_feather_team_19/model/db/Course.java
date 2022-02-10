@@ -6,19 +6,42 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "courses")
 public class Course {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public int courseId;
+    private int id = 0;
 
     @ColumnInfo(name = "user_id")
-    public int userId;
+    private int userId;
 
-    @ColumnInfo(name = "course")
-    public String course;
+    @ColumnInfo(name = "title")
+    private String title;
 
-    public Course(int courseId, int userId, String course) {
-        this.courseId = courseId;
+    public Course(int userId, String title) {
         this.userId = userId;
-        this.course = course;
+        this.title = title;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

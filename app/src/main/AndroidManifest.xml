@@ -2,6 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.birds_of_a_feather_team_19">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,15 +23,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Birdsofafeatherteam19">
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyDMtBDMvrgMXrCpEClzdRA0yvjbbUUG3gE" />
+        <service
+            android:name=".BluetoothService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
-            android:name=".AddClassActivity"
+            android:name=".UserDetailActivity"
             android:exported="true" />
         <activity
-            android:name=".PhotoURL"
-            android:exported="false" />
+            android:name=".AddCourseActivity"
+            android:exported="true" />
         <activity
-            android:name=".UserNameActivity"
-            android:exported="false" />
+            android:name=".AddPhotoURLActivity"
+            android:exported="true" />
+        <activity
+            android:name=".AddNameActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
