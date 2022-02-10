@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.buttonStartStop);
         Intent intent = new Intent(MainActivity.this, BluetoothService.class);
         if (button.getText().toString().equals("Start")) {
-            //button.setText("Stop");
+            button.setText("Stop");
             //loadUsers();
             List<User> users = db.userDao().getAll();
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             button.setText("Start");
-            stopService(intent);
+            //stopService(intent);
         }
     }/*
 
