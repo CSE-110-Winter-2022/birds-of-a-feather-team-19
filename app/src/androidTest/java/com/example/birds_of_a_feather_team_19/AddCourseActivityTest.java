@@ -44,7 +44,7 @@ public class AddCourseActivityTest {
     @Test
     public void addCourseActivityTest() {
         ViewInteraction appCompatSpinner = onView(
-                allOf(withId(R.id.spinnerQuarter),
+                allOf(withId(R.id.spinnerTerm),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

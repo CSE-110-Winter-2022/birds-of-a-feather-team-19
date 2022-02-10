@@ -1,7 +1,6 @@
 package com.example.birds_of_a_feather_team_19;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +15,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class AddClassActivity extends AppCompatActivity {
-    private Set<String> courses = new TreeSet<String>();
+    private Set<String> courses = new TreeSet<>();
     private AppDatabase db;
     private User user;
 
@@ -25,21 +24,13 @@ public class AddClassActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_class);
 
-        int userId = getIntent().getIntExtra("user_id", 0);
-
-        db = AppDatabase.singleton(this);
-        user = db.usersDao().get(userId);
-
-//        setTitle(user.getName());
-
         Spinner yearSpinner = findViewById(R.id.spinnerYear);
         ArrayAdapter<CharSequence> yearAdapter =
                 ArrayAdapter.createFromResource(this, R.array.year, android.R.layout.simple_spinner_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(yearAdapter);
 
-
-        Spinner quarterSpinner = findViewById(R.id.spinnerQuarter);
+        Spinner quarterSpinner = findViewById(R.id.spinnerTerm);
         ArrayAdapter<CharSequence> quarterAdapter =
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
         quarterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -47,33 +38,37 @@ public class AddClassActivity extends AppCompatActivity {
     }
 
     public void onEnterClicked(View view) {
-        String courseName = "";
-        Spinner yearSpinner = findViewById(R.id.spinnerYear);
-        Spinner quarterSpinner = findViewById(R.id.spinnerQuarter);
-        TextView subject = findViewById(R.id.editTextSubject);
-        TextView courseNumber = findViewById(R.id.editTextCourseNumber);
-        if (subject.getText().toString() == null || courseNumber.getText().toString() == null) {
+        if (((TextView) findViewById(R.id.editTextSubject)).getText().toString() == "") {
+            Utilities.showAlert(this, "Please enter course subject");
             return;
         }
-        courseName = yearSpinner.getSelectedItem().toString()
-                + quarterSpinner.getSelectedItem().toString()
-                + subject.getText().toString()
-                + courseNumber.getText().toString();
-        courseName = courseName.toLowerCase();
-        courses.add(courseName);
+        if (((TextView) findViewById(R.id.editTextNumber)).getText().toString() == "") {
+            Utilities.showAlert(this, "Please enter course number");
+            return;
+        }
 
+        String courseName = ((Spinner) findViewById(R.id.spinnerYear)).getSelectedItem().toString() +
+                ((Spinner) findViewById(R.id.spinnerTerm)).getSelectedItem().toString() +
+                ((TextView) findViewById(R.id.editTextSubject)).getText().toString() +
+                ((TextView) findViewById(R.id.editTextNumber)).getText().toString();
+        courseName = courseName.toLowerCase();
+
+        courses.add(courseName);
         Toast.makeText(this, "Class added", Toast.LENGTH_SHORT).show();
     }
 
     public void onDoneClicked(View view) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        String name = preferences.getString("name", "Error!");
+        String photo = preferences.getString("photo", "");
+        db.usersDao().insert(new User(name, photo));
+
         for (String course : courses) {
-            System.out.println(course);
             //int newCourseId = db.courseDao().maxId() + 1;
             //Course newCourse = new Course(newCourseId, 0, course);
             //db.courseDao().insert(newCourse);
             // System.out.println(userId + ", " + newCourseId + ", " + course);
-            Course newCourse = new Course(1, course);
-            db.courseDao().insert(newCourse);
+            db.courseDao().insert(new Course(0, course));
         }
 //        SharedPreferences sharedPreferences = getSharedPreferences("prefs", MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
