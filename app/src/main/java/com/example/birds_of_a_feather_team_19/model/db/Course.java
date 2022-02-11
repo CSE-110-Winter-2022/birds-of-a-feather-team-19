@@ -64,4 +64,10 @@ public class Course {
     public String getNumber() { return this.number; }
 
     public void setNumber(String number) { this.number = number; }
+
+    @Override
+    public boolean equals(Object o) {
+        return (this.year + this.term + this.subject + this.number)
+                .equals(((Course) o).getYear() + ((Course) o).getTerm() + ((Course) o).getSubject() + ((Course) o).getNumber());
+    }
 }

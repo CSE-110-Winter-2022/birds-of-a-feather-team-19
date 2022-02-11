@@ -49,4 +49,9 @@ public class User {
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return this.id == ((User) o).getId();
+    }
 }

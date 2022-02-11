@@ -1,5 +1,6 @@
 package com.example.birds_of_a_feather_team_19;
 
+import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -22,7 +23,11 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
     protected RecyclerView usersRecyclerView;
@@ -40,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Birds of a Feather");
 
         db = AppDatabase.singleton(this);
-        List<User> users = new ArrayList<>();// db.usersDao().getAll();
 
         MessageListener realListener = new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found user: " + new String(message.getContent()));
-
+                updateDatabase();
+                updateRecylerView();
             }
 
             @Override
@@ -58,11 +63,38 @@ public class MainActivity extends AppCompatActivity {
 
         message = new Message("Hello world, this is user 0".getBytes());
 
+        updateRecylerView();
+    }
+
+    private void updateRecylerView() {
+        List<UserPriority> userPriorities = new ArrayList<>();
+        for (Course course : db.courseDao().getForUser(1)) {
+            for (int userId : db.courseDao().getClassmates(course.getYear(), course.getTerm(), course.getSubject(), course.getNumber())) {
+                UserPriority userPriority = new UserPriority(db.userDao().get(userId), 1);
+                if (userPriorities.contains(userPriority)) {
+                    userPriorities.get(userPriorities.indexOf(userPriority))
+                            .setPriority(userPriorities.get(userPriorities.indexOf(userPriority)).getPriority() + 1);
+                }
+                else {
+                    userPriorities.add(new UserPriority(db.userDao().get(userId), 1));
+                }
+            }
+        }
+        userPriorities.remove(new UserPriority(new User(1, "", ""), 1));
+
+        List<User> users = new ArrayList<>();
+        for (UserPriority userPriority : userPriorities) {
+            users.add(userPriority.getUser());
+        }
+
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
         usersViewAdapter = new UsersViewAdapter(users);
         usersRecyclerView.setAdapter(usersViewAdapter);
+    }
+
+    private void updateDatabase() {
     }
 
     @Override
@@ -116,8 +148,37 @@ public class MainActivity extends AppCompatActivity {
             button.setText("Start");
             //stopService(intent);
         }
-    }/*
+    }
+}
 
-    private void loadUsers() {
-    }*/
+class UserPriority implements Comparable<UserPriority> {
+    private int priority;
+    private User user;
+
+    public UserPriority(User user, int priority) {
+        this.user = user;
+        this.priority = priority;
+    }
+
+    @Override
+    public int compareTo(UserPriority userPriority) {
+        return userPriority.priority - this.priority;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return user.getId() == ((UserPriority) o).getUser().getId();
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }
