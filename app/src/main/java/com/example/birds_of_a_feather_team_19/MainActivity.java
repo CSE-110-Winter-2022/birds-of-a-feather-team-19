@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Birds of a Feather");
 
         db = AppDatabase.singleton(this);
+        List<User> users = new ArrayList<>();
 
         MessageListener realListener = new MessageListener() {
             @Override
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         if (button.getText().toString().equals("Start")) {
             button.setText("Stop");
             //loadUsers();
+          
             List<User> users = db.userDao().getAll();
             usersRecyclerView = findViewById(R.id.recyclerViewUsers);
             usersLayoutManager = new LinearLayoutManager(this);

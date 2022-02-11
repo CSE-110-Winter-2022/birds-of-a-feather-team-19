@@ -14,12 +14,8 @@
         <entry key="app/src/main/res/layout/activity_user_name.xml" value="0.18614130434782608" />
         <entry key="app/src/main/res/layout/activity_user_phote.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/activity_user_photo.xml" value="0.18614130434782608" />
-<<<<<<< HEAD
         <entry key="app/src/main/res/layout/course_row.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/user_row.xml" value="0.3098958333333333" />
-=======
-        <entry key="app/src/main/res/layout/user_row.xml" value="0.15070921985815602" />
->>>>>>> a09895cd3075f25f8421ad62bf19a46745c23497
       </map>
     </option>
   </component>

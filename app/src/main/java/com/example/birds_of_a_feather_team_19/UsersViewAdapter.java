@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.birds_of_a_feather_team_19.model.db.User;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -31,7 +30,6 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.user_row, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -42,7 +40,6 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -59,6 +56,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
 
         ViewHolder(View itemView) {
             super(itemView);
+          
             this.userNameView = itemView.findViewById(R.id.textViewName);
             //this.userImage = itemView.findViewById(R.id.user_image);
             this.userNameView = itemView.findViewById(R.id.user_row_name);
@@ -72,8 +70,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             new DownloadImageTask(userImage)
                     .execute(user.getPhotoURL());
         }
-
-
+      
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
