@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             button.setText("Stop");
             //loadUsers();
             List<User> users = db.userDao().getAll();
-
             usersRecyclerView = findViewById(R.id.recyclerViewUsers);
             usersLayoutManager = new LinearLayoutManager(this);
             usersRecyclerView.setLayoutManager(usersLayoutManager);
