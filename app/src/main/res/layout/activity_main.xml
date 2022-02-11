@@ -7,21 +7,21 @@
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewUsers"
+        android:id="@+id/recyclerViewUsersMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonStartStop" />
+        app:layout_constraintTop_toBottomOf="@id/buttonStartStopMain" />
 
     <Button
-        android:id="@+id/buttonStartStop"
+        android:id="@+id/buttonStartStopMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:onClick="onStartStopClicked"
+        android:onClick="onStartStopMainClicked"
         android:text="Start"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -49,25 +49,27 @@ public class Course {
         this.userId = userId;
     }
 
-    public String getYear() { return this.year; }
+    public String getYear() { return year; }
 
     public void setYear(String year) { this.year = year; }
 
-    public String getTerm() { return this.term; }
+    public String getTerm() { return term; }
 
     public void setTerm(String term) { this.term = term; }
 
-    public String getSubject() { return this.subject; }
+    public String getSubject() { return subject; }
 
     public void setSubject(String subject) { this.subject = subject; }
 
-    public String getNumber() { return this.number; }
+    public String getNumber() { return number; }
 
     public void setNumber(String number) { this.number = number; }
 
     @Override
     public boolean equals(Object o) {
-        return (this.year + this.term + this.subject + this.number)
-                .equals(((Course) o).getYear() + ((Course) o).getTerm() + ((Course) o).getSubject() + ((Course) o).getNumber());
+        return (year.equals(((Course) o).getYear()) &&
+                term.equals(((Course) o).getTerm()) &&
+                subject.equals(((Course) o).getSubject()) &&
+                number.equals(((Course) o).getNumber()));
     }
 }

@@ -22,14 +22,14 @@ public class AddNameActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onConfirmClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextUserName)).getText().toString().equals("")) {
+    public void onConfirmAddNameClicked(View view) {
+        if (((TextView) findViewById(R.id.editTextNameAddName)).getText().toString().equals("")) {
             Utilities.showAlert(this, "Please enter a name");
             return;
         }
 
         SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
-        editor.putString("name", ((TextView) findViewById(R.id.editTextUserName)).getText().toString());
+        editor.putString("name", ((TextView) findViewById(R.id.editTextNameAddName)).getText().toString());
         editor.apply();
 
         Intent intent = new Intent(this, AddPhotoURLActivity.class);

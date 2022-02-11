@@ -4,12 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 @Entity(tableName = "users")
 public class User {
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id = 0;

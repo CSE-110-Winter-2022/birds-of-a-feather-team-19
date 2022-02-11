@@ -12,7 +12,6 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -23,14 +22,14 @@ public class AddCourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_class);
+        setContentView(R.layout.activity_add_course);
 
-        Spinner yearSpinner = findViewById(R.id.spinnerYear);
+        Spinner yearSpinner = findViewById(R.id.spinnerYearAddCourse);
         ArrayAdapter<CharSequence> yearAdapter =
                 ArrayAdapter.createFromResource(this, R.array.year, android.R.layout.simple_spinner_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(yearAdapter);
-        Spinner quarterSpinner = findViewById(R.id.spinnerTerm);
+        Spinner quarterSpinner = findViewById(R.id.spinnerTermAddCourse);
         ArrayAdapter<CharSequence> quarterAdapter =
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
         quarterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -39,26 +38,26 @@ public class AddCourseActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
     }
 
-    public void onEnterClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextSubject)).getText().toString().equals("")) {
+    public void onEnterAddCourseClicked(View view) {
+        if (((TextView) findViewById(R.id.editTextSubjectAddCourse)).getText().toString().equals("")) {
             Utilities.showAlert(this, "Please enter course subject");
             return;
         }
-        if (((TextView) findViewById(R.id.editTextNumber)).getText().toString().equals("")) {
+        if (((TextView) findViewById(R.id.editTextNumberAddCourse)).getText().toString().equals("")) {
             Utilities.showAlert(this, "Please enter course number");
             return;
         }
 
-        if (!courses.add((((Spinner) findViewById(R.id.spinnerYear)).getSelectedItem().toString() +
-                ((Spinner) findViewById(R.id.spinnerTerm)).getSelectedItem().toString() +
-                ((TextView) findViewById(R.id.editTextSubject)).getText().toString() +
-                ((TextView) findViewById(R.id.editTextNumber)).getText().toString()).toLowerCase())) {
+        if (!courses.add((((Spinner) findViewById(R.id.spinnerYearAddCourse)).getSelectedItem().toString() +
+                ((Spinner) findViewById(R.id.spinnerTermAddCourse)).getSelectedItem().toString() +
+                ((TextView) findViewById(R.id.editTextSubjectAddCourse)).getText().toString() +
+                ((TextView) findViewById(R.id.editTextNumberAddCourse)).getText().toString()).toLowerCase())) {
             return;
         }
         Toast.makeText(this, R.string.toast_class_added, Toast.LENGTH_SHORT).show();
     }
 
-    public void onDoneClicked(View view) {
+    public void onDoneAddCourseClicked(View view) {
         if (courses.isEmpty()) {
             Utilities.showAlert(this, "Please enter a course");
             return;

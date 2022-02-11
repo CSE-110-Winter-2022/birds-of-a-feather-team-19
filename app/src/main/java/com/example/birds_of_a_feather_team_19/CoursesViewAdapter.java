@@ -43,7 +43,7 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.courseNameView = itemView.findViewById(R.id.courses_row_text);
+            this.courseNameView = itemView.findViewById(R.id.textViewTitleCourseRow);
         }
 
         public void setCourse(Course course) {

@@ -7,17 +7,17 @@
     tools:context=".AddCourseActivity">
 
     <ImageView
-        android:id="@+id/imageViewFeather"
+        android:id="@+id/imageViewFeatherAddClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/feather"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/feather" />
 
     <Spinner
-        android:id="@+id/spinnerYear"
+        android:id="@+id/spinnerYearAddCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,10 +25,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <Spinner
-        android:id="@+id/spinnerTerm"
+        android:id="@+id/spinnerTermAddCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,10 +36,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.4" />
 
     <EditText
-        android:id="@+id/editTextSubject"
+        android:id="@+id/editTextSubjectAddCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Subject"
@@ -52,7 +52,7 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/editTextNumberAddCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Number"
@@ -65,24 +65,24 @@
         app:layout_constraintVertical_bias="0.6" />
 
     <Button
-        android:id="@+id/buttonEnter"
+        android:id="@+id/buttonEnterAddCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@android:color/transparent"
-        android:onClick="onEnterClicked"
+        android:onClick="onEnterAddClassClicked"
         android:text="Enter"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <Button
-        android:id="@+id/buttonDone"
+        android:id="@+id/buttonDoneAddCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@android:color/transparent"
-        android:onClick="onDoneClicked"
+        android:onClick="onDoneAddCourseClicked"
         android:text="Done"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"

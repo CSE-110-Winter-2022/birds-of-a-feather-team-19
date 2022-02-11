@@ -3,18 +3,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.birds_of_a_feather_team_19.model.db.User;
-import java.io.IOException;
+
 import java.io.InputStream;
+import java.net.URL;
+import kotlin.jvm.internal.Ref.ObjectRef;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
     private final List<User> users;
@@ -35,11 +40,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        try {
-            holder.setUser(users.get(position));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        holder.setUser(users.get(position));
     }
 
     @Override
@@ -50,55 +51,50 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
-        private final TextView userNameView;
-        ImageView userImage = null;
+        private final ImageView photo;
+        private final TextView name;
         private User user;
 
         ViewHolder(View itemView) {
             super(itemView);
-          
-            this.userNameView = itemView.findViewById(R.id.textViewName);
-            //this.userImage = itemView.findViewById(R.id.user_image);
-            this.userNameView = itemView.findViewById(R.id.user_row_name);
-            this.userImage = itemView.findViewById(R.id.user_image);
+            this.photo = itemView.findViewById(R.id.imageViewPhotoUserRow);
+            this.name = itemView.findViewById(R.id.textViewNameUserRow);
             itemView.setOnClickListener(this);
         }
 
-        public void setUser(User user) throws IOException {
+        public void setUser(User user) {
             this.user = user;
-            this.userNameView.setText(user.getName());
-            new DownloadImageTask(userImage)
-                    .execute(user.getPhotoURL());
+            this.name.setText(user.getName());
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            final Handler handler = new Handler(Looper.getMainLooper());
+            final ObjectRef image = new ObjectRef();
+            image.element = (Bitmap) null;
+            executor.execute((Runnable) (new Runnable() {
+                public final void run() {
+                    String photoURL = user.getPhotoURL();
+
+                    try {
+                        InputStream in = (new URL(photoURL)).openStream();
+                        image.element = BitmapFactory.decodeStream(in);
+                        handler.post((Runnable)(new Runnable() {
+                            public final void run() {
+                                photo.setImageBitmap((Bitmap) image.element);
+                            }
+                        }));
+                    } catch (Exception var3) {
+                        var3.printStackTrace();
+                    }
+                }
+            }));
         }
       
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, UserDetailActivity.class);
-            intent.putExtra("user_id", this.user.getId());
+            intent.putExtra("id", this.user.getId());
             context.startActivity(intent);
         }
-    }
-}
-
-class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-    ImageView bmImage;
-    public DownloadImageTask(ImageView bmImage) {
-        this.bmImage = bmImage;
-    }
-    protected Bitmap doInBackground(String... urls) {
-        String urldisplay = urls[0];
-        Bitmap mIcon11 = null;
-        try {
-            InputStream in = new java.net.URL(urldisplay).openStream();
-            mIcon11 = BitmapFactory.decodeStream(in);
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-        }
-        return mIcon11;
-    }
-    protected void onPostExecute(Bitmap result) {
-        bmImage.setImageBitmap(result);
     }
 }

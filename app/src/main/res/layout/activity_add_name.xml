@@ -7,17 +7,17 @@
     tools:context=".AddNameActivity">
 
     <ImageView
-        android:id="@+id/imageViewBird"
+        android:id="@+id/imageViewBirdAddName"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/bird" />
 
     <EditText
-        android:id="@+id/editTextUserName"
+        android:id="@+id/editTextNameAddName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -31,11 +31,11 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <Button
-        android:id="@+id/buttonConfirm"
+        android:id="@+id/buttonConfirmAddName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#476843"
-        android:onClick="onConfirmClicked"
+        android:onClick="onConfirmAddNameClicked"
         android:text="Confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

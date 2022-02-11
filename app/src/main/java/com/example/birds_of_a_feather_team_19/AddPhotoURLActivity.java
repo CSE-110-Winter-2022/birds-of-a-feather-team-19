@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 public class AddPhotoURLActivity extends AppCompatActivity {
@@ -26,20 +24,19 @@ public class AddPhotoURLActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onSubmitClicked(View view) {
-        if (photoURLInvalid(((TextView) findViewById(R.id.editTextUserPhotoURL)).getText().toString())) {
+    public void onSubmitAddPhotoURLClicked(View view) {
+        if (photoURLInvalid(((TextView) findViewById(R.id.editTextPhotoAddPhotoURL)).getText().toString())) {
             Utilities.showAlert(this, "Please enter a valid photo");
             return;
         }
 
         SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
-        editor.putString("photoURL", ((TextView) findViewById(R.id.editTextUserPhotoURL)).getText().toString());
+        editor.putString("photoURL", ((TextView) findViewById(R.id.editTextPhotoAddPhotoURL)).getText().toString());
         editor.apply();
 
         Intent intent = new Intent(this, AddCourseActivity.class);
         startActivity(intent);
     }
-
     private boolean photoURLInvalid(String photoURL) {
         if (!photoURL.equals("")) {
             try {
