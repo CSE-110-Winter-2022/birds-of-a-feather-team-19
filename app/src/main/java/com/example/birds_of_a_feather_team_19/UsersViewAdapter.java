@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,6 +56,9 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
 
         ViewHolder(View itemView) {
             super(itemView);
+          
+            this.userNameView = itemView.findViewById(R.id.textViewName);
+            //this.userImage = itemView.findViewById(R.id.user_image);
             this.userNameView = itemView.findViewById(R.id.user_row_name);
             this.userImage = itemView.findViewById(R.id.user_image);
             itemView.setOnClickListener(this);
@@ -68,7 +70,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             new DownloadImageTask(userImage)
                     .execute(user.getPhotoURL());
         }
-
+      
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
