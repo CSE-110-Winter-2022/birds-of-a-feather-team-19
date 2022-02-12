@@ -125,9 +125,9 @@ public class MainActivity extends AppCompatActivity {
         }
         userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
 
-        List<User> users = new ArrayList<>();
+        List<UserPriority> users = new ArrayList<>();
         for (UserPriority userPriority : userPriorities) {
-            users.add(userPriority.getUser());
+            users.add(userPriority);
         }
 
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);

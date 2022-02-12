@@ -24,11 +24,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
-    private final List<User> users;
+    private final List<UserPriority> userPriorities;
 
-    public UsersViewAdapter(List<User> users) {
+    public UsersViewAdapter(List<UserPriority> usersPriorities) {
         super();
-        this.users = users;
+        this.userPriorities = usersPriorities;
     }
 
     @NonNull
@@ -42,12 +42,12 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setUser(users.get(position));
+        holder.setUser(userPriorities.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return userPriorities.size();
     }
 
     public static class ViewHolder
@@ -64,9 +64,9 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             itemView.setOnClickListener(this);
         }
 
-        public void setUser(User user) {
-            this.user = user;
-            name.setText(user.getName());
+        public void setUser(UserPriority userPriority) {
+            this.user = userPriority.getUser();
+            name.setText(user.getName() + " (" + userPriority.getPriority() + ")");
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
