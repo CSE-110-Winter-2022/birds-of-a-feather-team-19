@@ -7,11 +7,15 @@ import com.google.android.gms.nearby.messages.MessageListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +23,8 @@ import android.widget.Button;
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -34,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        checkBluetoothStatus();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
@@ -43,9 +51,10 @@ public class MainActivity extends AppCompatActivity {
         MessageListener realListener = new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
-                Log.d(TAG, "Found user: " + new String(message.getContent()));
-                updateDatabase();
-                updateRecylerView();
+                String userData = new String(message.getContent());
+//                Log.d(TAG, "Found user: " + new String(message.getContent()));
+                updateDatabase(userData);
+//                updateRecylerView();
             }
 
             @Override
@@ -53,7 +62,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Lost user: " + new String(message.getContent()));
             }
         };
-        this.messageListener = new MockNearbyMessageListener(realListener, 5, "Reloading");
+
+        message = new Message("hello".getBytes(StandardCharsets.UTF_8));
+
+        this.messageListener = new MockNearbyMessageListener(realListener, 5, "Data");
+
+
 
         updateRecylerView();
     }
@@ -61,15 +75,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //Nearby.getMessagesClient(this).publish(message);
-        //Nearby.getMessagesClient(this).subscribe(messageListener);
+
+        Nearby.getMessagesClient(this).publish(message);
+        Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        //checkBluetoothStatus();
+        System.out.println("Resumed");
 
         if (db.userDao().get(1) == null) {
             Intent intent = new Intent(this, AddNameActivity.class);
@@ -81,17 +96,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        //Nearby.getMessagesClient(this).unpublish(message);
-        //Nearby.getMessagesClient(this).unsubscribe(messageListener);
+        Nearby.getMessagesClient(this).unpublish(message);
+        Nearby.getMessagesClient(this).unsubscribe(messageListener);
+
+
     }
 
-    /*private void checkBluetoothStatus() {
+    private void checkBluetoothStatus() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH)) {
                 Utilities.showAlert(this, "This app requests permission to Bluetooth to connect you to other users. ");
             }
         }
-    }*/
+    }
+
+
+    public void onAddMockStudentDataClicked(View view) {
+        Intent intent = new Intent(MainActivity.this, MockNearbyMessageActivity.class);
+//        intent.putExtra("messageListener", (Parcelable) this.messageListener);
+
+        startActivity(intent);
+    }
 
     public void onStartStopMainClicked(View view) {
         Button button = findViewById(R.id.buttonStartStopMain);
@@ -101,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             //loadUsers();
           
             List<User> users = db.userDao().getAll();
+            users.remove(0);
             usersRecyclerView = findViewById(R.id.recyclerViewUsersMain);
             usersLayoutManager = new LinearLayoutManager(this);
             usersRecyclerView.setLayoutManager(usersLayoutManager);
@@ -113,7 +139,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateDatabase() {
+    private void updateDatabase(String userData) {
+        userData = userData.replace('\n', ',');
+        System.out.println(userData);
+        String[] data = userData.split(",");
+        System.out.println("Updating database");
+//        for (int i = 0; i < data.length; i++) {
+//            String s = data[i];
+//            System.out.println(i + ": " + s);
+//        }
+        String userName = data[0];
+        String userPhotoUrl = data[5];
+        int userId = db.userDao().count() + 1;
+
+        System.out.println(userName + ", " + userPhotoUrl + ", " + userId);
+
+        User studentUser = new User(userId, userName, userPhotoUrl);
+        db.userDao().insert(studentUser);
+
+        int i = 10;
+        while (i < data.length) {
+            String year = data[i];
+            String quarter = data[i + 1];
+            String subject = data[i + 2];
+            String number = data[i + 3];
+
+            System.out.println(year + quarter + " " + subject + number);
+
+            Course course = new Course(userId, year, quarter, subject, number);
+            db.courseDao().insert(course);
+
+            i += 5;
+        }
     }
 
     private void updateRecylerView() {
@@ -143,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         usersViewAdapter = new UsersViewAdapter(users);
         usersRecyclerView.setAdapter(usersViewAdapter);
     }
+
 }
 
 class UserPriority implements Comparable<UserPriority> {

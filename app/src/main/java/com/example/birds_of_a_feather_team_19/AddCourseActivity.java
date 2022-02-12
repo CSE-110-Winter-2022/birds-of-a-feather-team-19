@@ -12,11 +12,13 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class AddCourseActivity extends AppCompatActivity {
-    public Set<String[]> courses = new TreeSet<>();
+    public Set<String> courses = new TreeSet<>();
     public AppDatabase db;
 
     @Override
@@ -39,6 +41,7 @@ public class AddCourseActivity extends AppCompatActivity {
     }
 
     public void onEnterAddCourseButtonClicked(View view) {
+        System.out.println("Enter Course");
         String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString();
         String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString();
         String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString();
@@ -53,9 +56,13 @@ public class AddCourseActivity extends AppCompatActivity {
         }
 
         String[] course = {year, quarter, subject, number};
-        if (!courses.add(course)) {
+        String comparecourse = year + quarter + subject + number;
+//        courses.add(comparecourse);
+        if (!courses.add(comparecourse)) {
             Utilities.showAlert(this, "Course previously entered");
             return;
+        } else {
+            db.courseDao().insert(new Course(1, course[0], course[1], course[2], course[3]));
         }
         Toast.makeText(this, R.string.toast_add_course, Toast.LENGTH_SHORT).show();
     }
@@ -68,9 +75,9 @@ public class AddCourseActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
         db.userDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photo", null)));
-        for (String[] course : courses) {
-            db.courseDao().insert(new Course(0, course[0], course[1], course[2], course[3]));
-        }
+//        for (List<String> course : courses) {
+//            db.courseDao().insert(new Course(0, course.get(0), course.get(1), course.get(2), course.get(3)));
+//        }
 
         finish();
     }
