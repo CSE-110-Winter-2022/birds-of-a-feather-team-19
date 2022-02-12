@@ -12,11 +12,13 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class AddCourseActivity extends AppCompatActivity {
-    public Set<String[]> courses = new TreeSet<>();
+    public Set<List<String>> courses = new HashSet<>();
     public AppDatabase db;
 
     @Override
@@ -52,7 +54,11 @@ public class AddCourseActivity extends AppCompatActivity {
             return;
         }
 
-        String[] course = {year, quarter, subject, number};
+        List<String> course = new ArrayList<>();
+        course.add(year);
+        course.add(quarter);
+        course.add(subject);
+        course.add(number);
         if (!courses.add(course)) {
             Utilities.showAlert(this, "Course previously entered");
             return;
@@ -68,8 +74,8 @@ public class AddCourseActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
         db.userDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photo", null)));
-        for (String[] course : courses) {
-            db.courseDao().insert(new Course(0, course[0], course[1], course[2], course[3]));
+        for (List<String> course : courses) {
+            db.courseDao().insert(new Course(0, course.get(0), course.get(1), course.get(2), course.get(3)));
         }
 
         finish();
