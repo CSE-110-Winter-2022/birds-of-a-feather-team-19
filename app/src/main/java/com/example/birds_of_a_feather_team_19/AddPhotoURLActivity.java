@@ -7,11 +7,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class AddPhotoURLActivity extends AppCompatActivity {
 
@@ -42,17 +48,16 @@ public class AddPhotoURLActivity extends AppCompatActivity {
         startActivity(intent);
     }
     private boolean photoURLInvalid(String photo) {
+        ExecutorService imageExecutor = Executors.newSingleThreadExecutor();
+
         if (!photo.equals("")) {
+            Future<Boolean> future = (imageExecutor.submit(() -> BitmapFactory.decodeStream(new URL(photo).openStream()) == null));
             try {
-                if (BitmapFactory.decodeStream((new URL(photo)).openStream()) == null) {
-                    return true;
-                }
-            } catch (MalformedURLException e) {
+                return future.get();
+            } catch (ExecutionException e) {
                 e.printStackTrace();
-                return true;
-            } catch (IOException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
-                return true;
             }
         }
         return false;
