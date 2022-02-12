@@ -17,10 +17,15 @@ public class User {
     @ColumnInfo(name = "photoURL")
     private String photoURL;
 
-    /*public User(String name, String photo) {
+    public User(String name) {
+        this.name = name;
+    }
+    /*
+    public User(String name, String photo) {
         this.name = name;
         this.photo = photo;
-    }*/
+    }
+    */
 
     public User(int id, String name, String photoURL) {
         this.id = id;

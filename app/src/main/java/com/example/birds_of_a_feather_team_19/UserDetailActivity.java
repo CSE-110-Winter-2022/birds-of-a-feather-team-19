@@ -38,6 +38,10 @@ public class UserDetailActivity extends AppCompatActivity {
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
         coursesViewAdapter = new CoursesViewAdapter(courses);
         coursesRecyclerView.setAdapter(coursesViewAdapter);
+
+        //Gather all students gathered by Bluetooth
+        //Match user to each student and count the number of identical classes
+        //
     }
 
     public void onGoBackClicked(View view) {

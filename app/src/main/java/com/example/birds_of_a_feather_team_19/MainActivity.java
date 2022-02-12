@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         db = AppDatabase.singleton(this);
         List<User> users = new ArrayList<>();// db.usersDao().getAll();
-
+        db.userDao().insert(new User ())
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
@@ -68,18 +68,31 @@ public class MainActivity extends AppCompatActivity {
             //loadUsers();
             List<User> users = db.userDao().getAll();
 
+
+
             usersRecyclerView = findViewById(R.id.recyclerViewUsers);
             usersLayoutManager = new LinearLayoutManager(this);
             usersRecyclerView.setLayoutManager(usersLayoutManager);
             usersViewAdapter = new UsersViewAdapter(users);
             usersRecyclerView.setAdapter(usersViewAdapter);
+
+
         }
         else {
             button.setText("Start");
             //stopService(intent);
         }
-    }/*
+    }
+
+    private void compareUsers() {
+
+    }
 
     private void loadUsers() {
-    }*/
+        List<User> users = db.userDao().getAll();
+        for (user: users)(
+                if user
+                )
+
+    }
 }
