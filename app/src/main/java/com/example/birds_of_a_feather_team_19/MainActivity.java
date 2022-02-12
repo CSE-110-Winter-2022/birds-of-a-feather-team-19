@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
+import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         db = AppDatabase.singleton(this);
         List<User> users = new ArrayList<>();// db.usersDao().getAll();
-        db.userDao().insert(new User ())
+
         usersRecyclerView = findViewById(R.id.recyclerViewUsers);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
@@ -84,15 +85,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void compareUsers() {
+    private int compareUsers(User user1, User user2) {
+        List<Course> course1 = db.courseDao().getForUser(user1.getId());
+        List<Course> course2 = db.courseDao().getForUser(user2.getId());
 
+        int matches = 0;
+        //Compare course1 to course2 with retain. which creates a new list of common elements
+        //get size of new list, return size
+
+        for(Course c : course1) {
+            if(course2.contains(c))
+                matches++;
+        }
+
+        return matches;
     }
 
     private void loadUsers() {
         List<User> users = db.userDao().getAll();
-        for (user: users)(
-                if user
-                )
+        // User localUser = ...
+        //users.remove(localUser);
+        // (key: User otherStudent, val: int matches)
+        // Pair<int, User>
+        // max to min for match
+
+        for(User u : users) {
+            int
+        }
+
 
     }
 }
