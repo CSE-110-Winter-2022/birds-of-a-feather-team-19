@@ -29,18 +29,18 @@ public class AddCourseActivity extends AppCompatActivity {
                 ArrayAdapter.createFromResource(this, R.array.year, android.R.layout.simple_spinner_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(yearAdapter);
-        Spinner termSpinner = findViewById(R.id.termAddCourseSpinner);
-        ArrayAdapter<CharSequence> termAdapter =
+        Spinner quarterSpinner = findViewById(R.id.quarterAddCourseSpinner);
+        ArrayAdapter<CharSequence> quarterAdapter =
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
-        termAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        termSpinner.setAdapter(termAdapter);
+        quarterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        quarterSpinner.setAdapter(quarterAdapter);
 
         db = AppDatabase.singleton(this);
     }
 
     public void onEnterAddCourseButtonClicked(View view) {
         String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString();
-        String quarter = ((Spinner) findViewById(R.id.termAddCourseSpinner)).getSelectedItem().toString();
+        String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString();
         String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString();
         String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString();
         if (subject.isEmpty()) {
