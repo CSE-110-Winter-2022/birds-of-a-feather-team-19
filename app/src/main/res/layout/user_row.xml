@@ -10,23 +10,23 @@
     android:gravity="center_vertical">
 
     <TextView
-        android:id="@+id/textViewNameUserRow"
+        android:id="@+id/nameUserRowTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageViewPhotoUserRow"
+        app:layout_constraintStart_toEndOf="@id/photoUserRowImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
 
     <ImageView
-        android:id="@+id/imageViewPhotoUserRow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/photoUserRowImageView"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:layout_margin="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/nameUserRowTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintRight_toLeftOf="@id/textViewName"

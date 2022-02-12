@@ -1,7 +1,6 @@
 package com.example.birds_of_a_feather_team_19;
 
 import com.example.birds_of_a_feather_team_19.model.db.Course;
-import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         db = AppDatabase.singleton(this);
 
-        MessageListener realListener = new MessageListener() {
+        /*MessageListener realListener = new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found user: " + new String(message.getContent()));
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         this.messageListener = new MockNearbyMessageListener(realListener, 5, "Reloading");
-
+*/
         updateRecylerView();
     }
 
@@ -93,15 +92,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }*/
 
-    public void onStartStopMainClicked(View view) {
-        Button button = findViewById(R.id.buttonStartStopMain);
+    public void onStartStopMainButtonClicked(View view) {
+        Button button = findViewById(R.id.startStopMainButton);
         Intent intent = new Intent(MainActivity.this, BluetoothService.class);
         if (button.getText().toString().equals("Start")) {
             button.setText("Stop");
             //loadUsers();
           
             List<User> users = db.userDao().getAll();
-            usersRecyclerView = findViewById(R.id.recyclerViewUsersMain);
+            usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
             usersLayoutManager = new LinearLayoutManager(this);
             usersRecyclerView.setLayoutManager(usersLayoutManager);
             usersViewAdapter = new UsersViewAdapter(users);
@@ -137,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             users.add(userPriority.getUser());
         }
 
-        usersRecyclerView = findViewById(R.id.recyclerViewUsersMain);
+        usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
         usersViewAdapter = new UsersViewAdapter(users);

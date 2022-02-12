@@ -18,8 +18,10 @@ import java.io.InputStream;
 import java.net.URL;
 import kotlin.jvm.internal.Ref.ObjectRef;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
     private final List<User> users;
@@ -51,42 +53,28 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
+        private User user;
         private final ImageView photo;
         private final TextView name;
-        private User user;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.photo = itemView.findViewById(R.id.imageViewPhotoUserRow);
-            this.name = itemView.findViewById(R.id.textViewNameUserRow);
+            photo = itemView.findViewById(R.id.photoUserRowImageView);
+            name = itemView.findViewById(R.id.nameUserRowTextView);
             itemView.setOnClickListener(this);
         }
 
         public void setUser(User user) {
             this.user = user;
-            this.name.setText(user.getName());
+            name.setText(user.getName());
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            final Handler handler = new Handler(Looper.getMainLooper());
-            final ObjectRef image = new ObjectRef();
-            image.element = (Bitmap) null;
-            executor.execute((Runnable) (new Runnable() {
-                public final void run() {
-                    String photoURL = user.getPhotoURL();
-
-                    try {
-                        InputStream in = (new URL(photoURL)).openStream();
-                        image.element = BitmapFactory.decodeStream(in);
-                        handler.post((Runnable)(new Runnable() {
-                            public final void run() {
-                                photo.setImageBitmap((Bitmap) image.element);
-                            }
-                        }));
-                    } catch (Exception var3) {
-                        var3.printStackTrace();
-                    }
-                }
-            }));
+            Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
+            try {
+                photo.setImageBitmap(future.get());
+            } catch (ExecutionException e) {
+            } catch (InterruptedException e) {
+            }
         }
       
         @Override

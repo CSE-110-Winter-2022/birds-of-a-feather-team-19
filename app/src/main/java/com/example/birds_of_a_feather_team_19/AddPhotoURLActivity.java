@@ -7,12 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -34,24 +30,24 @@ public class AddPhotoURLActivity extends AppCompatActivity {
     }
 
     public void onSubmitAddPhotoURLButtonClicked(View view) {
-        String photo = ((TextView) findViewById(R.id.photoAddPhotoURLEditText)).getText().toString();
-        if (photoURLInvalid(photo)) {
+        String photoURL = ((TextView) findViewById(R.id.photoAddPhotoURLEditText)).getText().toString();
+        if (photoURLInvalid(photoURL)) {
             Utilities.showAlert(this, "Please enter a valid URL");
             return;
         }
 
         SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
-        editor.putString("photo", photo);
+        editor.putString("photoURL", photoURL);
         editor.apply();
 
         Intent intent = new Intent(this, AddCourseActivity.class);
         startActivity(intent);
     }
-    private boolean photoURLInvalid(String photo) {
+    private boolean photoURLInvalid(String photoURL) {
         ExecutorService imageExecutor = Executors.newSingleThreadExecutor();
 
-        if (!photo.equals("")) {
-            Future<Boolean> future = (imageExecutor.submit(() -> BitmapFactory.decodeStream(new URL(photo).openStream()) == null));
+        if (!photoURL.equals("")) {
+            Future<Boolean> future = (imageExecutor.submit(() -> BitmapFactory.decodeStream(new URL(photoURL).openStream()) == null));
             try {
                 return future.get();
             } catch (ExecutionException e) {
