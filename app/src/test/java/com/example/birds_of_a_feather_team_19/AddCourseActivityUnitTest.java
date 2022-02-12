@@ -16,6 +16,9 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,9 +46,19 @@ public class AddCourseActivityUnitTest {
             number.setText("110");
             enterButton.performClick();
 
-            Set<String> expected = new TreeSet<>();
-            expected.add("2022springcse101");
-            expected.add("2022springcse110");
+            Set<List<String>> expected = new HashSet<>();
+            List<String> course = new ArrayList<>();
+            course.add("2022");
+            course.add("spring");
+            course.add("cse");
+            course.add("101");
+            expected.add(course);
+            course = new ArrayList<>();
+            course.add("2022");
+            course.add("spring");
+            course.add("cse");
+            course.add("110");
+            expected.add(course);
             assertEquals(expected, activity.courses);
         });
     }
