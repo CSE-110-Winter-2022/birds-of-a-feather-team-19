@@ -94,17 +94,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
-        Intent intent = new Intent(MainActivity.this, BluetoothService.class);
+        //Intent intent = new Intent(MainActivity.this, BluetoothService.class);
         if (button.getText().toString().equals("Start")) {
             button.setText("Stop");
-            //loadUsers();
-          
-            List<User> users = db.userDao().getAll();
-            usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
-            usersLayoutManager = new LinearLayoutManager(this);
-            usersRecyclerView.setLayoutManager(usersLayoutManager);
-            usersViewAdapter = new UsersViewAdapter(users);
-            usersRecyclerView.setAdapter(usersViewAdapter);
+            updateRecylerView();
         }
         else {
             button.setText("Start");
@@ -129,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        userPriorities.remove(new UserPriority(new User(1, "", ""), 1));
+        userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
 
         List<User> users = new ArrayList<>();
         for (UserPriority userPriority : new TreeSet<>(userPriorities)) {
@@ -141,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
         usersRecyclerView.setLayoutManager(usersLayoutManager);
         usersViewAdapter = new UsersViewAdapter(users);
         usersRecyclerView.setAdapter(usersViewAdapter);
+    }
+
+    public void onMockMessageMainButtonClicked(View view) {
+        Intent intent = new Intent(this, MockNearbyMessageActivity.class);
+        startActivity(intent);
     }
 }
 

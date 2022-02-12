@@ -14,6 +14,9 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE id=:id")
     User get(int id);
 
+    @Query("SELECT * FROM users WHERE name=:name")
+    User get(String name);
+
     @Insert
     void insert(User user);
 }

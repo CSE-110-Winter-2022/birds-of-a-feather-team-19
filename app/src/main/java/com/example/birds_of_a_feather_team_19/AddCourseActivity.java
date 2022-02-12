@@ -41,10 +41,10 @@ public class AddCourseActivity extends AppCompatActivity {
     }
 
     public void onEnterAddCourseButtonClicked(View view) {
-        String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString();
-        String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString();
-        String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString();
-        String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString();
+        String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
+        String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
+        String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString().toLowerCase();
+        String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString().toLowerCase();
         if (subject.isEmpty()) {
             Utilities.showAlert(this, "Please enter course subject");
             return;

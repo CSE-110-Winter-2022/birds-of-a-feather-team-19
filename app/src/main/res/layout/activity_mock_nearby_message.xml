@@ -7,27 +7,28 @@
     tools:context=".MockNearbyMessageActivity">
 
     <EditText
-        android:id="@+id/editTextUserDetailMockNearbyMessage"
+        android:id="@+id/userDetailMockNearbyMessageEditText"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="15dp"
         android:ems="10"
         android:hint="User detail"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@id/buttonEnterMockNearbyMessage"
+        android:singleLine="false"
+        app:layout_constraintBottom_toTopOf="@id/enterMockNearbyMessageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonEnterMockNearbyMessage"
+        android:id="@+id/enterMockNearbyMessageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:onClick="onButtonEnterMockNearbyMessageClicked"
+        android:onClick="onEnterMockNearbyMessageButtonClicked"
         android:text="Enter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextUserDetailMockNearbyMessage" />
+        app:layout_constraintTop_toBottomOf="@id/userDetailMockNearbyMessageEditText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

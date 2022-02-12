@@ -13,6 +13,7 @@
         android:layout_margin="15dp"
         android:hint="Photo URL"
         android:inputType="text"
+        android:singleLine="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
