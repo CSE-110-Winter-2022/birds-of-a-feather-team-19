@@ -105,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Nearby.getMessagesClient(this).unpublish(message);
-        Nearby.getMessagesClient(this).unsubscribe(messageListener);
+
+        //Nearby.getMessagesClient(this).unpublish(message);
+        //Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 
     private void updateDatabase() {
