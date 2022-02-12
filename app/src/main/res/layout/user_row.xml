@@ -10,31 +10,26 @@
     android:gravity="center_vertical">
 
     <TextView
-        android:id="@+id/user_row_name"
-        android:layout_width="280dp"
+        android:id="@+id/nameUserRowTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:height="32sp"
-        android:lineHeight="32sp"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.005"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@id/photoUserRowImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/full_names" />
 
     <ImageView
-        android:id="@+id/user_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/photoUserRowImageView"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/user_row_name"
+        app:layout_constraintEnd_toStartOf="@id/nameUserRowTextView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/user_default_photo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

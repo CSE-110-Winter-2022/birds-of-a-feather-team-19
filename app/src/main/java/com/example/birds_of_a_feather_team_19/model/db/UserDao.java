@@ -1,7 +1,6 @@
 package com.example.birds_of_a_feather_team_19.model.db;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -15,12 +14,9 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE id=:id")
     User get(int id);
 
-    @Query("SELECT COUNT(*) from courses")
-    int count();
+    @Query("SELECT * FROM users WHERE name=:name")
+    User get(String name);
 
     @Insert
     void insert(User user);
-
-    @Delete
-    void delete(User user);
 }

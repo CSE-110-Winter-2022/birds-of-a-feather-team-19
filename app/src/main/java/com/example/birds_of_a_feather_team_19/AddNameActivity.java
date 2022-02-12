@@ -1,12 +1,12 @@
 package com.example.birds_of_a_feather_team_19;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AddNameActivity extends AppCompatActivity {
 
@@ -17,22 +17,22 @@ public class AddNameActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         finish();
     }
 
-    public void onConfirmClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextUserName)).getText().toString().equals("")) {
+    public void onConfirmAddNameButtonClicked(View view) {
+        String name = ((TextView) findViewById(R.id.nameAddNameEditText)).getText().toString();
+        if (name.equals("")) {
             Utilities.showAlert(this, "Please enter a name");
             return;
         }
 
         SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
-        editor.putString("name", ((TextView) findViewById(R.id.editTextUserName)).getText().toString());
+        editor.putString("name", name);
         editor.apply();
 
-        Intent intent = new Intent(this, AddPhotoURLActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, AddPhotoURLActivity.class));
     }
 }

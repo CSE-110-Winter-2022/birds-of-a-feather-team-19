@@ -12,25 +12,26 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class AddCourseActivity extends AppCompatActivity {
-    public Set<String> courses = new TreeSet<>();
+    public Set<List<String>> courses = new HashSet<>();
     public AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_class);
+        setContentView(R.layout.activity_add_course);
 
-        Spinner yearSpinner = findViewById(R.id.spinnerYear);
+        Spinner yearSpinner = findViewById(R.id.yearAddCourseSpinner);
         ArrayAdapter<CharSequence> yearAdapter =
                 ArrayAdapter.createFromResource(this, R.array.year, android.R.layout.simple_spinner_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(yearAdapter);
-        Spinner quarterSpinner = findViewById(R.id.spinnerTerm);
+        Spinner quarterSpinner = findViewById(R.id.quarterAddCourseSpinner);
         ArrayAdapter<CharSequence> quarterAdapter =
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
         quarterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -39,40 +40,44 @@ public class AddCourseActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
     }
 
-    public void onEnterClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextSubject)).getText().toString().equals("")) {
+    public void onEnterAddCourseButtonClicked(View view) {
+        String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
+        String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
+        String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString().toLowerCase();
+        String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString().toLowerCase();
+        if (subject.isEmpty()) {
             Utilities.showAlert(this, "Please enter course subject");
             return;
         }
-        if (((TextView) findViewById(R.id.editTextNumber)).getText().toString().equals("")) {
+        if (number.isEmpty()) {
             Utilities.showAlert(this, "Please enter course number");
             return;
         }
 
-        if (!courses.add((((Spinner) findViewById(R.id.spinnerYear)).getSelectedItem().toString() +
-                ((Spinner) findViewById(R.id.spinnerTerm)).getSelectedItem().toString() +
-                ((TextView) findViewById(R.id.editTextSubject)).getText().toString() +
-                ((TextView) findViewById(R.id.editTextNumber)).getText().toString()).toLowerCase())) {
+        List<String> course = new ArrayList<>();
+        course.add(year);
+        course.add(quarter);
+        course.add(subject);
+        course.add(number);
+        if (!courses.add(course)) {
+            Utilities.showAlert(this, "Course previously entered");
             return;
         }
-        Toast.makeText(this, R.string.toast_class_added, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_add_course, Toast.LENGTH_SHORT).show();
     }
 
-    public void onDoneClicked(View view) {
+    public void onDoneAddCourseButtonClicked(View view) {
         if (courses.isEmpty()) {
             Utilities.showAlert(this, "Please enter a course");
             return;
         }
 
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
-        db.userDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photoURL", "")));
-
-        for (String course : courses) {
-            db.courseDao().insert(new Course(1, course));
+        db.userDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photoURL", null)));
+        for (List<String> course : courses) {
+            db.courseDao().insert(new Course(1, course.get(0), course.get(1), course.get(2), course.get(3)));
         }
 
         finish();
     }
-
-
 }

@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddPhotoURLActivity">
+    tools:context=".MockNearbyMessageActivity">
 
     <EditText
-        android:id="@+id/photoAddPhotoURLEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/userDetailMockNearbyMessageEditText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_margin="15dp"
-        android:hint="Photo URL"
+        android:ems="10"
+        android:hint="User detail"
         android:inputType="text"
         android:singleLine="false"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/enterMockNearbyMessageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/submitAddPhotoURLButton"
+        android:id="@+id/enterMockNearbyMessageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:onClick="onSubmitAddPhotoURLButtonClicked"
-        android:text="SUBMIT"
+        android:onClick="onEnterMockNearbyMessageButtonClicked"
+        android:text="Enter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userDetailMockNearbyMessageEditText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

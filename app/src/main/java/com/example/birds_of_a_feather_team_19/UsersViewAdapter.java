@@ -1,10 +1,10 @@
 package com.example.birds_of_a_feather_team_19;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import kotlin.jvm.internal.Ref.ObjectRef;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
-    private final List<User> users;
+    private final List<UserPriority> userPriorities;
 
-    public UsersViewAdapter(List<User> users) {
+    public UsersViewAdapter(List<UserPriority> usersPriorities) {
         super();
-        this.users = users;
+        this.userPriorities = usersPriorities;
     }
 
     @NonNull
@@ -34,64 +37,51 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.user_row, parent, false);
-
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setUser(users.get(position));
+        holder.setUser(userPriorities.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return userPriorities.size();
     }
-
-/*
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
-    }
-*/
 
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
-        private final TextView userNameView;
-        //private final ImageView userImage;
         private User user;
+        private final ImageView photo;
+        private final TextView name;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.userNameView = itemView.findViewById(R.id.user_row_name);
-            //this.userImage = itemView.findViewById(R.id.user_image);
+            photo = itemView.findViewById(R.id.photoUserRowImageView);
+            name = itemView.findViewById(R.id.nameUserRowTextView);
             itemView.setOnClickListener(this);
         }
 
-        public void setUser(User user) {
-            this.user = user;
-            this.userNameView.setText(user.getName());
-            //this.userImage.setImageBitmap(getBitmapFromURL(user.getPhoto()));
+        public void setUser(UserPriority userPriority) {
+            this.user = userPriority.getUser();
+            name.setText(user.getName() + " (" + userPriority.getPriority() + ")");
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
+            try {
+                photo.setImageBitmap(future.get());
+            } catch (ExecutionException e) {
+            } catch (InterruptedException e) {
+            }
         }
+      
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, UserDetailActivity.class);
-            intent.putExtra("user_id", this.user.getId());
+            intent.putExtra("id", this.user.getId());
             context.startActivity(intent);
         }
     }
