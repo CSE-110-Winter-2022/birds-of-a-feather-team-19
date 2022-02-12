@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 String userData = new String(message.getContent());
 //                Log.d(TAG, "Found user: " + new String(message.getContent()));
                 updateDatabase(userData);
-//                updateRecylerView();
+                updateRecylerView();
             }
 
             @Override
@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Remove in merge
     public void onStartStopMainClicked(View view) {
         Button button = findViewById(R.id.buttonStartStopMain);
         Intent intent = new Intent(MainActivity.this, BluetoothService.class);
