@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class AddCourseActivity extends AppCompatActivity {
-    public Set<String> courses = new TreeSet<>();
+    public Set<String[]> courses = new TreeSet<>();
     public AppDatabase db;
 
     @Override
@@ -24,54 +24,54 @@ public class AddCourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
-        Spinner yearSpinner = findViewById(R.id.spinnerYearAddCourse);
+        Spinner yearSpinner = findViewById(R.id.yearAddCourseSpinner);
         ArrayAdapter<CharSequence> yearAdapter =
                 ArrayAdapter.createFromResource(this, R.array.year, android.R.layout.simple_spinner_item);
         yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         yearSpinner.setAdapter(yearAdapter);
-        Spinner quarterSpinner = findViewById(R.id.spinnerTermAddCourse);
-        ArrayAdapter<CharSequence> quarterAdapter =
+        Spinner termSpinner = findViewById(R.id.termAddCourseSpinner);
+        ArrayAdapter<CharSequence> termAdapter =
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
-        quarterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        quarterSpinner.setAdapter(quarterAdapter);
+        termAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        termSpinner.setAdapter(termAdapter);
 
         db = AppDatabase.singleton(this);
     }
 
-    public void onEnterAddCourseClicked(View view) {
-        if (((TextView) findViewById(R.id.editTextSubjectAddCourse)).getText().toString().equals("")) {
+    public void onEnterAddCourseButtonClicked(View view) {
+        String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString();
+        String quarter = ((Spinner) findViewById(R.id.termAddCourseSpinner)).getSelectedItem().toString();
+        String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString();
+        String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString();
+        if (subject.isEmpty()) {
             Utilities.showAlert(this, "Please enter course subject");
             return;
         }
-        if (((TextView) findViewById(R.id.editTextNumberAddCourse)).getText().toString().equals("")) {
+        if (number.isEmpty()) {
             Utilities.showAlert(this, "Please enter course number");
             return;
         }
 
-        if (!courses.add((((Spinner) findViewById(R.id.spinnerYearAddCourse)).getSelectedItem().toString() +
-                ((Spinner) findViewById(R.id.spinnerTermAddCourse)).getSelectedItem().toString() +
-                ((TextView) findViewById(R.id.editTextSubjectAddCourse)).getText().toString() +
-                ((TextView) findViewById(R.id.editTextNumberAddCourse)).getText().toString()).toLowerCase())) {
+        String[] course = {year, quarter, subject, number};
+        if (!courses.add(course)) {
+            Utilities.showAlert(this, "Course previously entered");
             return;
         }
-        Toast.makeText(this, R.string.toast_class_added, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_add_course, Toast.LENGTH_SHORT).show();
     }
 
-    public void onDoneAddCourseClicked(View view) {
+    public void onDoneAddCourseButtonClicked(View view) {
         if (courses.isEmpty()) {
             Utilities.showAlert(this, "Please enter a course");
             return;
         }
 
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
-        db.userDao().insert(new User(0, preferences.getString("name", null), preferences.getString("photoURL", "")));
-
-        for (String course : courses) {
-            db.courseDao().insert(new Course(0, course, course, course, course));
+        db.userDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photo", null)));
+        for (String[] course : courses) {
+            db.courseDao().insert(new Course(0, course[0], course[1], course[2], course[3]));
         }
 
         finish();
     }
-
-
 }

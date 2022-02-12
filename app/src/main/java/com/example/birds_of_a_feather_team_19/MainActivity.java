@@ -5,12 +5,14 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         db = AppDatabase.singleton(this);
 
-        /*MessageListener realListener = new MessageListener() {
+        MessageListener realListener = new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found user: " + new String(message.getContent()));
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         this.messageListener = new MockNearbyMessageListener(realListener, 5, "Reloading");
-*/
+
         updateRecylerView();
     }
 
@@ -74,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //Nearby.getMessagesClient(this).unpublish(message);
+        //Nearby.getMessagesClient(this).unsubscribe(messageListener);
+    }
+
     /*private void checkBluetoothStatus() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH)) {
@@ -102,21 +113,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        //Nearby.getMessagesClient(this).unpublish(message);
-        //Nearby.getMessagesClient(this).unsubscribe(messageListener);
-    }
-
     private void updateDatabase() {
     }
 
     private void updateRecylerView() {
         List<UserPriority> userPriorities = new ArrayList<>();
         for (Course userCourse : db.courseDao().getForUser(1)) {
-            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getTerm(), userCourse.getSubject(), userCourse.getNumber())) {
+            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
                 UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
                 if (userPriorities.contains(userPriority)) {
                     userPriorities.get(userPriorities.indexOf(userPriority))

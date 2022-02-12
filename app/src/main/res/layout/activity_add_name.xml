@@ -7,7 +7,7 @@
     tools:context=".AddNameActivity">
 
     <ImageView
-        android:id="@+id/imageViewBirdAddName"
+        android:id="@+id/birdAddNameImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,12 +17,12 @@
         app:srcCompat="@drawable/bird" />
 
     <EditText
-        android:id="@+id/editTextNameAddName"
+        android:id="@+id/nameAddNameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:hint="Name"
         android:inputType="textPersonName"
-        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -31,15 +31,16 @@
         app:layout_constraintVertical_bias="0.3" />
 
     <Button
-        android:id="@+id/buttonConfirmAddName"
+        android:id="@+id/confirmAddNameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:backgroundTint="#476843"
-        android:onClick="onConfirmAddNameClicked"
+        android:onClick="onConfirmAddNameButtonClicked"
         android:text="Confirm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintVertical_bias="0.9" />
 </androidx.constraintlayout.widget.ConstraintLayout>

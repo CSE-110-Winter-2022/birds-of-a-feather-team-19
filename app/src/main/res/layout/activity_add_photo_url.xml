@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".AddPhotoURLActivity">
 
-
     <EditText
-        android:id="@+id/editTextPhotoAddPhotoURL"
+        android:id="@+id/photoAddPhotoURLEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="15dp"
         android:hint="Photo URL"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,15 +19,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonSubmitAddPhotoURL"
+        android:id="@+id/submitAddPhotoURLButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onSubmitAddPhotoURLClicked"
+        android:layout_margin="15dp"
+        android:onClick="onSubmitAddPhotoURLButtonClicked"
         android:text="SUBMIT"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
-
+        app:layout_constraintVertical_bias="0.9" />
 </androidx.constraintlayout.widget.ConstraintLayout>

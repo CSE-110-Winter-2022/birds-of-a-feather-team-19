@@ -28,7 +28,7 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         String userName = userDetail.substring(0, userDetail.indexOf("\n"));
         userDetail = userDetail.substring(userDetail.indexOf("\n") + 1);
         String userPhotoURL = userDetail.substring(0, userDetail.indexOf("\n"));
-        if (photoURLInvalid(((TextView) findViewById(R.id.editTextPhotoAddPhotoURL)).getText().toString())) {
+        if (photoURLInvalid(((TextView) findViewById(R.id.photoAddPhotoURLEditText)).getText().toString())) {
             Utilities.showAlert(this, "Please enter a valid photo");
             return;
         }

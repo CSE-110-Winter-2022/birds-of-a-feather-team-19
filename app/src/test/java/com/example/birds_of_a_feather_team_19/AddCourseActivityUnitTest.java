@@ -33,9 +33,9 @@ public class AddCourseActivityUnitTest {
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
-            EditText subject = activity.findViewById(R.id.editTextSubjectAddCourse);
-            EditText number = activity.findViewById(R.id.editTextNumberAddCourse);
-            Button enterButton = activity.findViewById(R.id.buttonEnterAddCourse);
+            EditText subject = activity.findViewById(R.id.subjectAddCourseEditText);
+            EditText number = activity.findViewById(R.id.numberAddCourseEditText);
+            Button enterButton = activity.findViewById(R.id.enterAddCourseButton);
 
             subject.setText("CSE");
             number.setText("101");

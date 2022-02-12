@@ -1,13 +1,16 @@
 package com.example.birds_of_a_feather_team_19;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class AddPhotoURLActivity extends AppCompatActivity {
@@ -19,29 +22,36 @@ public class AddPhotoURLActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         finish();
     }
 
-    public void onSubmitAddPhotoURLClicked(View view) {
-        if (photoURLInvalid(((TextView) findViewById(R.id.editTextPhotoAddPhotoURL)).getText().toString())) {
-            Utilities.showAlert(this, "Please enter a valid photo");
+    public void onSubmitAddPhotoURLButtonClicked(View view) {
+        String photo = ((TextView) findViewById(R.id.photoAddPhotoURLEditText)).getText().toString();
+        if (photoURLInvalid(photo)) {
+            Utilities.showAlert(this, "Please enter a valid URL");
             return;
         }
 
         SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
-        editor.putString("photoURL", ((TextView) findViewById(R.id.editTextPhotoAddPhotoURL)).getText().toString());
+        editor.putString("photo", photo);
         editor.apply();
 
         Intent intent = new Intent(this, AddCourseActivity.class);
         startActivity(intent);
     }
-    private boolean photoURLInvalid(String photoURL) {
-        if (!photoURL.equals("")) {
+    private boolean photoURLInvalid(String photo) {
+        if (!photo.equals("")) {
             try {
-                new URL(photoURL).toURI();
-            } catch (Exception e) {
+                if (BitmapFactory.decodeStream((new URL(photo)).openStream()) == null) {
+                    return true;
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
                 return true;
             }
         }

@@ -16,8 +16,8 @@ public class Course {
     @ColumnInfo(name = "year")
     private String year;
 
-    @ColumnInfo(name = "term")
-    private String term;
+    @ColumnInfo(name = "quarter")
+    private String quarter;
 
     @ColumnInfo(name = "subject")
     private String subject;
@@ -25,10 +25,10 @@ public class Course {
     @ColumnInfo(name = "number")
     private String number;
 
-    public Course(int userId, String year, String term, String subject, String number) {
+    public Course(int userId, String year, String quarter, String subject, String number) {
         this.userId = userId;
         this.year = year;
-        this.term = term;
+        this.quarter = quarter;
         this.subject = subject;
         this.number = number;
     }
@@ -53,9 +53,9 @@ public class Course {
 
     public void setYear(String year) { this.year = year; }
 
-    public String getTerm() { return term; }
+    public String getQuarter() { return quarter; }
 
-    public void setTerm(String term) { this.term = term; }
+    public void setQuarter(String quarter) { this.quarter = quarter; }
 
     public String getSubject() { return subject; }
 
@@ -68,7 +68,7 @@ public class Course {
     @Override
     public boolean equals(Object o) {
         return (year.equals(((Course) o).getYear()) &&
-                term.equals(((Course) o).getTerm()) &&
+                quarter.equals(((Course) o).getQuarter()) &&
                 subject.equals(((Course) o).getSubject()) &&
                 number.equals(((Course) o).getNumber()));
     }
