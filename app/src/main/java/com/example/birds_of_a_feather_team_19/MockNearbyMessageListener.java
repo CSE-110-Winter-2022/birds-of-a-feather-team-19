@@ -1,5 +1,14 @@
 package com.example.birds_of_a_feather_team_19;
 
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+
+import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
