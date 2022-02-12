@@ -20,7 +20,6 @@ import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
     protected RecyclerView usersRecyclerView;
@@ -80,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        ((Button) findViewById(R.id.startStopMainButton)).setText("Start");
+
         //Nearby.getMessagesClient(this).unpublish(message);
         //Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
 
         List<User> users = new ArrayList<>();
-        for (UserPriority userPriority : new TreeSet<>(userPriorities)) {
+        for (UserPriority userPriority : userPriorities) {
             users.add(userPriority.getUser());
         }
 

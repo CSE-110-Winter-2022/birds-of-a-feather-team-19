@@ -39,16 +39,15 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView courseNameView;
-        private Course course;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.courseNameView = itemView.findViewById(R.id.textViewTitleCourseRow);
+            this.courseNameView = itemView.findViewById(R.id.titleCourseRowTextView);
         }
 
         public void setCourse(Course course) {
-            this.course = course;
-            this.courseNameView.setText(course.getQuarter() + " " + course.getYear() + " " + course.getSubject() + " " + course.getNumber());
+            this.courseNameView.setText(course.getYear() + " " + course.getQuarter() + " " +
+                    course.getSubject() + " " + course.getNumber());
         }
 
     }

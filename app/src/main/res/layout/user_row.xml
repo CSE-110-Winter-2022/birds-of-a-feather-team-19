@@ -29,8 +29,7 @@
         app:layout_constraintEnd_toStartOf="@id/nameUserRowTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_constraintRight_toLeftOf="@id/textViewName"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/user_default_photo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

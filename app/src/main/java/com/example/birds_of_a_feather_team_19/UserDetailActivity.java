@@ -3,16 +3,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class UserDetailActivity extends AppCompatActivity {
     private RecyclerView coursesRecyclerView;
@@ -27,20 +35,36 @@ public class UserDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_detail);
 
         db = AppDatabase.singleton(this);
-        int userId = getIntent().getIntExtra("id", 0);
-        user = db.userDao().get(userId);
-        List<Course> courses = db.courseDao().getForUser(userId);
-        // Set the title with the person.
-        ((TextView) findViewById(R.id.textViewNameUserDetail)).setText(user.getName());
+        user = db.userDao().get(getIntent().getIntExtra("id", 0));
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
+        try {
+            ((ImageView) findViewById(R.id.photoUserDetailImageView)).setImageBitmap(future.get());
+        } catch (ExecutionException e) {
+        } catch (InterruptedException e) {
+        }
+        ((TextView) findViewById(R.id.nameUserDetailTextView)).setText(user.getName());
 
-        coursesRecyclerView = findViewById(R.id.recyclerViewCoursesUserDetail);
+        updateRecylerView();
+    }
+    private void updateRecylerView() {
+        List<Course> courses = new ArrayList<>();
+        for (Course userCourse : db.courseDao().getForUser(1)) {
+            for (Course course : db.courseDao().getForUser(user.getId())) {
+                if (userCourse.equals(course)) {
+                    courses.add(course);
+                }
+            }
+        }
+
+        coursesRecyclerView = findViewById(R.id.coursesUserDetailRecyclerView);
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
         coursesViewAdapter = new CoursesViewAdapter(courses);
         coursesRecyclerView.setAdapter(coursesViewAdapter);
     }
 
-    public void onGoBackUserDetailClicked(View view) {
+    public void onGoBackUserDetailButtonClicked(View view) {
         finish();
     }
 

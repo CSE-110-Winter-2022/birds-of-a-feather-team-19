@@ -7,47 +7,46 @@
     tools:context=".UserDetailActivity">
 
     <Button
-        android:id="@+id/buttonGoBackUserDetail"
+        android:id="@+id/goBackUserDetailButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:onClick="onGoBackUserDetailClicked"
+        android:onClick="onGoBackUserDetailButtonClicked"
         android:text="GO BACK"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewCoursesUserDetail" />
+        app:layout_constraintTop_toBottomOf="@id/coursesUserDetailRecyclerView" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewCoursesUserDetail"
+        android:id="@+id/coursesUserDetailRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="15dp"
-        app:layout_constraintBottom_toTopOf="@id/buttonGoBackUserDetail"
+        app:layout_constraintBottom_toTopOf="@id/goBackUserDetailButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewNameUserDetail" />
+        app:layout_constraintTop_toBottomOf="@id/nameUserDetailTextView" />
 
     <ImageView
-        android:id="@+id/imageViewPhotoUserDetail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/photoUserDetailImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_margin="15dp"
-        app:layout_constraintBottom_toTopOf="@id/textViewNameUserDetail"
+        app:layout_constraintBottom_toTopOf="@id/nameUserDetailTextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/user_default_photo" />
 
     <TextView
-        android:id="@+id/textViewNameUserDetail"
+        android:id="@+id/nameUserDetailTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@id/recyclerViewCoursesUserDetail"
+        app:layout_constraintBottom_toTopOf="@id/coursesUserDetailRecyclerView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageViewPhotoUserDetail" />
-
+        app:layout_constraintTop_toBottomOf="@id/photoUserDetailImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
