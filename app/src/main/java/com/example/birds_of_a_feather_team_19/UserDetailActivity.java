@@ -23,11 +23,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class UserDetailActivity extends AppCompatActivity {
-    private RecyclerView coursesRecyclerView;
-    private RecyclerView.LayoutManager coursesLayoutManager;
-    private CoursesViewAdapter coursesViewAdapter;
-    private AppDatabase db;
-    private User user;
+    protected RecyclerView coursesRecyclerView;
+    protected RecyclerView.LayoutManager coursesLayoutManager;
+    protected CoursesViewAdapter coursesViewAdapter;
+    protected AppDatabase db;
+    protected User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class UserDetailActivity extends AppCompatActivity {
 
         updateRecylerView();
     }
-    private void updateRecylerView() {
+    protected void updateRecylerView() {
         List<Course> courses = new ArrayList<>();
         for (Course userCourse : db.courseDao().getForUser(1)) {
             for (Course course : db.courseDao().getForUser(user.getId())) {
