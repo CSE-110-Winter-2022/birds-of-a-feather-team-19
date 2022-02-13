@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private CoursesViewAdapter coursesViewAdapter;
     private AppDatabase db;
     private User user;
+    private static final String TAG = "BoF";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,18 @@ public class UserDetailActivity extends AppCompatActivity {
             courses.add(coursesPriorityQueue.poll());
         }
 
+        Log.d(TAG, "List of Common Courses for " + user.getName() + " and " + db.userDao().get(1).getName());
+        for (Course commonCourse : courses) {
+            String courseString = commonCourse.getYear() + commonCourse.getQuarter() + commonCourse.getSubject() + commonCourse.getNumber();
+            Log.d(TAG, courseString);
+        }
+      
         coursesRecyclerView = findViewById(R.id.coursesUserDetailRecyclerView);
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
         coursesViewAdapter = new CoursesViewAdapter(courses);
         coursesRecyclerView.setAdapter(coursesViewAdapter);
+
     }
 
     public void onGoBackUserDetailButtonClicked(View view) {
