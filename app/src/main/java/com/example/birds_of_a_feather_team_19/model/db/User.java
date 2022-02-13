@@ -17,12 +17,13 @@ public class User {
     @ColumnInfo(name = "photoURL")
     private String photoURL;
 
+    @Ignore
     public User(String name, String photoURL) {
         this.name = name;
         this.photoURL = photoURL;
     }
 
-    @Ignore
+//    @Ignore
     public User(int id, String name, String photoURL) {
         this.id = id;
         this.name = name;
