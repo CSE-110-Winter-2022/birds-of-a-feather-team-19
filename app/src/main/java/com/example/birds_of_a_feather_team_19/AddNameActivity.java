@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,8 +23,8 @@ public class AddNameActivity extends AppCompatActivity {
     }
 
     public void onConfirmAddNameButtonClicked(View view) {
-        String name = ((TextView) findViewById(R.id.nameAddNameEditText)).getText().toString();
-        if (name.equals("")) {
+        String name = ((EditText) findViewById(R.id.nameAddNameEditText)).getText().toString();
+        if (Utilities.invalidName(name)) {
             Utilities.showAlert(this, "Please enter a name");
             return;
         }

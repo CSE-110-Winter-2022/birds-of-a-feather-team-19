@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     protected RecyclerView.LayoutManager usersLayoutManager;
     protected UsersViewAdapter usersViewAdapter;
     private AppDatabase db;
+    public static final int USER_ID = 1;
     private static final String TAG = "BoF";
     private MessageListener messageListener;
     private Message message;
@@ -84,24 +85,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         checkBluetoothStatus();
-
-        if (db.userDao().get(1) == null) {
-            Intent intent = new Intent(this, AddNameActivity.class);
-            startActivity(intent);
+        if (db.userDao().get(USER_ID) == null) {
+            startActivity(new Intent(this, AddNameActivity.class));
         } else {
 //            updateRecylerView();
         }
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
         ((Button) findViewById(R.id.startStopMainButton)).setText("Start");
-
         Nearby.getMessagesClient(this).unpublish(message);
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
