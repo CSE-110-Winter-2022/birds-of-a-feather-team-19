@@ -1,11 +1,14 @@
 
 package com.example.birds_of_a_feather_team_19;
 
+import android.util.Log;
+
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -19,10 +22,11 @@ public class MockNearbyMessageListener extends MessageListener implements Serial
 
     private int index;
 
-    private static Set<String> messages = new TreeSet<>();
+    private static List<String> messages = new ArrayList<>();
 
     public static void addMessage(String message) {
-        messages.add(message);
+        if (messages.indexOf(message) < 0)
+            messages.add(message);
     }
 
     public MockNearbyMessageListener(MessageListener realMessageListener, int frequency, String messageStr) {
@@ -32,11 +36,11 @@ public class MockNearbyMessageListener extends MessageListener implements Serial
         this.executor = Executors.newSingleThreadScheduledExecutor();
 
         executor.scheduleAtFixedRate(() -> {
-            String[] messagesArr = new String[0];
-            messagesArr = messages.toArray(messagesArr);
-
+            for (String m : messages) {
+                Log.d("BoF", m);
+            }
             while (index < messages.size()) {
-                String messageString = messagesArr[index++];
+                String messageString = messages.get(index++);
                 Message message = new Message(messageString.getBytes(StandardCharsets.UTF_8));
                 this.messageListener.onFound(message);
             }

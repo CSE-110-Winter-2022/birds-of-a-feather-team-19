@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
 
-        quarterMap.put("FA", "Fall");
-        quarterMap.put("WI", "Winter");
-        quarterMap.put("SP", "Spring");
-        quarterMap.put("SS1", "Summer Session I");
-        quarterMap.put("SS2", "Summer Session II");
-        quarterMap.put("SSS", "Special Summer Session");
+        quarterMap.put("fa", "fall");
+        quarterMap.put("wi", "winter");
+        quarterMap.put("sp", "spring");
+        quarterMap.put("ss1", "summer session 1");
+        quarterMap.put("ss2", "summer session 2");
+        quarterMap.put("sss", "special summer session");
 
         db = AppDatabase.singleton(this);
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found user: " + new String(message.getContent()));
                 updateDatabase(new String(message.getContent()));
-                updateRecylerView();
+//                updateRecylerView();
             }
 
             @Override
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AddNameActivity.class);
             startActivity(intent);
         } else {
-            updateRecylerView();
+//            updateRecylerView();
         }
 
     }
@@ -114,19 +115,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onStartStopMainButtonClicked(View view) {
-        Button button = findViewById(R.id.startStopMainButton);
-        //Intent intent = new Intent(MainActivity.this, BluetoothService.class);
-        if (button.getText().toString().equals("Start")) {
-            button.setText("Stop");
-            updateRecylerView();
-        }
-        else {
-            button.setText("Start");
-            //stopService(intent);
-        }
+//        Button button = findViewById(R.id.startStopMainButton);
+//        //Intent intent = new Intent(MainActivity.this, BluetoothService.class);
+//        if (button.getText().toString().equals("Start")) {
+//            button.setText("Stop");
+//            updateRecylerView();
+//        }
+//        else {
+//            button.setText("Start");
+//            //stopService(intent);
+//        }
     }
 
     private void updateDatabase(String userData) {
+//        userData = userData.toLowerCase(Locale.ROOT);
         userData = userData.replace('\n', ',');
         System.out.println(userData);
         String[] data = userData.split(",");
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println(i + ": " + s);
 //        }
         String userName = data[0];
-        String userPhotoUrl = data[5];
+        String userPhotoUrl = data[4];
         int userId = db.userDao().count() + 1;
 
         System.out.println(userName + ", " + userPhotoUrl + ", " + userId);
@@ -144,24 +146,25 @@ public class MainActivity extends AppCompatActivity {
         User studentUser = new User(userId, userName, userPhotoUrl);
         db.userDao().insert(studentUser);
 
-        int i = 10;
+        int i = 8;
         while (i < data.length) {
-            String year = data[i];
-            String quarter = quarterMap.get(data[i + 1]);
-            String subject = data[i + 2];
-            String number = data[i + 3];
+            String year = data[i].toLowerCase(Locale.ROOT);
+            String quarter = quarterMap.get(data[i + 1].toLowerCase(Locale.ROOT));
+            String subject = data[i + 2].toLowerCase(Locale.ROOT);
+            String number = data[i + 3].toLowerCase(Locale.ROOT);
+
+
 
             System.out.println(year + quarter + " " + subject + number);
 
             Course course = new Course(userId, year, quarter, subject, number);
             db.courseDao().insert(course);
 
-            i += 5;
+            i += 4;
         }
     }
 
     private void updateRecylerView() {
-        System.out.println("Updating Recycler View");
         List<UserPriority> userPriorities = new ArrayList<>();
         for (Course userCourse : db.courseDao().getForUser(1)) {
             for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
@@ -177,12 +180,9 @@ public class MainActivity extends AppCompatActivity {
         }
         userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
 
-
         List<UserPriority> users = new ArrayList<>();
         for (UserPriority userPriority : userPriorities) {
             users.add(userPriority);
-            User user = userPriority.getUser();
-            System.out.println(user.getName() + ", " + user.getId());
         }
 
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
@@ -190,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
         usersRecyclerView.setLayoutManager(usersLayoutManager);
         usersViewAdapter = new UsersViewAdapter(users);
         usersRecyclerView.setAdapter(usersViewAdapter);
-        System.out.println("Recycler View Updated");
     }
 
     public void onMockMessageMainButtonClicked(View view) {
