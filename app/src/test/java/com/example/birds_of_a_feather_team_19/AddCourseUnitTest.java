@@ -33,12 +33,7 @@ public class AddCourseUnitTest {
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = AppDatabase.singleton(context);
-    }
-
-    @After
-    public void closeDb() throws IOException {
-        db.close();
+        db = AppDatabase.useTestSingleton(context);
     }
 
     @Test
@@ -57,4 +52,11 @@ public class AddCourseUnitTest {
 
         assertEquals(3, db.courseDao().getForUser(userId).size());
     }
+
+    @After
+    public void closeDb() throws IOException {
+        db.close();
+    }
+
+
 }

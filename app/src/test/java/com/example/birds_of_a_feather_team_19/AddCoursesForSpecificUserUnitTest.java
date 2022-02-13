@@ -27,7 +27,7 @@ public class AddCoursesForSpecificUserUnitTest {
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = AppDatabase.singleton(context);
+        db = AppDatabase.useTestSingleton(context);
 
         test = new User("Test one", "");
         one = new Course(test.getId(), "2022", "WI", "CSE", "110");
@@ -42,11 +42,6 @@ public class AddCoursesForSpecificUserUnitTest {
 
     }
 
-    @After
-    public void closeDb() throws IOException {
-        db.close();
-    }
-
     @Test
     public void addCoursesForSpecificUser() throws Exception {
         List<Course> storedClasses = db.courseDao().getForUser(test.getId());
@@ -56,4 +51,11 @@ public class AddCoursesForSpecificUserUnitTest {
         assertTrue(storedClasses.contains(two));
         assertTrue(storedClasses.contains(three));
     }
+
+    @After
+    public void closeDb() throws IOException {
+        db.close();
+    }
+
+
 }

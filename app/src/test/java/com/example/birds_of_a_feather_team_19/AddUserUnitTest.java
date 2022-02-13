@@ -32,13 +32,9 @@ public class AddUserUnitTest {
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = AppDatabase.singleton(context);
+        db = AppDatabase.useTestSingleton(context);
     }
 
-    @After
-    public void closeDb() throws IOException {
-        db.close();
-    }
 
     @Test
     public void createUserAndAddToDb() throws Exception {
@@ -50,4 +46,10 @@ public class AddUserUnitTest {
 
         assertEquals(2, db.userDao().getAll().size());
     }
+
+    @After
+    public void closeDb() throws IOException {
+        db.close();
+    }
+
 }
