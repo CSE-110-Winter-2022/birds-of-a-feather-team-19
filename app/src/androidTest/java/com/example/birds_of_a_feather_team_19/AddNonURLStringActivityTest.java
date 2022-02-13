@@ -38,7 +38,7 @@ public class AddNonURLStringActivityTest {
     @Test
     public void addNonURLStringActivityTest() {
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.photoAddPhotoURLEditText),
+                allOf(withId(R.id.photoURLAddPhotoURLEditText),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

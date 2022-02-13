@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 
+    // Needs testing
     private void checkBluetoothStatus() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
             if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH)) {
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
+    // Logging
     private void updateDatabase(String userData) {
 //        userData = userData.toLowerCase(Locale.ROOT);
         userData = userData.replace('\n', ',');
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         updateRecylerView();
     }
 
+    // Logging
     private void updateRecylerView() {
         System.out.println("UPDATING RECYCLER VIEW");
         List<UserPriority> userPriorities = new ArrayList<>();
@@ -197,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
+// Test correct ordering
 class UserPriority implements Comparable<UserPriority> {
     private User user;
     private int priority;

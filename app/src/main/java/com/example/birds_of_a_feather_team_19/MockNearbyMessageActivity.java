@@ -43,21 +43,4 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         mockUserTextView.setText("");
     }
 
-    private boolean photoURLInvalid(String photoURL) {
-        ExecutorService imageExecutor = Executors.newSingleThreadExecutor();
-
-        if (!photoURL.equals("")) {
-            Future<Boolean> future = (imageExecutor.submit(() -> BitmapFactory.decodeStream(new URL(photoURL).openStream()) == null));
-            try {
-                return future.get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-
 }
