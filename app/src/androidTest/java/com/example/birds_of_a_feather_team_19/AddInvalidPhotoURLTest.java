@@ -8,6 +8,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
@@ -30,13 +31,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class AddNonURLStringActivityTest {
+public class AddInvalidPhotoURLTest {
 
     @Rule
     public ActivityTestRule<AddPhotoURLActivity> mActivityTestRule = new ActivityTestRule<>(AddPhotoURLActivity.class);
 
     @Test
-    public void addNonURLStringActivityTest() {
+    public void addInvalidPhotoURLTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.photoURLAddPhotoURLEditText),
                         childAtPosition(
@@ -45,7 +46,7 @@ public class AddNonURLStringActivityTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("invalid"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("google.com"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.submitAddPhotoURLButton), withText("SUBMIT"),
@@ -57,9 +58,11 @@ public class AddNonURLStringActivityTest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        ViewInteraction frameLayout = onView(
-                allOf(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class), isDisplayed()));
-        frameLayout.check(matches(isDisplayed()));
+        ViewInteraction textView = onView(
+                allOf(withId(android.R.id.message), withText("Please enter a valid URL"),
+                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class))),
+                        isDisplayed()));
+        textView.check(matches(withText("Please enter a valid URL")));
     }
 
     private static Matcher<View> childAtPosition(

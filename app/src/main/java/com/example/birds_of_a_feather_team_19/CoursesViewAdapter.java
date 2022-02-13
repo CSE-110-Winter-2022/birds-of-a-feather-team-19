@@ -1,5 +1,6 @@
 package com.example.birds_of_a_feather_team_19;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,16 @@ import java.util.List;
 
 public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.ViewHolder> {
     private final List<Course> courses;
+    private static final String TAG = "BoF";
 
     public CoursesViewAdapter(List<Course> courses) {
         super();
         this.courses = courses;
+
+        for (Course addedCourse : courses) {
+            String courseString = addedCourse.getYear() + addedCourse.getQuarter() + addedCourse.getSubject() + addedCourse.getNumber();
+            Log.d(TAG, courseString);
+        }
     }
 
     @NonNull
@@ -34,6 +41,7 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "Size of Courses" + courses.size());
         return courses.size();
     }
 

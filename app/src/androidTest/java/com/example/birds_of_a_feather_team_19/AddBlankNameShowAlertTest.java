@@ -1,18 +1,37 @@
 package com.example.birds_of_a_feather_team_19;
 
+<<<<<<< HEAD:app/src/androidTest/java/com/example/birds_of_a_feather_team_19/AddBlankNameActivityTest.java
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
+=======
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+>>>>>>> 975f54a62ff684346d12c3617a26db535fa28dde:app/src/androidTest/java/com/example/birds_of_a_feather_team_19/AddBlankNameShowAlertTest.java
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+<<<<<<< HEAD:app/src/androidTest/java/com/example/birds_of_a_feather_team_19/AddBlankNameActivityTest.java
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
+=======
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
+>>>>>>> 975f54a62ff684346d12c3617a26db535fa28dde:app/src/androidTest/java/com/example/birds_of_a_feather_team_19/AddBlankNameShowAlertTest.java
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -22,19 +41,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.is;
-
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class AddBlankNameActivityTest {
+public class AddBlankNameShowAlertTest {
 
     @Rule
     public ActivityTestRule<AddNameActivity> mActivityTestRule = new ActivityTestRule<>(AddNameActivity.class);
 
     @Test
-    public void addBlankNameActivityTest() {
+    public void addBlankNameShowAlertTest() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.confirmAddNameButton), withText("Confirm"),
                         childAtPosition(
@@ -45,9 +60,11 @@ public class AddBlankNameActivityTest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        ViewInteraction frameLayout = onView(
-                allOf(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class), isDisplayed()));
-        frameLayout.check(matches(isDisplayed()));
+        ViewInteraction textView = onView(
+                allOf(withId(android.R.id.message), withText("Please enter a name"),
+                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class))),
+                        isDisplayed()));
+        textView.check(matches(withText("Please enter a name")));
     }
 
     private static Matcher<View> childAtPosition(

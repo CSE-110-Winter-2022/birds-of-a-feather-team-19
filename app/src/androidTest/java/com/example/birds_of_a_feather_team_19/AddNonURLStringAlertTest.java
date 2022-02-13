@@ -4,11 +4,11 @@ package com.example.birds_of_a_feather_team_19;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
@@ -31,13 +31,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class AddInvalidPhotoURLActivityTest {
+public class AddNonURLStringAlertTest {
 
     @Rule
     public ActivityTestRule<AddPhotoURLActivity> mActivityTestRule = new ActivityTestRule<>(AddPhotoURLActivity.class);
 
     @Test
-    public void addInvalidPhotoURLActivityTest() {
+    public void addNonURLStringAlertTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.photoURLAddPhotoURLEditText),
                         childAtPosition(
@@ -46,17 +46,7 @@ public class AddInvalidPhotoURLActivityTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("google.com"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.photoURLAddPhotoURLEditText), withText("google.com"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText2.perform(pressImeActionButton());
+        appCompatEditText.perform(replaceText("invalid"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.submitAddPhotoURLButton), withText("SUBMIT"),
@@ -68,9 +58,11 @@ public class AddInvalidPhotoURLActivityTest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        ViewInteraction frameLayout = onView(
-                allOf(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class), isDisplayed()));
-        frameLayout.check(matches(isDisplayed()));
+        ViewInteraction textView = onView(
+                allOf(withId(android.R.id.message), withText("Please enter a valid URL"),
+                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class))),
+                        isDisplayed()));
+        textView.check(matches(withText("Please enter a valid URL")));
     }
 
     private static Matcher<View> childAtPosition(
