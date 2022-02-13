@@ -17,6 +17,7 @@ import com.example.birds_of_a_feather_team_19.model.db.User;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,13 +49,18 @@ public class UserDetailActivity extends AppCompatActivity {
         updateRecylerView();
     }
     private void updateRecylerView() {
+        PriorityQueue<Course> coursesPriorityQueue = new PriorityQueue<>();
         List<Course> courses = new ArrayList<>();
         for (Course userCourse : db.courseDao().getForUser(1)) {
             for (Course course : db.courseDao().getForUser(user.getId())) {
                 if (userCourse.equals(course)) {
-                    courses.add(course);
+                    coursesPriorityQueue.add(course);
                 }
             }
+        }
+
+        while (!coursesPriorityQueue.isEmpty()) {
+            courses.add(coursesPriorityQueue.poll());
         }
 
         coursesRecyclerView = findViewById(R.id.coursesUserDetailRecyclerView);
