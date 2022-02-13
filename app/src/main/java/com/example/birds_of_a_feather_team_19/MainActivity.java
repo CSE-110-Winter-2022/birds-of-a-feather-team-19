@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class MainActivity extends AppCompatActivity {
     protected RecyclerView usersRecyclerView;
@@ -174,17 +175,18 @@ public class MainActivity extends AppCompatActivity {
                 if (userPriorities.contains(userPriority)) {
                     userPriorities.get(userPriorities.indexOf(userPriority))
                             .setPriority(userPriorities.get(userPriorities.indexOf(userPriority)).getPriority() + 1);
-                }
-                else {
+                } else {
                     userPriorities.add(userPriority);
                 }
             }
         }
         userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
 
+        PriorityQueue<UserPriority> userPriorityQueue = new PriorityQueue<>(userPriorities);
+
         List<UserPriority> users = new ArrayList<>();
-        for (UserPriority userPriority : userPriorities) {
-            users.add(userPriority);
+        while (!userPriorityQueue.isEmpty()) {
+            users.add(userPriorityQueue.poll());
         }
 
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
