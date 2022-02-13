@@ -7,7 +7,7 @@
     tools:context=".AddCourseActivity">
 
     <ImageView
-        android:id="@+id/imageViewFeatherAddClass"
+        android:id="@+id/featherAddCourseImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +47,6 @@
         android:layout_margin="15dp"
         android:hint="Subject"
         android:inputType="textPersonName"
-        android:singleLine="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -62,7 +61,6 @@
         android:layout_margin="15dp"
         android:hint="Number"
         android:inputType="textPersonName"
-        android:singleLine="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"

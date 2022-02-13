@@ -30,66 +30,17 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
     }
 
-    public void onEnterMockNearbyMessageButtonClicked(View view) {
-        String userDetail = ((TextView) findViewById(R.id.userDetailMockNearbyMessageEditText)).getText().toString();
-        String userName = userDetail.substring(0, userDetail.indexOf("\n"));
-        if (db.userDao().get(userName) != null) {
-            Utilities.showAlert(this, "Username taken. Please enter another username");
-            return;
-        }
-        userDetail = userDetail.substring(userDetail.indexOf("\n") + 1);
-        String userPhotoURL = userDetail.substring(0, userDetail.indexOf("\n"));
-        if (photoURLInvalid(userPhotoURL)) {
-            Utilities.showAlert(this, "Please enter a valid photo");
-            return;
-        }
-        userDetail = userDetail.substring(userDetail.indexOf("\n") + 1);
-        db.userDao().insert(new User(userName, userPhotoURL));
-
-        userDetail = userDetail.toLowerCase() + "\n";
-        String courseYear, courseQuarter, courseSubject, courseNumber;
-        while (!userDetail.isEmpty()) {
-            try {
-                courseYear = userDetail.substring(0, userDetail.indexOf(","));
-                userDetail = userDetail.substring(userDetail.indexOf(",") + 1);
-                courseQuarter = userDetail.substring(0, userDetail.indexOf(","));
-                userDetail = userDetail.substring(userDetail.indexOf(",") + 1);
-                courseSubject = userDetail.substring(0, userDetail.indexOf(","));
-                userDetail = userDetail.substring(userDetail.indexOf(",") + 1);
-                courseNumber = userDetail.substring(0, userDetail.indexOf("\n"));
-                userDetail = userDetail.substring(userDetail.indexOf("\n") + 1);
-            } catch (IndexOutOfBoundsException e) {
-                Utilities.showAlert(this, "Please enter valid courses");
-                return;
-            }
-
-            switch (courseQuarter) {
-                case "fa":
-                    courseQuarter = "fall";
-                    break;
-                case "wi":
-                    courseQuarter = "winter";
-                    break;
-                case "sp":
-                    courseQuarter = "spring";
-                    break;
-                case "ss1":
-                    courseQuarter = "summer session 1";
-                    break;
-                case "ss2":
-                    courseQuarter = "summer session 2";
-                    break;
-                case "sss":
-                    courseQuarter = "special summer session";
-                    break;
-                default:
-                    Utilities.showAlert(this, "Please enter valid courses");
-                    return;
-            }
-            db.courseDao().insert(new Course(db.userDao().get(userName).getId(), courseYear, courseQuarter, courseSubject, courseNumber));
-        }
-
+    public void onBackClicked(View view) {
         finish();
+    }
+
+    public void onEnterMockNearbyMessageButtonClicked(View view) {
+        TextView mockUserTextView = findViewById(R.id.userDetailMockNearbyMessageEditText);
+        String userDetail = mockUserTextView.getText().toString();
+
+        MockNearbyMessageListener.addMessage(userDetail);
+
+        mockUserTextView.setText("");
     }
 
     private boolean photoURLInvalid(String photoURL) {
@@ -107,4 +58,6 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         }
         return false;
     }
+
+
 }
