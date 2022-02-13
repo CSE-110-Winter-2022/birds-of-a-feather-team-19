@@ -127,9 +127,9 @@ public class MainActivity extends AppCompatActivity {
     private void updateDatabase(String userData) {
 //        userData = userData.toLowerCase(Locale.ROOT);
         userData = userData.replace('\n', ',');
-        System.out.println(userData);
+        Log.d(TAG,userData);
         String[] data = userData.split(",");
-        System.out.println("Updating database");
+        Log.d(TAG,"Updating database");
 //        for (int i = 0; i < data.length; i++) {
 //            String s = data[i];
 //            System.out.println(i + ": " + s);
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         String userPhotoUrl = data[4];
         int userId = db.userDao().count() + 1;
 
-        System.out.println(userName + ", " + userPhotoUrl + ", " + userId);
+        Log.d(TAG,userName + ", " + userPhotoUrl + ", " + userId);
 
         User studentUser = new User(userId, userName, userPhotoUrl);
         db.userDao().insert(studentUser);
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            System.out.println(year + quarter + " " + subject + number);
+            Log.d(TAG,year + quarter + " " + subject + number);
 
             Course course = new Course(userId, year, quarter, subject, number);
             db.courseDao().insert(course);
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Logging
     private void updateRecylerView() {
-        System.out.println("UPDATING RECYCLER VIEW");
+        Log.d(TAG,"UPDATING RECYCLER VIEW");
         List<UserPriority> userPriorities = new ArrayList<>();
         for (Course userCourse : db.courseDao().getForUser(1)) {
             for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
@@ -185,6 +185,12 @@ public class MainActivity extends AppCompatActivity {
         List<UserPriority> users = new ArrayList<>();
         while (!userPriorityQueue.isEmpty()) {
             users.add(userPriorityQueue.poll());
+        }
+
+        Log.d(TAG, "List of Users in priority order");
+        for (UserPriority priorityUsers : users) {
+            String courseString = "User: " + priorityUsers.getUser().getName() + " with priority " + priorityUsers.getPriority();
+            Log.d(TAG, courseString);
         }
 
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
