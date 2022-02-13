@@ -21,4 +21,5 @@ public interface CourseDao {
 
     @Insert
     void insert(Course course);
+
 }
