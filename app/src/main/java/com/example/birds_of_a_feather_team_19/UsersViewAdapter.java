@@ -73,7 +73,9 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             try {
                 photo.setImageBitmap(future.get());
             } catch (ExecutionException e) {
+                e.printStackTrace();
             } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
       
