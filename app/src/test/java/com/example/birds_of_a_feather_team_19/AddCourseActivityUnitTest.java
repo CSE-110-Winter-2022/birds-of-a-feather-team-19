@@ -62,4 +62,5 @@ public class AddCourseActivityUnitTest {
             assertEquals(expected, activity.courses);
         });
     }
+
 }
