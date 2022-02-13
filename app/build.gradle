@@ -47,10 +47,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
     implementation "androidx.room:room-runtime:2.4.1"
     implementation 'androidx.room:room-common:2.4.1'
-<<<<<<< HEAD
 //    implementation 'androidx.compose.ui:ui:1.0.0-rc01'
-=======
->>>>>>> 5c1064173226b58d66701ad54967f23d121f7558
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation 'androidx.test:rules:1.4.0'
     testImplementation 'androidx.test:runner:1.4.0'
