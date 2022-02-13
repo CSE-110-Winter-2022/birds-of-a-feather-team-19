@@ -32,7 +32,7 @@ public class AddPhotoURLActivityTest extends TestCase {
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
-            EditText photoURL = activity.findViewById(R.id.photoAddPhotoURLEditText);
+            EditText photoURL = activity.findViewById(R.id.photoURLAddPhotoURLEditText);
             Button URLButton = activity.findViewById(R.id.submitAddPhotoURLButton);
             photoURL.setText("Test URL Input");
             URLButton.performClick();
@@ -48,7 +48,7 @@ public class AddPhotoURLActivityTest extends TestCase {
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
-            EditText photoURL = activity.findViewById(R.id.photoAddPhotoURLEditText);
+            EditText photoURL = activity.findViewById(R.id.photoURLAddPhotoURLEditText);
             Button URLButton = activity.findViewById(R.id.submitAddPhotoURLButton);
             URLButton.performClick();
 

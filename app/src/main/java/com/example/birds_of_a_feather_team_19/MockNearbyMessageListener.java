@@ -36,11 +36,9 @@ public class MockNearbyMessageListener extends MessageListener implements Serial
         this.executor = Executors.newSingleThreadScheduledExecutor();
 
         executor.scheduleAtFixedRate(() -> {
-            for (String m : messages) {
-                Log.d("BoF", m);
-            }
             while (index < messages.size()) {
                 String messageString = messages.get(index++);
+                Log.d("BoF", messageString);
                 Message message = new Message(messageString.getBytes(StandardCharsets.UTF_8));
                 this.messageListener.onFound(message);
             }

@@ -39,8 +39,10 @@ public class Utilities {
                 return future.get();
             } catch (ExecutionException e) {
                 e.printStackTrace();
+                return true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                return true;
             }
         }
         return false;
