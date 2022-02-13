@@ -39,7 +39,7 @@ public class AddInvalidPhotoURLActivityTest {
     @Test
     public void addInvalidPhotoURLActivityTest() {
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.photoAddPhotoURLEditText),
+                allOf(withId(R.id.photoURLAddPhotoURLEditText),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -49,7 +49,7 @@ public class AddInvalidPhotoURLActivityTest {
         appCompatEditText.perform(replaceText("google.com"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.photoAddPhotoURLEditText), withText("google.com"),
+                allOf(withId(R.id.photoURLAddPhotoURLEditText), withText("google.com"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

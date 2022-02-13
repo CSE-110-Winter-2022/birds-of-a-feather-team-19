@@ -137,6 +137,6 @@ public class AddCourseActivityUnitTest {
         });
     }
 
-    
+    // Make sure the spinners & text fields provide the correct values
 
 }
