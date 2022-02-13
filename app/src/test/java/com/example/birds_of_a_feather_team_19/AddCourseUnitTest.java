@@ -52,8 +52,8 @@ public class AddCourseUnitTest {
                 "114");
 
         db.courseDao().insert(one);
-        db.courseDao().insert(one);
-        db.courseDao().insert(one);
+        db.courseDao().insert(two);
+        db.courseDao().insert(three);
 
         assertEquals(3, db.courseDao().getForUser(userId).size());
     }

@@ -2,6 +2,7 @@ package com.example.birds_of_a_feather_team_19;
 
 import static org.junit.Assert.assertEquals;
 
+import android.app.AlertDialog;
 import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +38,6 @@ public class AddPhotoURLActivityTest extends TestCase {
             URLButton.performClick();
 
             assertEquals("Test URL Input", photoURL.getText().toString());
-
         });
     }
 
@@ -53,6 +53,16 @@ public class AddPhotoURLActivityTest extends TestCase {
             URLButton.performClick();
 
             assertEquals("", photoURL.getText().toString());
+        });
+    }
+
+    @Test
+    public void validPhotoUrlTest() {
+        ActivityScenario<AddPhotoURLActivity> scenario = scenarioRule.getScenario();
+
+        scenario.moveToState(Lifecycle.State.CREATED);
+
+        scenario.onActivity(activity -> {
 
         });
     }
