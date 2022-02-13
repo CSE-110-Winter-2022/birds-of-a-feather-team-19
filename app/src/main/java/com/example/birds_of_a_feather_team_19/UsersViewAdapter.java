@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.util.concurrent.Future;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
     private final List<UserPriority> userPriorities;
+    private static final String TAG = "BoF";
 
     public UsersViewAdapter(List<UserPriority> usersPriorities) {
         super();
@@ -47,6 +49,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "Size of user priorities" + userPriorities.size());
         return userPriorities.size();
     }
 
@@ -67,7 +70,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         public void setUser(UserPriority userPriority) {
             this.user = userPriority.getUser();
             name.setText(user.getName() + " (" + userPriority.getPriority() + ")");
-
+            Log.d(TAG, "User name" + user.getName() + " (" + userPriority.getPriority() + ")");
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
             try {
