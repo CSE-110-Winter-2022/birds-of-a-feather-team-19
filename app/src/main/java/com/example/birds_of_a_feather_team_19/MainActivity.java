@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
             public void onFound(@NonNull Message message) {
                 Log.d(TAG, "Found user: " + new String(message.getContent()));
                 updateDatabase(new String(message.getContent()));
-//                updateRecylerView();
             }
 
             @Override
@@ -162,9 +161,12 @@ public class MainActivity extends AppCompatActivity {
 
             i += 4;
         }
+
+        updateRecylerView();
     }
 
     private void updateRecylerView() {
+        System.out.println("UPDATING RECYCLER VIEW");
         List<UserPriority> userPriorities = new ArrayList<>();
         for (Course userCourse : db.courseDao().getForUser(1)) {
             for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
