@@ -12,19 +12,24 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +40,14 @@ public class AddCourseActivityTest_onecourse {
 
     @Rule
     public ActivityTestRule<AddCourseActivity> mActivityTestRule = new ActivityTestRule<>(AddCourseActivity.class);
+
+    @BeforeClass
+    public static void clearDatabase() {
+        Context context = ApplicationProvider.getApplicationContext();
+        AppDatabase db = AppDatabase.singleton(context);
+        db.userDao().deleteAll();
+        db.courseDao().deleteAll();
+    }
 
     @Test
     public void addCourseActivityTest_onecourse() {
