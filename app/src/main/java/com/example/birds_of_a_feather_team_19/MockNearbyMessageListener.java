@@ -29,6 +29,10 @@ public class MockNearbyMessageListener extends MessageListener implements Serial
             messages.add(message);
     }
 
+    public boolean isMessagesFinished() {
+        return this.index == messages.size();
+    }
+
     public MockNearbyMessageListener(MessageListener realMessageListener, int frequency, String messageStr) {
         this.index = 0;
 
