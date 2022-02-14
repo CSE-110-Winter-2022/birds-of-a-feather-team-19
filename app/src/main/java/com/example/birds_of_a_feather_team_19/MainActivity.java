@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         };
         this.message = new Message("hello".getBytes(StandardCharsets.UTF_8));
 
-        this.messageListener = new MockNearbyMessageListener(realListener, 5, "Reloading");
+        this.messageListener = new MockNearbyMessageListener(realListener, 1, "Reloading");
 
         updateRecylerView();
     }

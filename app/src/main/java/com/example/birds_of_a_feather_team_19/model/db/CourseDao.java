@@ -19,6 +19,9 @@ public interface CourseDao {
     @Query("SELECT * FROM courses WHERE year=:year AND quarter=:quarter AND subject=:subject AND number=:number")
     List<Course> getUsers(String year, String quarter, String subject, String number);
 
+    @Query("DELETE FROM courses")
+    void deleteAll();
+
     @Insert
     void insert(Course course);
 

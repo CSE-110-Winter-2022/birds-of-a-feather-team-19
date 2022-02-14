@@ -30,7 +30,8 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
     }
 
-    public void onBackClicked(View view) {
+    public void onBackClicked(View view) throws InterruptedException {
+        Thread.sleep(2000);
         finish();
     }
 

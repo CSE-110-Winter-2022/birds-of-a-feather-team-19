@@ -35,6 +35,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,18 +44,21 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class GoodEndToEndScenarioTest1 {
 
+
+
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Before
-    public void clearDatabase() {
+    @BeforeClass
+    public static void clearDatabase() {
         Context context = ApplicationProvider.getApplicationContext();
         AppDatabase db = AppDatabase.singleton(context);
-        db.clearAllTables();
+        db.userDao().deleteAll();
+        db.courseDao().deleteAll();
     }
 
     @Test
-    public void goodEndToEndScenarioTest1() {
+    public void goodEndToEndScenarioTest1() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.nameAddNameEditText),
                         childAtPosition(
@@ -162,6 +166,8 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         appCompatEditText4.perform(replaceText("Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110"), closeSoftKeyboard());
 
+        Thread.sleep(500);
+
         ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
                         childAtPosition(
@@ -172,6 +178,8 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         materialButton6.perform(click());
 
+        Thread.sleep(2200);
+
         ViewInteraction materialButton7 = onView(
                 allOf(withId(R.id.button), withText("BACK"),
                         childAtPosition(
@@ -181,6 +189,8 @@ public class GoodEndToEndScenarioTest1 {
                                 2),
                         isDisplayed()));
         materialButton7.perform(click());
+
+        Thread.sleep(500);
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Bill (1)"),
@@ -195,6 +205,8 @@ public class GoodEndToEndScenarioTest1 {
                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                 0)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
+
+        Thread.sleep(500);
 
         ViewInteraction textView2 = onView(
                 allOf(withId(R.id.nameUserDetailTextView), withText("Bill"),

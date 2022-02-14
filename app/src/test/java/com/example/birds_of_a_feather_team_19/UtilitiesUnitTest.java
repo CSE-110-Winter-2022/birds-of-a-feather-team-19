@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config;
 @RunWith(AndroidJUnit4.class)
 @Config(sdk = Build.VERSION_CODES.P)
 public class UtilitiesUnitTest {
-    //Empty Strring should return true
+    //Empty String should return true
     @Test
     public void invalidName_empty() throws Exception {
         assertTrue(invalidName(""));
@@ -37,14 +37,14 @@ public class UtilitiesUnitTest {
     }
 
     //Valid Url that is not photo should return false
-//    @Test
-//    public void invalidName_vaildUrlNotPhoto() throws Exception {
-//        assertTrue(invalidPhotoURL("https://www.google.com/"));
-//    }
+    @Test
+    public void invalidUrlNotPhoto() throws Exception {
+        assertTrue(invalidPhotoURL("https://www.google.com/"));
+    }
 
     //valid photo url should return true;
     @Test
-    public void invalidName_validPhotoUrl() throws Exception {
+    public void validPhotoUrl() throws Exception {
         assertFalse(invalidPhotoURL("https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0"));
     }
 

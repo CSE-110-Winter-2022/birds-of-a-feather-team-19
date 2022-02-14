@@ -20,6 +20,9 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE name=:name")
     User get(String name);
 
+    @Query("DELETE FROM users")
+    void deleteAll();
+
     @Insert
     void insert(User user);
 }

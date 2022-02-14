@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19.4/app/src/main/res/layout/activity_add_course.xml" value="0.30344202898550726" />
+        <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19.4/app/src/main/res/layout/activity_add_photo_url.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19.4/app/src/main/res/layout/activity_main.xml" value="0.30344202898550726" />
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19.4/app/src/main/res/layout/course_row.xml" value="0.30344202898550726" />
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19/app/src/main/res/layout/activity_add_class.xml" value="0.3151041666666667" />
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19/app/src/main/res/layout/activity_class_view.xml" value="0.296195652173913" />
@@ -12,11 +14,6 @@
         <entry key="app/src/main/res/layout/activity_add_course.xml" value="0.16621376811594202" />
         <entry key="app/src/main/res/layout/activity_add_name.xml" value="0.16621376811594202" />
         <entry key="app/src/main/res/layout/activity_add_photo_url.xml" value="0.20244565217391305" />
-
-        <!--    <entry key="app/src/main/res/layout/activity_add_course.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_add_name.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_add_photo_url.xml" value="0.1" /> -->
-
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1578125" />
         <entry key="app/src/main/res/layout/activity_user_detail.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/layout/activity_user_name.xml" value="0.18614130434782608" />
