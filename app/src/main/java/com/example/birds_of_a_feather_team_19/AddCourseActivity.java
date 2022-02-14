@@ -2,6 +2,7 @@ package com.example.birds_of_a_feather_team_19;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -25,6 +26,7 @@ public class AddCourseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(this.getString(R.string.TAG), "Add course activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
@@ -62,6 +64,7 @@ public class AddCourseActivity extends AppCompatActivity {
             Utilities.showAlert(this, "Course previously entered");
             return;
         }
+        Log.d(this.getString(R.string.TAG), "Course added: " + year + quarter + subject + number);
         Toast.makeText(this, R.string.toast_add_course, Toast.LENGTH_SHORT).show();
     }
 
@@ -76,6 +79,8 @@ public class AddCourseActivity extends AppCompatActivity {
         for (List<String> course : courses) {
             db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3)));
         }
+
+        Log.d(this.getString(R.string.TAG), "Add course activity finished");
 
         finish();
     }

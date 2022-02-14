@@ -31,7 +31,7 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
     }
 
     public void onBackClicked(View view) throws InterruptedException {
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         finish();
     }
 

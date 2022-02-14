@@ -166,7 +166,6 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         appCompatEditText4.perform(replaceText("Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110"), closeSoftKeyboard());
 
-        Thread.sleep(500);
 
         ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -178,7 +177,7 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         materialButton6.perform(click());
 
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
         ViewInteraction materialButton7 = onView(
                 allOf(withId(R.id.button), withText("BACK"),
@@ -190,7 +189,6 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         materialButton7.perform(click());
 
-        Thread.sleep(500);
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Bill (1)"),
@@ -206,7 +204,6 @@ public class GoodEndToEndScenarioTest1 {
                                 0)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
-        Thread.sleep(500);
 
         ViewInteraction textView2 = onView(
                 allOf(withId(R.id.nameUserDetailTextView), withText("Bill"),
