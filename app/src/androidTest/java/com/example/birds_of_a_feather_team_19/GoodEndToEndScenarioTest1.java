@@ -178,7 +178,7 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         materialButton6.perform(click());
 
-        Thread.sleep(2200);
+        Thread.sleep(2000);
 
         ViewInteraction materialButton7 = onView(
                 allOf(withId(R.id.button), withText("BACK"),
