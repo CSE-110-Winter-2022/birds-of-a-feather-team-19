@@ -46,7 +46,7 @@ public class AddInvalidPhotoURLTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("google.com"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("https://www.google.com"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.submitAddPhotoURLButton), withText("SUBMIT"),
