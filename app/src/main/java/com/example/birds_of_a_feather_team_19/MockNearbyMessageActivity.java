@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
@@ -42,6 +43,8 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         MockNearbyMessageListener.addMessage(userDetail);
 
         mockUserTextView.setText("");
+
+        Toast.makeText(this, R.string.toast_add_mock_user, Toast.LENGTH_SHORT).show();
     }
 
 }

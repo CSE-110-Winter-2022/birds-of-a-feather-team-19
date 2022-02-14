@@ -43,6 +43,6 @@ public class MockNearbyMessageListener extends MessageListener implements Serial
                 Message message = new Message(messageString.getBytes(StandardCharsets.UTF_8));
                 this.messageListener.onFound(message);
             }
-        }, 0, frequency, TimeUnit.SECONDS);
+        }, 0, frequency, TimeUnit.MILLISECONDS);
     }
 }
