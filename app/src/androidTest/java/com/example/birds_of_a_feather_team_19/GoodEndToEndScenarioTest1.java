@@ -17,25 +17,19 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,21 +38,11 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class GoodEndToEndScenarioTest1 {
 
-
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @BeforeClass
-    public static void clearDatabase() {
-        Context context = ApplicationProvider.getApplicationContext();
-        AppDatabase db = AppDatabase.singleton(context);
-        db.userDao().deleteAll();
-        db.courseDao().deleteAll();
-    }
-
     @Test
-    public void goodEndToEndScenarioTest1() throws InterruptedException {
+    public void goodEndToEndScenarioTest1() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.nameAddNameEditText),
                         childAtPosition(
@@ -67,7 +51,7 @@ public class GoodEndToEndScenarioTest1 {
                                         0),
                                 1),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("Team19"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("Will"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.confirmAddNameButton), withText("Confirm"),
@@ -89,6 +73,23 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         materialButton2.perform(click());
 
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.quarterAddCourseSpinner),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatSpinner.perform(click());
+
+        DataInteraction appCompatCheckedTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(5);
+        appCompatCheckedTextView.perform(click());
+
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.subjectAddCourseEditText),
                         childAtPosition(
@@ -108,23 +109,6 @@ public class GoodEndToEndScenarioTest1 {
                                 4),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("110"), closeSoftKeyboard());
-
-        ViewInteraction appCompatSpinner = onView(
-                allOf(withId(R.id.quarterAddCourseSpinner),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatSpinner.perform(click());
-
-        DataInteraction appCompatCheckedTextView = onData(anything())
-                .inAdapterView(childAtPosition(
-                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
-                        0))
-                .atPosition(5);
-        appCompatCheckedTextView.perform(click());
 
         ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.enterAddCourseButton), withText("Enter"),
@@ -166,7 +150,6 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         appCompatEditText4.perform(replaceText("Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110"), closeSoftKeyboard());
 
-
         ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
                         childAtPosition(
@@ -176,8 +159,6 @@ public class GoodEndToEndScenarioTest1 {
                                 1),
                         isDisplayed()));
         materialButton6.perform(click());
-
-        Thread.sleep(1000);
 
         ViewInteraction materialButton7 = onView(
                 allOf(withId(R.id.button), withText("BACK"),
@@ -189,6 +170,15 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         materialButton7.perform(click());
 
+        ViewInteraction materialButton8 = onView(
+                allOf(withId(R.id.startStopMainButton), withText("Start"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton8.perform(click());
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Bill (1)"),
@@ -204,19 +194,12 @@ public class GoodEndToEndScenarioTest1 {
                                 0)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
-
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.nameUserDetailTextView), withText("Bill"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView2.check(matches(withText("Bill")));
-
-        ViewInteraction textView4 = onView(
                 allOf(withId(R.id.titleCourseRowTextView), withText("2022 winter cse 110"),
                         withParent(allOf(withId(R.id.constraintLayout),
                                 withParent(withId(R.id.coursesUserDetailRecyclerView)))),
                         isDisplayed()));
-        textView4.check(matches(withText("2022 winter cse 110")));
+        textView2.check(matches(withText("2022 winter cse 110")));
     }
 
     private static Matcher<View> childAtPosition(

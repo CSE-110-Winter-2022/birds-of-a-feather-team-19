@@ -78,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Nearby.getMessagesClient(this).publish(message);
-        Nearby.getMessagesClient(this).subscribe(messageListener);
     }
 
     @Override
@@ -97,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         ((Button) findViewById(R.id.startStopMainButton)).setText("Start");
-        Nearby.getMessagesClient(this).unpublish(message);
-        Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 
     // Needs testing
@@ -111,16 +107,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onStartStopMainButtonClicked(View view) {
-//        Button button = findViewById(R.id.startStopMainButton);
-//        //Intent intent = new Intent(MainActivity.this, BluetoothService.class);
-//        if (button.getText().toString().equals("Start")) {
-//            button.setText("Stop");
-//            updateRecylerView();
-//        }
-//        else {
-//            button.setText("Start");
-//            //stopService(intent);
-//        }
+        Button button = findViewById(R.id.startStopMainButton);
+        //Intent intent = new Intent(MainActivity.this, BluetoothService.class);
+        if (button.getText().toString().equals("Start")) {
+            button.setText("Stop");
+            Nearby.getMessagesClient(this).publish(message);
+            Nearby.getMessagesClient(this).subscribe(messageListener);
+            updateRecylerView();
+        }
+        else {
+            button.setText("Start");
+            Nearby.getMessagesClient(this).unpublish(message);
+            Nearby.getMessagesClient(this).unsubscribe(messageListener);
+        }
     }
 
     // Logging
@@ -160,7 +159,9 @@ public class MainActivity extends AppCompatActivity {
             i += 4;
         }
 
-        updateRecylerView();
+        if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("STOP")) {
+            updateRecylerView();
+        }
     }
 
     // Logging
