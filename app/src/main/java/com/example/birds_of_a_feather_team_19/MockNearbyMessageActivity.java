@@ -22,7 +22,6 @@ import java.util.concurrent.Future;
 
 public class MockNearbyMessageActivity extends AppCompatActivity {
     private AppDatabase db;
-    private int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +29,13 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mock_nearby_message);
 
         db = AppDatabase.singleton(this);
-
-        count = db.userDao().count();
     }
 
-    public void onBackClicked(View view) {
-        System.out.println("Back clicked");
-//        while (count > db.userDao().count()) {
-//            System.out.println("Count: " + count + ", db.count(): " + db.userDao().count());
-//        }
+    public void onBackClicked(View view) throws InterruptedException {
         finish();
     }
 
     public void onEnterMockNearbyMessageButtonClicked(View view) {
-        count++;
         TextView mockUserTextView = findViewById(R.id.userDetailMockNearbyMessageEditText);
         String userDetail = mockUserTextView.getText().toString();
 

@@ -1,5 +1,7 @@
 package com.example.birds_of_a_feather_team_19;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +18,18 @@ public class AddNameActivity extends AppCompatActivity {
         Log.d(this.getString(R.string.TAG), "Add name activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_name);
+
+
+        AccountManager manager = (AccountManager) getSystemService(ACCOUNT_SERVICE);
+        Account[] listOfAccounts = manager.getAccountsByType("com.google");
+        String googleName;
+        EditText nameView = (EditText) findViewById(R.id.nameAddNameEditText);
+
+        if(listOfAccounts.length > 0) {
+            googleName = listOfAccounts[0].name;
+            nameView.setText(googleName);
+        }
+
     }
 
     @Override
@@ -26,6 +40,8 @@ public class AddNameActivity extends AppCompatActivity {
     }
 
     public void onConfirmAddNameButtonClicked(View view) {
+
+
         String name = ((EditText) findViewById(R.id.nameAddNameEditText)).getText().toString();
         if (Utilities.invalidName(name)) {
             Utilities.showAlert(this, "Please enter a name");

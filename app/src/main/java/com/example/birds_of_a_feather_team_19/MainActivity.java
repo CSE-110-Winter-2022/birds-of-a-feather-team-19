@@ -84,12 +84,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        updateRecylerView();
         super.onResume();
         checkBluetoothStatus();
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
-        } else {
-            updateRecylerView();
         }
     }
 
