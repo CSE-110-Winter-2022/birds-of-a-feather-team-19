@@ -1,13 +1,16 @@
 package com.example.birds_of_a_feather_team_19;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
@@ -23,6 +26,7 @@ public class AddCourseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(this.getString(R.string.TAG), "Add course activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
@@ -55,14 +59,12 @@ public class AddCourseActivity extends AppCompatActivity {
         }
 
         List<String> course = new ArrayList<>();
-        course.add(year);
-        course.add(quarter);
-        course.add(subject);
-        course.add(number);
+        course.add(year);course.add(quarter);course.add(subject);course.add(number);
         if (!courses.add(course)) {
             Utilities.showAlert(this, "Course previously entered");
             return;
         }
+        Log.d(this.getString(R.string.TAG), "Course added: " + year + quarter + subject + number);
         Toast.makeText(this, R.string.toast_add_course, Toast.LENGTH_SHORT).show();
     }
 
@@ -73,10 +75,12 @@ public class AddCourseActivity extends AppCompatActivity {
         }
 
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
-        db.userDao().insert(new User(1, preferences.getString("name", null), preferences.getString("photoURL", null)));
+        db.userDao().insert(new User(MainActivity.USER_ID, preferences.getString("name", null), preferences.getString("photoURL", null)));
         for (List<String> course : courses) {
-            db.courseDao().insert(new Course(1, course.get(0), course.get(1), course.get(2), course.get(3)));
+            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3)));
         }
+
+        Log.d(this.getString(R.string.TAG), "Add course activity finished");
 
         finish();
     }

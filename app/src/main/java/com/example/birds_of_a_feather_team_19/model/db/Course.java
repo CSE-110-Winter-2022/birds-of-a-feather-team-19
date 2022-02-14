@@ -4,8 +4,20 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Entity(tableName = "courses")
-public class Course {
+public class Course implements Comparable<Course> {
+    private static final Map<String, Integer> quarterMap = new HashMap<String, Integer>() {{
+        put("spring", 0);
+        put("summer session 1", 1);
+        put("summer session 2", 2);
+        put("special summer session", 3);
+        put("fall", 4);
+        put("winter", 5);
+    }};
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
@@ -71,5 +83,18 @@ public class Course {
                 quarter.equals(((Course) o).getQuarter()) &&
                 subject.equals(((Course) o).getSubject()) &&
                 number.equals(((Course) o).getNumber()));
+    }
+
+    @Override
+    public int compareTo(Course course) {
+        if (!this.year.equals(course.getYear())) {
+            return Integer.parseInt(this.year) < Integer.parseInt(course.year) ? -1 : 1;
+        } else if (quarterMap.get(this.quarter) != quarterMap.get(course.getQuarter())) {
+            return quarterMap.get(this.quarter) < quarterMap.get(course.getQuarter()) ? -1 : 1;
+        } else if (!this.subject.equals(course.getSubject())) {
+            return this.subject.compareTo(course.getSubject());
+        } else {
+            return this.number.compareTo(course.getNumber());
+        }
     }
 }

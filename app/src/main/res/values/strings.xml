@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">birds-of-a-feather-team-19</string>
     <string name="toast_add_course">Course added</string>
+    <string name="toast_add_mock_user">Mock user added</string>
+    <string name="TAG">BoF</string>
     <string-array name="year">
         <item>2022</item>
         <item>2021</item>

@@ -14,8 +14,14 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE id=:id")
     User get(int id);
 
+    @Query("SELECT COUNT(*) FROM users")
+    int count();
+
     @Query("SELECT * FROM users WHERE name=:name")
     User get(String name);
+
+    @Query("DELETE FROM users")
+    void deleteAll();
 
     @Insert
     void insert(User user);
