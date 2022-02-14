@@ -223,6 +223,16 @@ public class AddMultipleUsersTest {
                         isDisplayed()));
         materialButton12.perform(click());
 
+        ViewInteraction materialButton13 = onView(
+                allOf(withId(R.id.startStopMainButton), withText("Start"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton13.perform(click());
+
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (3)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
@@ -251,7 +261,7 @@ public class AddMultipleUsersTest {
                         isDisplayed()));
         textView3.check(matches(withText("2022 winter cse 110")));
 
-        ViewInteraction materialButton13 = onView(
+        ViewInteraction materialButton14 = onView(
                 allOf(withId(R.id.goBackUserDetailButton), withText("GO BACK"),
                         childAtPosition(
                                 childAtPosition(
@@ -259,7 +269,7 @@ public class AddMultipleUsersTest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialButton13.perform(click());
+        materialButton14.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
