@@ -9,13 +9,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,19 +25,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.PriorityQueue;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "BoF";
     public static final int USER_ID = 1;
-    private ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (!isGranted) {
-                    Utilities.showAlert(this, "This app will be unable to connect you to other users. ");
-                }
-            });
     private AppDatabase db;
     private Message message;
     private MessageListener messageListener;
@@ -87,36 +77,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        checkBluetoothPermission();
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ((Button) findViewById(R.id.startStopMainButton)).setText("Start");
-    }
-
-    private void checkBluetoothPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_DENIED) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_SCAN)) {
-                Utilities.showAlert(this, "This app requests permission to Bluetooth Scan to find other devices. ");
-            }
-            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_SCAN);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_DENIED) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_ADVERTISE)) {
-                Utilities.showAlert(this, "This app requests permission to Bluetooth Advertise to make your device discoverable to other devices. ");
-            }
-            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_ADVERTISE);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_CONNECT)) {
-                Utilities.showAlert(this, "This app requests permission to Bluetooth Connect to transfer data between you to other devices. ");
-            }
-            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT);
         }
     }
 
@@ -126,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
-            updateRecylerView();
         }
         else {
             button.setText("Start");
