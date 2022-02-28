@@ -10,12 +10,12 @@ import java.util.Map;
 @Entity(tableName = "courses")
 public class Course implements Comparable<Course> {
     private static final Map<String, Integer> quarterMap = new HashMap<String, Integer>() {{
-        put("spring", 0);
-        put("summer session 1", 1);
-        put("summer session 2", 2);
-        put("special summer session", 3);
-        put("fall", 4);
-        put("winter", 5);
+        put("winter", 0);
+        put("spring", 1);
+        put("summer session 1", 2);
+        put("summer session 2", 3);
+        put("special summer session", 4);
+        put("fall", 5);
     }};
 
     @PrimaryKey(autoGenerate = true)
@@ -37,12 +37,16 @@ public class Course implements Comparable<Course> {
     @ColumnInfo(name = "number")
     private String number;
 
-    public Course(int userId, String year, String quarter, String subject, String number) {
+    @ColumnInfo(name = "size")
+    private String size;
+
+    public Course(int userId, String year, String quarter, String subject, String number, String size) {
         this.userId = userId;
         this.year = year;
         this.quarter = quarter;
         this.subject = subject;
         this.number = number;
+        this.size = size;
     }
 
     public int getId() {
@@ -77,12 +81,21 @@ public class Course implements Comparable<Course> {
 
     public void setNumber(String number) { this.number = number; }
 
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
     @Override
     public boolean equals(Object o) {
         return (year.equals(((Course) o).getYear()) &&
                 quarter.equals(((Course) o).getQuarter()) &&
                 subject.equals(((Course) o).getSubject()) &&
-                number.equals(((Course) o).getNumber()));
+                number.equals(((Course) o).getNumber()) &&
+                size.equals(((Course) o).getSize()));
     }
 
     @Override

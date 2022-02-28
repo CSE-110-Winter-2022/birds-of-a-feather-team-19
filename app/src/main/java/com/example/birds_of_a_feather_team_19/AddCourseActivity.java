@@ -40,6 +40,11 @@ public class AddCourseActivity extends AppCompatActivity {
                 ArrayAdapter.createFromResource(this, R.array.quarter, android.R.layout.simple_spinner_item);
         quarterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         quarterSpinner.setAdapter(quarterAdapter);
+        Spinner sizeSpinner = findViewById(R.id.sizeAddCourseSpinner);
+        ArrayAdapter<CharSequence> sizeAdapter =
+                ArrayAdapter.createFromResource(this, R.array.size, android.R.layout.simple_spinner_item);
+        sizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sizeSpinner.setAdapter(sizeAdapter);
 
         db = AppDatabase.singleton(this);
     }
@@ -49,6 +54,7 @@ public class AddCourseActivity extends AppCompatActivity {
         String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
         String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString().toLowerCase();
         String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString().toLowerCase();
+        String size = ((Spinner) findViewById(R.id.sizeAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
         if (subject.isEmpty()) {
             Utilities.showAlert(this, "Please enter course subject");
             return;
@@ -59,7 +65,7 @@ public class AddCourseActivity extends AppCompatActivity {
         }
 
         List<String> course = new ArrayList<>();
-        course.add(year);course.add(quarter);course.add(subject);course.add(number);
+        course.add(year);course.add(quarter);course.add(subject);course.add(number);course.add(size);
         if (!courses.add(course)) {
             Utilities.showAlert(this, "Course previously entered");
             return;
@@ -77,7 +83,7 @@ public class AddCourseActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
         db.userDao().insert(new User(MainActivity.USER_ID, preferences.getString("name", null), preferences.getString("photoURL", null)));
         for (List<String> course : courses) {
-            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3)));
+            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3), course.get(4)));
         }
 
         Log.d(this.getString(R.string.TAG), "Add course activity finished");

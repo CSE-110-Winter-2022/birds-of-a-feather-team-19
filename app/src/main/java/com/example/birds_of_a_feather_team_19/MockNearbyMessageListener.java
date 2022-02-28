@@ -6,23 +6,19 @@ import android.util.Log;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MockNearbyMessageListener extends MessageListener implements Serializable {
+public class MockNearbyMessageListener extends MessageListener {
     private final MessageListener messageListener;
     private final ScheduledExecutorService executor;
 
-    private int index;
-
     private static List<String> messages = new ArrayList<>();
+    private int index;
 
     public static void addMessage(String message) {
         if (messages.indexOf(message) < 0)

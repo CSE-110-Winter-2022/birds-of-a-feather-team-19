@@ -5,6 +5,8 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -31,15 +33,21 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public class MainActivity extends AppCompatActivity {
-    protected RecyclerView usersRecyclerView;
-    protected RecyclerView.LayoutManager usersLayoutManager;
-    protected UsersViewAdapter usersViewAdapter;
-    private AppDatabase db;
+    public static final String TAG = "BoF";
     public static final int USER_ID = 1;
-    private static final String TAG = "BoF";
-    private MessageListener messageListener;
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (!isGranted) {
+                    Utilities.showAlert(this, "This app will be unable to connect you to other users. ");
+                }
+            });
+    private AppDatabase db;
     private Message message;
+    private MessageListener messageListener;
     private Map<String, String> quarterMap = new HashMap<>();
+    private RecyclerView usersRecyclerView;
+    private RecyclerView.LayoutManager usersLayoutManager;
+    private UsersViewAdapter usersViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,18 +84,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        checkBluetoothStatus();
+
+        checkBluetoothPermission();
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
-        } else {
-
         }
     }
 
@@ -97,18 +99,29 @@ public class MainActivity extends AppCompatActivity {
         ((Button) findViewById(R.id.startStopMainButton)).setText("Start");
     }
 
-    // Needs testing
-    private void checkBluetoothStatus() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_DENIED) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH)) {
-                Utilities.showAlert(this, "This app requests permission to Bluetooth to connect you to other users. ");
+    private void checkBluetoothPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_DENIED) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_SCAN)) {
+                Utilities.showAlert(this, "This app requests permission to Bluetooth Scan to find other devices. ");
             }
+            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_SCAN);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADVERTISE) == PackageManager.PERMISSION_DENIED) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_ADVERTISE)) {
+                Utilities.showAlert(this, "This app requests permission to Bluetooth Advertise to make your device discoverable to other devices. ");
+            }
+            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_ADVERTISE);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.BLUETOOTH_CONNECT)) {
+                Utilities.showAlert(this, "This app requests permission to Bluetooth Connect to transfer data between you to other devices. ");
+            }
+            requestPermissionLauncher.launch(Manifest.permission.BLUETOOTH_CONNECT);
         }
     }
 
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
-        //Intent intent = new Intent(MainActivity.this, BluetoothService.class);
         if (button.getText().toString().equals("Start")) {
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
@@ -122,17 +135,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Logging
     private void updateDatabase(String userData) {
-//        userData = userData.toLowerCase(Locale.ROOT);
         userData = userData.replace('\n', ',');
         Log.d(TAG,userData);
         String[] data = userData.split(",");
         Log.d(TAG,"Updating database");
-//        for (int i = 0; i < data.length; i++) {
-//            String s = data[i];
-//            System.out.println(i + ": " + s);
-//        }
         String userName = data[0];
         String userPhotoUrl = data[4];
         int userId = db.userDao().count() + 1;
@@ -144,16 +151,15 @@ public class MainActivity extends AppCompatActivity {
 
         int i = 8;
         while (i < data.length) {
-            String year = data[i].toLowerCase(Locale.ROOT);
-            String quarter = quarterMap.get(data[i + 1].toLowerCase(Locale.ROOT));
-            String subject = data[i + 2].toLowerCase(Locale.ROOT);
-            String number = data[i + 3].toLowerCase(Locale.ROOT);
-
-
+            String year = data[i].toLowerCase();
+            String quarter = quarterMap.get(data[i + 1].toLowerCase());
+            String subject = data[i + 2].toLowerCase();
+            String number = data[i + 3].toLowerCase();
+            String size = data[i + 4].toLowerCase();
 
             Log.d(TAG,year + quarter + " " + subject + number);
 
-            Course course = new Course(userId, year, quarter, subject, number);
+            Course course = new Course(userId, year, quarter, subject, number, size);
             db.courseDao().insert(course);
 
             i += 4;
