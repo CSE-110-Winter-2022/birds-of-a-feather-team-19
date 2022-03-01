@@ -23,6 +23,7 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private MessageListener messageListener;
     private Message message;
     private Map<String, String> quarterMap = new HashMap<>();
+    private UserPriorityAssigner priorityAssigner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put("ss1", "summer session 1");
         quarterMap.put("ss2", "summer session 2");
         quarterMap.put("sss", "special summer session");
+
+        priorityAssigner = new SharedClassesPriorityAssigner();
 
         db = AppDatabase.singleton(this);
 
@@ -167,21 +171,44 @@ public class MainActivity extends AppCompatActivity {
     // Logging
     private void updateRecylerView() {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
-        List<UserPriority> userPriorities = new ArrayList<>();
-        for (Course userCourse : db.courseDao().getForUser(1)) {
-            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
-                UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
-                if (userPriorities.contains(userPriority)) {
-                    userPriorities.get(userPriorities.indexOf(userPriority))
-                            .setPriority(userPriorities.get(userPriorities.indexOf(userPriority)).getPriority() + 1);
-                } else {
-                    userPriorities.add(userPriority);
+//        List<UserPriority> userPriorities = new ArrayList<>();
+//        for (Course userCourse : db.courseDao().getForUser(1)) {
+//            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
+//                UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
+//                if (userPriorities.contains(userPriority)) {
+//                    userPriorities.get(userPriorities.indexOf(userPriority))
+//                            .setPriority(userPriorities.get(userPriorities.indexOf(userPriority)).getPriority() + 1);
+//                } else {
+//                    userPriorities.add(userPriority);
+//                }
+//            }
+//        }
+
+        List<UserPriority> listUsers = new ArrayList<>();
+
+        List<Course> userCourses = db.courseDao().getForUser(1);
+        for (User user : db.userDao().getAll()) {
+            if (user.getId() == 1)
+                continue;
+            List<Course> otherUserCourses = db.courseDao().getForUser(user.getId());
+            double priority = 0;
+            for (Course cUser : userCourses) {
+                for (Course c : otherUserCourses) {
+                    if (cUser.equals(c)) {
+                        priority += priorityAssigner.getPriority(c);
+                    }
                 }
             }
+            if (!(priority > 0)) {
+                continue;
+            }
+            UserPriority userPriority = new UserPriority(user, priority);
+            listUsers.add(userPriority);
         }
-        userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
 
-        PriorityQueue<UserPriority> userPriorityQueue = new PriorityQueue<>(userPriorities);
+//        userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
+
+        PriorityQueue<UserPriority> userPriorityQueue = new PriorityQueue<>(listUsers);
 
         List<UserPriority> users = new ArrayList<>();
         while (!userPriorityQueue.isEmpty()) {
@@ -204,38 +231,5 @@ public class MainActivity extends AppCompatActivity {
     public void onMockMessageMainButtonClicked(View view) {
         Intent intent = new Intent(this, MockNearbyMessageActivity.class);
         startActivity(intent);
-    }
-}
-
-// Test correct ordering
-class UserPriority implements Comparable<UserPriority> {
-    private User user;
-    private int priority;
-
-    public UserPriority(User user, int priority) {
-        this.user = user;
-        this.priority = priority;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    @Override
-    public int compareTo(UserPriority userPriority) {
-        return userPriority.getPriority() - priority;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return user.equals(((UserPriority) o).getUser());
     }
 }
