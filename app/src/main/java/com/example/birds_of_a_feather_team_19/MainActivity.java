@@ -17,7 +17,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
@@ -55,6 +57,12 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put("ss1", "summer session 1");
         quarterMap.put("ss2", "summer session 2");
         quarterMap.put("sss", "special summer session");
+
+        Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
+        ArrayAdapter<CharSequence> filterAdapter =
+                ArrayAdapter.createFromResource(this, R.array.sort_type, android.R.layout.simple_spinner_item);
+        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(filterAdapter);
 
         priorityAssigner = new SharedClassesPriorityAssigner();
 
@@ -99,6 +107,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         ((Button) findViewById(R.id.startStopMainButton)).setText("Start");
+    }
+
+    public void onSetFilterClicked(View view) {
+        String filterType = ((Spinner) findViewById(R.id.sort_list_students_filter)).getSelectedItem().toString().toLowerCase(Locale.ROOT);
+        switch (filterType) {
+            case "default":
+                this.priorityAssigner = new SharedClassesPriorityAssigner();
+                break;
+            case "prioritize recent":
+                this.priorityAssigner = new SharedRecentClassPriorityAssigner();
+                break;
+            case "prioritize small classes":
+                this.priorityAssigner = new SharedClassSizePriorityAssigner();
+                break;
+            case "this quarter only":
+                break;
+        }
     }
 
     // Needs testing

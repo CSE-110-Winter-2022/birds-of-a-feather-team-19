@@ -6,7 +6,8 @@ public class SharedRecentClassPriorityAssigner implements UserPriorityAssigner {
 
     @Override
     public double getPriority(Course course) {
-        switch("age") {
+        int age = 0;
+        switch(age) {
             case 0:
                 return 5;
             case 1:
@@ -21,8 +22,6 @@ public class SharedRecentClassPriorityAssigner implements UserPriorityAssigner {
                 return 0;
         }
         return 0;
-
-        }
 
     }
 }
