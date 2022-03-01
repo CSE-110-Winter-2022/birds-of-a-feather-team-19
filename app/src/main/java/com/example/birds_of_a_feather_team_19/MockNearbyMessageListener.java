@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class MockNearbyMessageListener extends MessageListener {
+public class MockNearbyMessageListener extends MessageListener implements Serializable {
     private final MessageListener messageListener;
     private final ScheduledExecutorService executor;
 

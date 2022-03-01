@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
+            updateRecylerView();
         }
         else {
             button.setText("Start");
@@ -118,10 +119,9 @@ public class MainActivity extends AppCompatActivity {
             String number = data[i + 3].toLowerCase();
             String size = data[i + 4].toLowerCase();
 
-            Log.d(TAG,year + quarter + " " + subject + number);
+            Log.d(TAG,year + quarter + " " + subject + number + " " + size);
 
-            Course course = new Course(userId, year, quarter, subject, number, size);
-            db.courseDao().insert(course);
+            db.courseDao().insert(new Course(userId, year, quarter, subject, number, size));
 
             i += 4;
         }
@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Logging
     private void updateRecylerView() {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
         List<UserPriority> userPriorities = new ArrayList<>();
