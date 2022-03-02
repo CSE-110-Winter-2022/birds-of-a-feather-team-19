@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 this.priorityAssigner = new SharedClassSizePriorityAssigner();
                 break;
             case "this quarter only":
+                this.priorityAssigner = new SharedThisQuarterPriorityAssigner();
                 break;
         }
     }
