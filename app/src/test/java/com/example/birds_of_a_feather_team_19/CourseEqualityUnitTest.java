@@ -15,9 +15,12 @@ public class CourseEqualityUnitTest {
     @Test
     public void twoCoursesAreEqual() throws Exception {
         int userId = 1;
-        Course one = new Course(userId, "2022", "WI", "CSE", "110");
-        Course two = new Course(userId, "2022", "WI", "CSE", "110");
-        Course three = new Course(userId, "2021", "FA", "ECON", "109");
+        Course one = new Course(userId, "2022", "WI", "CSE", "110",
+                "small");
+        Course two = new Course(userId, "2022", "WI", "CSE", "110",
+                "small");
+        Course three = new Course(userId, "2021", "FA", "ECON", "109",
+                "small");
 
         assertTrue(one.equals(two));
     }
@@ -25,8 +28,10 @@ public class CourseEqualityUnitTest {
     @Test
     public void twoCoursesAreNotEqual() throws Exception {
         int userId = 1;
-        Course one = new Course(userId, "2022", "WI", "CSE", "110");
-        Course two = new Course(userId, "2021", "FA", "ECON", "109");
+        Course one = new Course(userId, "2022", "WI", "CSE", "110",
+                "small");
+        Course two = new Course(userId, "2021", "FA", "ECON", "109",
+                "small");
 
         assertFalse(one.equals(two));
     }
