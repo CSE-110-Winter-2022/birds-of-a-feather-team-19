@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     protected RecyclerView.LayoutManager usersLayoutManager;
     protected UsersViewAdapter usersViewAdapter;
     private AppDatabase db;
-    public static final int USER_ID = 1;
+    public static final int USER_ID = 1000;
     private static final String TAG = "BoF";
     private MessageListener messageListener;
     private Message message;

@@ -25,6 +25,9 @@ public class Course implements Comparable<Course> {
     @ColumnInfo(name = "user_id")
     private int userId;
 
+    @ColumnInfo(name = "owner_id")
+    private int ownerId;
+
     @ColumnInfo(name = "year")
     private String year;
 
@@ -37,12 +40,13 @@ public class Course implements Comparable<Course> {
     @ColumnInfo(name = "number")
     private String number;
 
-    public Course(int userId, String year, String quarter, String subject, String number) {
+    public Course(int userId, String year, String quarter, String subject, String number, int ownerId) {
         this.userId = userId;
         this.year = year;
         this.quarter = quarter;
         this.subject = subject;
         this.number = number;
+        this.ownerId = ownerId;
     }
 
     public int getId() {
