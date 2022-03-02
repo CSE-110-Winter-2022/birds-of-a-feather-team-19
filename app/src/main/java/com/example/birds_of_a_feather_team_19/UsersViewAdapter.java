@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
