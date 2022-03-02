@@ -57,6 +57,14 @@ public class Course implements Comparable<Course> {
         this.id = id;
     }
 
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
     public int getUserId() {
         return userId;
     }

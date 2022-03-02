@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG,year + quarter + " " + subject + number);
 
-            Course course = new Course(userId, year, quarter, subject, number);
+            Course course = new Course(userId, year, quarter, subject, number, USER_ID);
             db.courseDao().insert(course);
 
             i += 4;
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
         List<UserPriority> userPriorities = new ArrayList<>();
         for (Course userCourse : db.courseDao().getForUser(1)) {
-            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
+            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber(), userCourse.getOwnerId())) {
                 UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
                 if (userPriorities.contains(userPriority)) {
                     userPriorities.get(userPriorities.indexOf(userPriority))
