@@ -18,11 +18,12 @@ public class SharedThisQuarterPriorityAssigner implements UserPriorityAssigner {
         String quarter = "";
         MonthDay current = MonthDay.of(month, day);
 
+        //dates are acording to https://blink.ucsd.edu/instructors/resources/academic/calendars/2021.html
         MonthDay fallIn = MonthDay.of(Month.SEPTEMBER, 20);
         MonthDay fallOut = MonthDay.of(Month.DECEMBER, 11);
         MonthDay winterIn = MonthDay.of(Month.JANUARY, 3);
         MonthDay winterOut = MonthDay.of(Month.MARCH, 19);
-        MonthDay springIn = MonthDay.of(Month.MARCH, 28);
+        MonthDay springIn = MonthDay.of(Month.MARCH, 23);
         MonthDay springOut = MonthDay.of(Month.JUNE, 10);
         MonthDay summer1In = MonthDay.of(Month.JUNE, 27);
         MonthDay summer1Out = MonthDay.of(Month.JULY, 30);
