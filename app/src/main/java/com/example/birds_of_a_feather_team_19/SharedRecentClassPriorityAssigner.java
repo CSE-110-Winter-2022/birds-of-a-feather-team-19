@@ -25,4 +25,4 @@ public class SharedRecentClassPriorityAssigner implements UserPriorityAssigner {
         }
 
     }
-}
+
