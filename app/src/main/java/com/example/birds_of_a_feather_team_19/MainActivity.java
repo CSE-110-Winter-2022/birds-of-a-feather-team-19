@@ -65,15 +65,19 @@ public class MainActivity extends AppCompatActivity {
                 switch ((int) id) {
                     case 0:
                         priorityAssigner = new SharedClassesPriorityAssigner();
+                        updateRecylerView();
                         break;
                     case 1:
                         priorityAssigner = new SharedRecentClassPriorityAssigner();
+                        updateRecylerView();
                         break;
                     case 2:
                         priorityAssigner = new SharedClassSizePriorityAssigner();
+                        updateRecylerView();
                         break;
                     case 3:
                         priorityAssigner = new SharedThisQuarterPriorityAssigner();
+                        updateRecylerView();
                         break;
                 }
             }
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         String[] data = userData.split(",");
         Log.d(TAG,"Updating database");
         String userName = data[0];
-        String userPhotoUrl = data[4];
+        String userPhotoUrl = data[5];
         int userId = db.userDao().count() + 1;
 
         Log.d(TAG,userName + ", " + userPhotoUrl + ", " + userId);
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         User studentUser = new User(userId, userName, userPhotoUrl);
         db.userDao().insert(studentUser);
 
-        int i = 8;
+        int i = 10;
         while (i < data.length) {
             String year = data[i].toLowerCase();
             String quarter = quarterMap.get(data[i + 1].toLowerCase());
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
             db.courseDao().insert(new Course(userId, year, quarter, subject, number, size));
 
-            i += 4;
+            i += 5;
         }
 
         if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("STOP")) {

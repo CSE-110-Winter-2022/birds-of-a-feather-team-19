@@ -17,57 +17,32 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
-import com.example.birds_of_a_feather_team_19.model.db.Course;
-import com.example.birds_of_a_feather_team_19.model.db.User;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class GoodEndToEndScenarioTest1 {
+public class EndToEndScenarioTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @BeforeClass @AfterClass
-    public static void clearDatabase() {
-        Context context = ApplicationProvider.getApplicationContext();
-        AppDatabase db = AppDatabase.singleton(context);
-        db.userDao().deleteAll();
-        db.courseDao().deleteAll();
-        Log.d("EtoETest", "Looking through Users in DB");
-        for (User u : db.userDao().getAll()) {
-            Log.d("EtoETest", u.getName());
-        }
-        System.out.println("Database Cleared");
-        Log.d("EtoETest", "Database cleared");
-    }
-
     @Test
-    public void goodEndToEndScenarioTest1() {
+    public void endToEndScenarioTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.nameAddNameEditText),
                         childAtPosition(
@@ -135,13 +110,30 @@ public class GoodEndToEndScenarioTest1 {
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("110"), closeSoftKeyboard());
 
+        ViewInteraction appCompatSpinner2 = onView(
+                allOf(withId(R.id.sizeAddCourseSpinner),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatSpinner2.perform(click());
+
+        DataInteraction appCompatCheckedTextView2 = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(3);
+        appCompatCheckedTextView2.perform(click());
+
         ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.enterAddCourseButton), withText("Enter"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                5),
+                                6),
                         isDisplayed()));
         materialButton3.perform(click());
 
@@ -151,7 +143,7 @@ public class GoodEndToEndScenarioTest1 {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                6),
+                                7),
                         isDisplayed()));
         materialButton4.perform(click());
 
@@ -173,7 +165,47 @@ public class GoodEndToEndScenarioTest1 {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText4.perform(replaceText("Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110"), closeSoftKeyboard());
+        appCompatEditText4.perform(click());
+
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.userDetailMockNearbyMessageEditText),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText5.perform(click());
+
+        ViewInteraction appCompatEditText6 = onView(
+                allOf(withId(R.id.userDetailMockNearbyMessageEditText),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText6.perform(click());
+
+        ViewInteraction appCompatEditText7 = onView(
+                allOf(withId(R.id.userDetailMockNearbyMessageEditText),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText7.perform(click());
+
+        ViewInteraction appCompatEditText8 = onView(
+                allOf(withId(R.id.userDetailMockNearbyMessageEditText),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatEditText8.perform(replaceText("Bill,,,,\n,,,,\n2022,WI,CSE,110,large"), closeSoftKeyboard());
 
         ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -220,11 +252,17 @@ public class GoodEndToEndScenarioTest1 {
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
         ViewInteraction textView2 = onView(
+                allOf(withId(R.id.nameUserDetailTextView), withText("Bill"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        textView2.check(matches(withText("Bill")));
+
+        ViewInteraction textView3 = onView(
                 allOf(withId(R.id.titleCourseRowTextView), withText("2022 winter cse 110"),
                         withParent(allOf(withId(R.id.constraintLayout),
                                 withParent(withId(R.id.coursesUserDetailRecyclerView)))),
                         isDisplayed()));
-        textView2.check(matches(withText("2022 winter cse 110")));
+        textView3.check(matches(withText("2022 winter cse 110")));
     }
 
     private static Matcher<View> childAtPosition(

@@ -9,6 +9,7 @@ import java.time.Month;
 import java.time.MonthDay;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -91,78 +92,28 @@ public class Utilities {
         //int current_quarter = Integer.parseInt(currentQuarter);
 
         int temp_courseYear = course_year;
-        String temp_courseQuarter = courseQuarter;
-        if (temp_courseQuarter == "summer session 1" || temp_courseQuarter == "special summer session" || temp_courseQuarter == "summer session 2") {
+        String temp_courseQuarter = courseQuarter.toLowerCase(Locale.ROOT);
+        if (temp_courseQuarter.equals("summer session 1") || temp_courseQuarter.equals("special summer session") || temp_courseQuarter.equals("summer session 2")) {
             temp_courseQuarter = "summer";
         }
         int temp_age = 0;
-        while (temp_courseQuarter != currentQuarter && temp_courseYear != current_year) {
-            if (temp_age - 1 == 4) {
+        currentQuarter = currentQuarter.toLowerCase(Locale.ROOT);
+        while (!temp_courseQuarter.equals(currentQuarter) || temp_courseYear < current_year) {
+            if (temp_age == 4) {
                 break;
             }
-            if(temp_courseQuarter == "fall") {
-                temp_courseYear = temp_courseYear + 1;
+            if(temp_courseQuarter.equals("fall")) {
+                temp_courseYear++;
                 temp_courseQuarter = "winter";
-                temp_age = temp_age + 1;
-            } else if (temp_courseQuarter == "winter") {
+            } else if (temp_courseQuarter.equals("winter")) {
                 temp_courseQuarter = "spring";
-                temp_age = temp_age + 1;
-            } else if (temp_courseQuarter == "spring") {
+            } else if (temp_courseQuarter.equals("spring")) {
                 temp_courseQuarter = "summer";
-                temp_age = temp_age + 1;
-            } else if (temp_courseQuarter == "summer") {
+            } else if (temp_courseQuarter.equals("summer")) {
                 temp_courseQuarter = "fall";
-                temp_age = temp_age + 1;
             }
+            temp_age++;
         }
-        return temp_age - 1;
-
-        /*
-        Map<String, Integer> yearquarterMap = new HashMap<String, Integer>() {{
-            put("winter", 0);
-            put("spring", 1);
-            put("summer session 1", 2);
-            put("summer session 2", 2);
-            put("special summer session", 2);
-            put("fall", 3);
-        }};
-
-        if (current_year - course_year == 0) {
-            if (courseQuarter == currentQuarter) {
-                return -1;
-            } else {
-                 return (yearquarterMap.get(currentQuarter) - yearquarterMap.get(courseQuarter)) - 1;
-            }
-        } else {
-            if (current_year - course_year >= 2) {
-                return 4;
-            }
-            else {
-                int temp_courseYear = Integer.parseInt(courseYear);
-                String temp_courseQuarter = courseQuarter;
-                if (temp_courseQuarter == "summer session 1" || temp_courseQuarter == "special summer session" || temp_courseQuarter == "summer session 2") {
-                    temp_courseQuarter = "summer";
-                }
-                int temp_age = 0;
-                while (temp_courseQuarter != currentQuarter && temp_courseYear != current_year) {
-                    if(temp_courseQuarter == "fall") {
-                        temp_courseYear = temp_courseYear + 1;
-                        temp_courseQuarter = "winter";
-                        temp_age = temp_age + 1;
-                    } else if (temp_courseQuarter == "winter") {
-                        temp_courseQuarter = "spring";
-                        temp_age = temp_age + 1;
-                    } else if (temp_courseQuarter == "spring") {
-                        temp_courseQuarter = "summer";
-                        temp_age = temp_age + 1;
-                    } else if (temp_courseQuarter == "summer") {
-                        temp_courseQuarter = "fall";
-                        temp_age = temp_age + 1;
-                    }
-                    return temp_age - 1;
-            }
-
-
-*/
+        return temp_age;
     }
 }

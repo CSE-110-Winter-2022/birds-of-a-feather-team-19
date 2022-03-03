@@ -35,7 +35,6 @@ public class AddUserUnitTest {
         db = AppDatabase.useTestSingleton(context);
     }
 
-
     @Test
     public void createUserAndAddToDb() throws Exception {
         User one = new User("Test User One", "");
