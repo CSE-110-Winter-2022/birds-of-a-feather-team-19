@@ -65,15 +65,19 @@ public class MainActivity extends AppCompatActivity {
                 switch ((int) id) {
                     case 0:
                         priorityAssigner = new SharedClassesPriorityAssigner();
+                        updateRecylerView();
                         break;
                     case 1:
                         priorityAssigner = new SharedRecentClassPriorityAssigner();
+                        updateRecylerView();
                         break;
                     case 2:
                         priorityAssigner = new SharedClassSizePriorityAssigner();
+                        updateRecylerView();
                         break;
                     case 3:
                         priorityAssigner = new SharedThisQuarterPriorityAssigner();
+                        updateRecylerView();
                         break;
                 }
             }
