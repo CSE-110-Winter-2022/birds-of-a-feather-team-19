@@ -27,7 +27,7 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 @Config(sdk = Build.VERSION_CODES.P)
-public class AddCourseUnitTest {
+public class TestCourseSize {
     private AppDatabase db;
 
     @Before
@@ -36,27 +36,33 @@ public class AddCourseUnitTest {
         db = AppDatabase.useTestSingleton(context);
     }
 
+
     @Test
-    public void createCourseAndAddToDb() throws Exception {
+    public void createCourseAndCheckSize() throws Exception {
         int userId = 1;
         Course one = new Course(userId, "2022", "WI", "CSE",
                 "100", "small");
         Course two = new Course(userId, "2021", "FA", "POLI",
-                "27", "small");
+                "27", "large");
         Course three = new Course(userId, "2022", "WI", "MUS",
-                "114", "small");
+                "114", "huge");
+
+        one.setId(1);
+        two.setId(2);
+        three.setId(3);
 
         db.courseDao().insert(one);
         db.courseDao().insert(two);
         db.courseDao().insert(three);
 
-        assertEquals(3, db.courseDao().getForUser(userId).size());
+        assertEquals("small", db.courseDao().get(1).getSize());
+        assertEquals("large", db.courseDao().get(2).getSize());
+        assertEquals("huge", db.courseDao().get(3).getSize());
     }
 
     @After
     public void closeDb() throws IOException {
         db.close();
     }
-
 
 }

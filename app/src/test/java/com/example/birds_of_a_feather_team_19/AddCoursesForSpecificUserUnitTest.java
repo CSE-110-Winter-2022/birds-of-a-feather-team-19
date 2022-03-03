@@ -30,9 +30,12 @@ public class AddCoursesForSpecificUserUnitTest {
         db = AppDatabase.useTestSingleton(context);
 
         test = new User("Test one", "");
-        one = new Course(test.getId(), "2022", "WI", "CSE", "110");
-        two = new Course(test.getId(), "2021", "FA", "CSE", "100");
-        three = new Course(test.getId(), "2021", "FA", "CSE", "105");
+        one = new Course(test.getId(), "2022", "WI", "CSE", "110",
+                "small");
+        two = new Course(test.getId(), "2021", "FA", "CSE", "100",
+                "small");
+        three = new Course(test.getId(), "2021", "FA", "CSE", "105",
+                "small");
 
 
         db.userDao().insert(test);
