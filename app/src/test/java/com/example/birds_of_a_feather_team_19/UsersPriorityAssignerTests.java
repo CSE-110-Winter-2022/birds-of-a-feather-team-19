@@ -42,14 +42,14 @@ public class UsersPriorityAssignerTests {
 
     @Before
     public void createTestClasses() {
-        c0 = new Course(1, "2022", "winter", "CSE", "110");
-        c1 = new Course(1, "2022", "winter", "CSE", "101");
-        c2 = new Course(1, "2022", "fall", "CSE", "100");
-        c3 = new Course(1, "2022", "fall", "BILD", "3");
-        c4 = new Course(1, "2021", "spring", "LIGN", "101");
-        c5 = new Course(1, "2021", "winter", "CSE", "21");
-        c6 = new Course(1, "2021", "winter", "WCWP", "10A");
-        c7 = new Course(1, "2020", "fall", "CSE", "11");
+        c0 = new Course(1, "2022", "winter", "CSE", "110", "tiny");
+        c1 = new Course(1, "2022", "winter", "CSE", "101", "large");
+        c2 = new Course(1, "2021", "fall", "CSE", "100", "medium");
+        c3 = new Course(1, "2021", "summer", "BILD", "3", "huge");
+        c4 = new Course(1, "2021", "spring", "LIGN", "101", "gigantic");
+        c5 = new Course(1, "2021", "winter", "CSE", "21", "small");
+        c6 = new Course(1, "2020", "fall", "WCWP", "10A", "huge");
+        c7 = new Course(1, "2019", "spring", "CSE", "11", "gigantic");
         testCoursesList = new ArrayList<Course>();
         testCoursesList.add(c0);
         testCoursesList.add(c1);
@@ -72,12 +72,24 @@ public class UsersPriorityAssignerTests {
     @Test
     public void testRecentClassPriorityAssigner() {
         UserPriorityAssigner assigner = new SharedRecentClassPriorityAssigner();
+        assertEquals(5, (int) assigner.getPriority(c0));
+        assertEquals(4, (int) assigner.getPriority(c2));
+        assertEquals(3, (int) assigner.getPriority(c3));
+        assertEquals(2, (int) assigner.getPriority(c4));
+        assertEquals(1, (int) assigner.getPriority(c5));
+        assertEquals(1, (int) assigner.getPriority(c7));
+
     }
 
     @Test
     public void testSharedClassSizeAssigner() {
         UserPriorityAssigner assigner = new SharedClassSizePriorityAssigner();
-
+        assertEquals(1.00, assigner.getPriority(c0), 0);
+        assertEquals(0.33, assigner.getPriority(c5), 0);
+        assertEquals(0.18, assigner.getPriority(c2), 0);
+        assertEquals(0.10, assigner.getPriority(c1), 0);
+        assertEquals(0.06, assigner.getPriority(c6), 0);
+        assertEquals(0.03, assigner.getPriority(c7), 0);
     }
 
     @Test

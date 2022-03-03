@@ -2,12 +2,14 @@ package com.example.birds_of_a_feather_team_19;
 
 import static com.example.birds_of_a_feather_team_19.Utilities.invalidName;
 import static com.example.birds_of_a_feather_team_19.Utilities.invalidPhotoURL;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import android.os.Build;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 
@@ -46,6 +48,13 @@ public class UtilitiesUnitTest {
     @Test
     public void validPhotoUrl() throws Exception {
         assertFalse(invalidPhotoURL("https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0"));
+    }
+
+    @Test
+    public void testGetCurrentQuarterYear() {
+        String[] currentQuarterYear = Utilities.getCurrentQuarterYear();
+        assertEquals("winter", currentQuarterYear[0]);
+        assertEquals("2022", currentQuarterYear[1]);
     }
 
 }
