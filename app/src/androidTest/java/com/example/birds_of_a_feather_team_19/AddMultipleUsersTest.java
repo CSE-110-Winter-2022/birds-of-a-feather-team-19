@@ -65,9 +65,9 @@ public class AddMultipleUsersTest {
         User testUser = new User(1, "Team 19", "");
         db.userDao().insert(testUser);
 
-        Course testCourse1 = new Course(1, "2022", "winter", "cse", "110");
-        Course testCourse2 = new Course(1, "2021", "fall", "cse", "105");
-        Course testCourse3 = new Course(1, "2021", "spring", "cse", "30");
+        Course testCourse1 = new Course(1, "2022", "winter", "cse", "110", "small");
+        Course testCourse2 = new Course(1, "2021", "fall", "cse", "105", "small");
+        Course testCourse3 = new Course(1, "2021", "spring", "cse", "30", "small");
 
         db.courseDao().insert(testCourse1);
         db.courseDao().insert(testCourse2);
@@ -144,7 +144,7 @@ public class AddMultipleUsersTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText10.perform(replaceText("Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2021,FA,CSE,210\n2022,WI,CSE,110\n2022,SP,CSE,110"), closeSoftKeyboard());
+        appCompatEditText10.perform(replaceText("Bill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2021,FA,CSE,210,medium\n2022,WI,CSE,110,medium\n2022,SP,CSE,110,medium"), closeSoftKeyboard());
 
         ViewInteraction materialButton8 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -174,7 +174,7 @@ public class AddMultipleUsersTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText12.perform(replaceText("Will,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110\n2020,FA,CSE,12\n2022,SP,CSE,110"), closeSoftKeyboard());
+        appCompatEditText12.perform(replaceText("Will,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2022,WI,CSE,110,medium\n2020,FA,CSE,12,medium\n2022,SP,CSE,110,medium"), closeSoftKeyboard());
 
         ViewInteraction materialButton9 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -204,7 +204,7 @@ public class AddMultipleUsersTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText14.perform(replaceText("Dill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110\n2020,FA,CSE,12\n2022,SP,CSE,110\n2021,SP,CSE,30\n2021,FA,CSE,105"), closeSoftKeyboard());
+        appCompatEditText14.perform(replaceText("Dill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2022,WI,CSE,110,medium\n2020,FA,CSE,12,medium\n2022,SP,CSE,110,medium\n2021,SP,CSE,30,medium\n2021,FA,CSE,105,medium"), closeSoftKeyboard());
 
         ViewInteraction materialButton10 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -234,7 +234,7 @@ public class AddMultipleUsersTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText16.perform(replaceText("Jill,,,\n,,,\n2020,FA,CSE,120\n2022,SP,CSE,110"), closeSoftKeyboard());
+        appCompatEditText16.perform(replaceText("Jill,,,\n,,,,\n2020,FA,CSE,120,medium\n2022,SP,CSE,110,medium"), closeSoftKeyboard());
 
         ViewInteraction materialButton11 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
