@@ -6,6 +6,7 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
@@ -35,11 +38,18 @@ public class MainActivity extends AppCompatActivity {
     protected RecyclerView.LayoutManager usersLayoutManager;
     protected UsersViewAdapter usersViewAdapter;
     private AppDatabase db;
-    public static final int USER_ID = 1000;
+    public static int USER_ID = 1000;
+    public static int next_USER_ID = 1000;
+    public static Map<String, Integer> sessionMap = new HashMap<>();
+    boolean resume;
     private static final String TAG = "BoF";
     private MessageListener messageListener;
     private Message message;
     private Map<String, String> quarterMap = new HashMap<>();
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private EditText sessionName;
+    private Button yes, no;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +121,11 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(MainActivity.this, BluetoothService.class);
         if (button.getText().toString().equals("Start")) {
             button.setText("Stop");
-            Nearby.getMessagesClient(this).publish(message);
-            Nearby.getMessagesClient(this).subscribe(messageListener);
+            createNewContactDialog();
+            if(resume == false){
+                Nearby.getMessagesClient(this).publish(message);
+                Nearby.getMessagesClient(this).subscribe(messageListener);
+            }
             updateRecylerView();
         }
         else {
@@ -120,6 +133,36 @@ public class MainActivity extends AppCompatActivity {
             Nearby.getMessagesClient(this).unpublish(message);
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
         }
+    }
+    public void createNewContactDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View contactPopupView = getLayoutInflater().inflate(R.layout.popupresume, null);
+        sessionName = contactPopupView.findViewById(R.id.sessionName);
+        yes = contactPopupView.findViewById(R.id.yes);
+        no = contactPopupView.findViewById(R.id.no);
+        dialogBuilder.setView(contactPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String  session = sessionName.getText().toString();
+                USER_ID = sessionMap.get(session);
+                resume = true;
+                dialog.dismiss();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                next_USER_ID++;
+                USER_ID = next_USER_ID;
+                resume = false;
+                dialog.dismiss();
+            }
+        });
     }
 
     // Logging
@@ -168,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
     private void updateRecylerView() {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
         List<UserPriority> userPriorities = new ArrayList<>();
-        for (Course userCourse : db.courseDao().getForUser(1)) {
-            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber(), userCourse.getOwnerId())) {
+        for (Course userCourse : db.courseDao().getForUser(USER_ID)) {
+            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber(), USER_ID)) {
                 UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
                 if (userPriorities.contains(userPriority)) {
                     userPriorities.get(userPriorities.indexOf(userPriority))

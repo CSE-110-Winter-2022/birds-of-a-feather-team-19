@@ -77,7 +77,7 @@ public class AddCourseActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
         db.userDao().insert(new User(MainActivity.USER_ID, preferences.getString("name", null), preferences.getString("photoURL", null)));
         for (List<String> course : courses) {
-            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3)));
+            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3), 0));
         }
 
         Log.d(this.getString(R.string.TAG), "Add course activity finished");
