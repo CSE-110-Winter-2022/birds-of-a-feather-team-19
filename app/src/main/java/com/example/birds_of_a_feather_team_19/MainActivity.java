@@ -1,17 +1,14 @@
 package com.example.birds_of_a_feather_team_19;
-
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,11 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private AppDatabase db;
     public static int USER_ID = 1000;
     public static int next_USER_ID = 1000;
+    public static String session;
     public static Map<String, Integer> sessionMap = new HashMap<>();
     boolean resume;
     private static final String TAG = "BoF";
@@ -127,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
                 Nearby.getMessagesClient(this).subscribe(messageListener);
             }
             updateRecylerView();
+            if(resume == false){
+                next_USER_ID++;
+                USER_ID = next_USER_ID;
+            }
         }
         else {
             button.setText("Start");
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String  session = sessionName.getText().toString();
+                session = sessionName.getText().toString();
                 USER_ID = sessionMap.get(session);
                 resume = true;
                 dialog.dismiss();
@@ -157,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                next_USER_ID++;
-                USER_ID = next_USER_ID;
                 resume = false;
                 dialog.dismiss();
             }
@@ -223,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
-
         PriorityQueue<UserPriority> userPriorityQueue = new PriorityQueue<>(userPriorities);
 
         List<UserPriority> users = new ArrayList<>();
