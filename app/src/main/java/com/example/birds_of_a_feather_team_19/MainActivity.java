@@ -16,12 +16,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private UsersViewAdapter usersViewAdapter;
+    private UserPriorityAssigner priorityAssigner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,40 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put("ss1", "summer session 1");
         quarterMap.put("ss2", "summer session 2");
         quarterMap.put("sss", "special summer session");
+
+        Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
+
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                switch ((int) id) {
+                    case 0:
+                        priorityAssigner = new SharedClassesPriorityAssigner();
+                        break;
+                    case 1:
+                        priorityAssigner = new SharedRecentClassPriorityAssigner();
+                        break;
+                    case 2:
+                        priorityAssigner = new SharedClassSizePriorityAssigner();
+                        break;
+                    case 3:
+                        priorityAssigner = new SharedThisQuarterPriorityAssigner();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                return;
+            }
+
+        });
+//        ArrayAdapter<CharSequence> filterAdapter =
+//                ArrayAdapter.createFromResource(this, R.array.sort_type, android.R.layout.simple_spinner_item);
+//        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        filterSpinner.setAdapter(filterAdapter);
+
+        priorityAssigner = new SharedClassesPriorityAssigner();
 
         db = AppDatabase.singleton(this);
 
@@ -133,21 +172,46 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateRecylerView() {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
-        List<UserPriority> userPriorities = new ArrayList<>();
-        for (Course userCourse : db.courseDao().getForUser(1)) {
-            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
-                UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
-                if (userPriorities.contains(userPriority)) {
-                    userPriorities.get(userPriorities.indexOf(userPriority))
-                            .setPriority(userPriorities.get(userPriorities.indexOf(userPriority)).getPriority() + 1);
-                } else {
-                    userPriorities.add(userPriority);
+//        List<UserPriority> userPriorities = new ArrayList<>();
+//        for (Course userCourse : db.courseDao().getForUser(1)) {
+//            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
+//                UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
+//                if (userPriorities.contains(userPriority)) {
+//                    userPriorities.get(userPriorities.indexOf(userPriority))
+//                            .setPriority(userPriorities.get(userPriorities.indexOf(userPriority)).getPriority() + 1);
+//                } else {
+//                    userPriorities.add(userPriority);
+//                }
+//            }
+//        }
+
+        List<UserPriority> listUsers = new ArrayList<>();
+
+        List<Course> userCourses = db.courseDao().getForUser(1);
+        for (User user : db.userDao().getAll()) {
+            if (user.getId() == 1)
+                continue;
+            List<Course> otherUserCourses = db.courseDao().getForUser(user.getId());
+            double priority = 0;
+            int sharedClasses = 0;
+            for (Course cUser : userCourses) {
+                for (Course c : otherUserCourses) {
+                    if (cUser.equals(c)) {
+                        priority += priorityAssigner.getPriority(c);
+                        sharedClasses++;
+                    }
                 }
             }
+            if (!(priority > 0)) {
+                continue;
+            }
+            UserPriority userPriority = new UserPriority(user, priority, sharedClasses);
+            listUsers.add(userPriority);
         }
-        userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
 
-        PriorityQueue<UserPriority> userPriorityQueue = new PriorityQueue<>(userPriorities);
+//        userPriorities.remove(new UserPriority(db.userDao().get(1), 1));
+
+        PriorityQueue<UserPriority> userPriorityQueue = new PriorityQueue<>(listUsers);
 
         List<UserPriority> users = new ArrayList<>();
         while (!userPriorityQueue.isEmpty()) {
@@ -170,38 +234,5 @@ public class MainActivity extends AppCompatActivity {
     public void onMockMessageMainButtonClicked(View view) {
         Intent intent = new Intent(this, MockNearbyMessageActivity.class);
         startActivity(intent);
-    }
-}
-
-// Test correct ordering
-class UserPriority implements Comparable<UserPriority> {
-    private User user;
-    private int priority;
-
-    public UserPriority(User user, int priority) {
-        this.user = user;
-        this.priority = priority;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    @Override
-    public int compareTo(UserPriority userPriority) {
-        return userPriority.getPriority() - priority;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return user.equals(((UserPriority) o).getUser());
     }
 }

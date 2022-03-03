@@ -29,6 +29,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,8 +42,8 @@ public class AddCourseActivityTest_onecourse {
     @Rule
     public ActivityTestRule<AddCourseActivity> mActivityTestRule = new ActivityTestRule<>(AddCourseActivity.class);
 
-    @BeforeClass
-    public static void clearDatabase() {
+    @Before
+    public void clearDatabase() {
         Context context = ApplicationProvider.getApplicationContext();
         AppDatabase db = AppDatabase.singleton(context);
         db.userDao().deleteAll();

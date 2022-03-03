@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -68,7 +69,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
 
         public void setUser(UserPriority userPriority) {
             this.user = userPriority.getUser();
-            name.setText(user.getName() + " (" + userPriority.getPriority() + ")");
+            name.setText(user.getName() + " (" + userPriority.getSharedClasses() + ")");
             Log.d(TAG, "User name" + user.getName() + " (" + userPriority.getPriority() + ")");
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
