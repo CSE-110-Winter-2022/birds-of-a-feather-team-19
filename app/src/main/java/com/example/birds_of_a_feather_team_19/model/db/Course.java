@@ -9,15 +9,6 @@ import java.util.Map;
 
 @Entity(tableName = "courses")
 public class Course implements Comparable<Course> {
-    private static final Map<String, Integer> quarterMap = new HashMap<String, Integer>() {{
-        put("spring", 0);
-        put("summer session 1", 1);
-        put("summer session 2", 2);
-        put("special summer session", 3);
-        put("fall", 4);
-        put("winter", 5);
-    }};
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
@@ -37,12 +28,25 @@ public class Course implements Comparable<Course> {
     @ColumnInfo(name = "number")
     private String number;
 
-    public Course(int userId, String year, String quarter, String subject, String number) {
+    @ColumnInfo(name = "size")
+    private String size;
+
+    private static final Map<String, Integer> quarterMap = new HashMap<String, Integer>() {{
+        put("winter", 0);
+        put("spring", 1);
+        put("summer session 1", 2);
+        put("summer session 2", 3);
+        put("special summer session", 4);
+        put("fall", 5);
+    }};
+
+    public Course(int userId, String year, String quarter, String subject, String number, String size) {
         this.userId = userId;
         this.year = year;
         this.quarter = quarter;
         this.subject = subject;
         this.number = number;
+        this.size = size;
     }
 
     public int getId() {
@@ -57,25 +61,17 @@ public class Course implements Comparable<Course> {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public String getYear() { return year; }
-
-    public void setYear(String year) { this.year = year; }
 
     public String getQuarter() { return quarter; }
 
-    public void setQuarter(String quarter) { this.quarter = quarter; }
-
     public String getSubject() { return subject; }
-
-    public void setSubject(String subject) { this.subject = subject; }
 
     public String getNumber() { return number; }
 
-    public void setNumber(String number) { this.number = number; }
+    public String getSize() {
+        return size;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -88,13 +84,13 @@ public class Course implements Comparable<Course> {
     @Override
     public int compareTo(Course course) {
         if (!this.year.equals(course.getYear())) {
-            return Integer.parseInt(this.year) < Integer.parseInt(course.year) ? -1 : 1;
-        } else if (quarterMap.get(this.quarter) != quarterMap.get(course.getQuarter())) {
-            return quarterMap.get(this.quarter) < quarterMap.get(course.getQuarter()) ? -1 : 1;
+            return Integer.parseInt(this.year) - Integer.parseInt(course.year);
+        } else if (!this.quarter.equals(course.getQuarter())) {
+            return quarterMap.get(this.quarter) - quarterMap.get(course.getQuarter());
         } else if (!this.subject.equals(course.getSubject())) {
             return this.subject.compareTo(course.getSubject());
         } else {
-            return this.number.compareTo(course.getNumber());
+            return Integer.parseInt(this.number) - Integer.parseInt(course.getNumber());
         }
     }
 }

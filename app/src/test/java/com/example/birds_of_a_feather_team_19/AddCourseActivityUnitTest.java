@@ -52,12 +52,14 @@ public class AddCourseActivityUnitTest {
             course.add("spring");
             course.add("cse");
             course.add("101");
+            course.add("tiny (<40)");
             expected.add(course);
             course = new ArrayList<>();
             course.add("2022");
             course.add("spring");
             course.add("cse");
             course.add("110");
+            course.add("tiny (<40)");
             expected.add(course);
             assertEquals(expected, activity.courses);
         });
@@ -84,6 +86,7 @@ public class AddCourseActivityUnitTest {
             course.add("spring");
             course.add("cse");
             course.add("101");
+            course.add("tiny (<40)");
             expected.add(course);
             assertEquals(expected, activity.courses);
         });
