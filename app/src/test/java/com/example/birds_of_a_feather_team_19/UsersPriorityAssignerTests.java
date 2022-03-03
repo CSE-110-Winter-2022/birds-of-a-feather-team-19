@@ -78,7 +78,6 @@ public class UsersPriorityAssignerTests {
         assertEquals(2, (int) assigner.getPriority(c4));
         assertEquals(1, (int) assigner.getPriority(c5));
         assertEquals(1, (int) assigner.getPriority(c7));
-
     }
 
     @Test
