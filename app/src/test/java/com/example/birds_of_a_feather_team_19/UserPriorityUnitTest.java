@@ -16,8 +16,8 @@ public class UserPriorityUnitTest {
         User one = new User(1, "Test user one", "");
         User two = new User(2, "Test user two", "");
 
-        UserPriority upOne = new UserPriority(one, 1);
-        UserPriority upTwo = new UserPriority(two, 2);
+        UserPriority upOne = new UserPriority(one, 1, 1);
+        UserPriority upTwo = new UserPriority(two, 2, 2);
 
         assertEquals(1, upOne.compareTo(upTwo));
     }
@@ -26,8 +26,8 @@ public class UserPriorityUnitTest {
     public void userPriorityEqualsReturnsTrue() throws Exception {
         User one = new User(1, "Test user one", "");
 
-        UserPriority upOne = new UserPriority(one, 1);
-        UserPriority upTwo = new UserPriority(one, 10);
+        UserPriority upOne = new UserPriority(one, 1, 1);
+        UserPriority upTwo = new UserPriority(one, 10, 10);
 
         assertTrue(upOne.equals(upTwo));
     }
@@ -37,8 +37,8 @@ public class UserPriorityUnitTest {
         User one = new User(1, "Test user one", "");
         User two = new User(2, "Test user two", "");
 
-        UserPriority upOne = new UserPriority(one, 1);
-        UserPriority upTwo = new UserPriority(two, 10);
+        UserPriority upOne = new UserPriority(one, 1, 1);
+        UserPriority upTwo = new UserPriority(two, 10, 10);
 
         assertFalse(upOne.equals(upTwo));
     }

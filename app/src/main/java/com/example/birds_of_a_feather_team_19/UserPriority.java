@@ -6,8 +6,10 @@ import com.example.birds_of_a_feather_team_19.model.db.User;
 public class UserPriority implements Comparable<UserPriority> {
     private User user;
     private double priority;
+    private int sharedClasses;
 
-    public UserPriority(User user, double priority) {
+    public UserPriority(User user, double priority, int sharedClasses) {
+        this.sharedClasses = sharedClasses;
         this.user = user;
         this.priority = priority;
     }
@@ -20,8 +22,16 @@ public class UserPriority implements Comparable<UserPriority> {
         return priority;
     }
 
+    public int getSharedClasses() {
+        return sharedClasses;
+    }
+
     public void setPriority(double priority) {
         this.priority = priority;
+    }
+
+    public void incrementSharedClasses() {
+        sharedClasses++;
     }
 
     @Override

@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -36,6 +37,8 @@ import com.example.birds_of_a_feather_team_19.model.db.User;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -45,17 +48,19 @@ import org.junit.runner.RunWith;
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class AddMultipleUsersTest {
-    private String[] testMockUsers;
+    private static String[] testMockUsers;
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @BeforeClass
-    public static void clearDatabase() {
+    public static void setupTestData() {
         Context context = ApplicationProvider.getApplicationContext();
         AppDatabase db = AppDatabase.singleton(context);
         db.userDao().deleteAll();
         db.courseDao().deleteAll();
+//        System.out.println("Database Cleared");
+        Log.d("BoF", "Database cleared");
 
         User testUser = new User(1, "Team 19", "");
         db.userDao().insert(testUser);
@@ -67,10 +72,7 @@ public class AddMultipleUsersTest {
         db.courseDao().insert(testCourse1);
         db.courseDao().insert(testCourse2);
         db.courseDao().insert(testCourse3);
-    }
 
-    @Before
-    public void setUpTestUsers() {
         testMockUsers = new String[]{"Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110",
                 "Will,,,\n" +
                         ",,,\n" +
@@ -90,6 +92,37 @@ public class AddMultipleUsersTest {
                         "2022,SP,CSE,110"
         };
     }
+
+    @AfterClass
+    public static void clearDatabase() {
+        Context context = ApplicationProvider.getApplicationContext();
+        AppDatabase db = AppDatabase.singleton(context);
+        db.userDao().deleteAll();
+        db.courseDao().deleteAll();
+        Log.d("BoF", "Cleared Database After Tests");
+    }
+
+//    @Before
+//    public void setUpTestUsers() {
+//        testMockUsers = new String[]{"Bill,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n2022,WI,CSE,110",
+//                "Will,,,\n" +
+//                        ",,,\n" +
+//                        "2022,WI,CSE,110\n" +
+//                        "2020,FA,CSE,12\n" +
+//                        "2022,SP,CSE,110",
+//                "Dill,,,\n" +
+//                        "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n" +
+//                        "2022,WI,CSE,110\n" +
+//                        "2020,FA,CSE,12\n" +
+//                        "2022,SP,CSE,110\n" +
+//                        "2021,SP,CSE,30\n" +
+//                        "2021,FA,CSE,105",
+//                "Jill,,,\n" +
+//                        ",,,\n" +
+//                        "2020,FA,CSE,120\n" +
+//                        "2022,SP,CSE,110"
+//        };
+//    }
 
     @Test
     public void addMultipleUsersTest() {
