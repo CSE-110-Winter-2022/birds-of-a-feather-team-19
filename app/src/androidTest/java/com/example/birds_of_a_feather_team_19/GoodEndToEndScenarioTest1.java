@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -36,6 +37,9 @@ import com.example.birds_of_a_feather_team_19.model.db.User;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,12 +52,18 @@ public class GoodEndToEndScenarioTest1 {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @BeforeClass
+    @BeforeClass @AfterClass
     public static void clearDatabase() {
         Context context = ApplicationProvider.getApplicationContext();
         AppDatabase db = AppDatabase.singleton(context);
         db.userDao().deleteAll();
         db.courseDao().deleteAll();
+        Log.d("EtoETest", "Looking through Users in DB");
+        for (User u : db.userDao().getAll()) {
+            Log.d("EtoETest", u.getName());
+        }
+        System.out.println("Database Cleared");
+        Log.d("EtoETest", "Database cleared");
     }
 
     @Test

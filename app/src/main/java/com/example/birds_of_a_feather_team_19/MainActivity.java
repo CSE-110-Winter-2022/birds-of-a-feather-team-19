@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -59,10 +60,36 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put("sss", "special summer session");
 
         Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
-        ArrayAdapter<CharSequence> filterAdapter =
-                ArrayAdapter.createFromResource(this, R.array.sort_type, android.R.layout.simple_spinner_item);
-        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filterSpinner.setAdapter(filterAdapter);
+
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                switch ((int) id) {
+                    case 0:
+                        priorityAssigner = new SharedClassesPriorityAssigner();
+                        break;
+                    case 1:
+                        priorityAssigner = new SharedRecentClassPriorityAssigner();
+                        break;
+                    case 2:
+                        priorityAssigner = new SharedClassSizePriorityAssigner();
+                        break;
+                    case 3:
+                        priorityAssigner = new SharedThisQuarterPriorityAssigner();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                return;
+            }
+
+        });
+//        ArrayAdapter<CharSequence> filterAdapter =
+//                ArrayAdapter.createFromResource(this, R.array.sort_type, android.R.layout.simple_spinner_item);
+//        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        filterSpinner.setAdapter(filterAdapter);
 
         priorityAssigner = new SharedClassesPriorityAssigner();
 
@@ -107,24 +134,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         ((Button) findViewById(R.id.startStopMainButton)).setText("Start");
-    }
-
-    public void onSetFilterClicked(View view) {
-        String filterType = ((Spinner) findViewById(R.id.sort_list_students_filter)).getSelectedItem().toString().toLowerCase(Locale.ROOT);
-        switch (filterType) {
-            case "default":
-                this.priorityAssigner = new SharedClassesPriorityAssigner();
-                break;
-            case "prioritize recent":
-                this.priorityAssigner = new SharedRecentClassPriorityAssigner();
-                break;
-            case "prioritize small classes":
-                this.priorityAssigner = new SharedClassSizePriorityAssigner();
-                break;
-            case "this quarter only":
-                this.priorityAssigner = new SharedThisQuarterPriorityAssigner();
-                break;
-        }
     }
 
     // Needs testing
@@ -218,17 +227,19 @@ public class MainActivity extends AppCompatActivity {
                 continue;
             List<Course> otherUserCourses = db.courseDao().getForUser(user.getId());
             double priority = 0;
+            int sharedClasses = 0;
             for (Course cUser : userCourses) {
                 for (Course c : otherUserCourses) {
                     if (cUser.equals(c)) {
                         priority += priorityAssigner.getPriority(c);
+                        sharedClasses++;
                     }
                 }
             }
             if (!(priority > 0)) {
                 continue;
             }
-            UserPriority userPriority = new UserPriority(user, priority);
+            UserPriority userPriority = new UserPriority(user, priority, sharedClasses);
             listUsers.add(userPriority);
         }
 

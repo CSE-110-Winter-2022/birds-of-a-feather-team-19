@@ -69,7 +69,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
 
         public void setUser(UserPriority userPriority) {
             this.user = userPriority.getUser();
-            name.setText(user.getName() + " (" + userPriority.getPriority() + ")");
+            name.setText(user.getName() + " (" + userPriority.getSharedClasses() + ")");
             Log.d(TAG, "User name" + user.getName() + " (" + userPriority.getPriority() + ")");
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
