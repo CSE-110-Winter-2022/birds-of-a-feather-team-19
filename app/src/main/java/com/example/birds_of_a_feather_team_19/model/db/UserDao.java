@@ -12,13 +12,13 @@ public interface UserDao {
     List<User> getAll();
 
     @Query("SELECT * FROM users WHERE id=:id")
-    User get(int id);
+    User get(String id);
 
     @Query("SELECT COUNT(*) FROM users")
     int count();
 
     @Query("SELECT * FROM users WHERE name=:name")
-    User get(String name);
+    User getFromName(String name);
 
     @Query("DELETE FROM users")
     void deleteAll();
