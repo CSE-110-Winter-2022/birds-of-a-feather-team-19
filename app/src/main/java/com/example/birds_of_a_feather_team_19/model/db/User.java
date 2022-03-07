@@ -17,10 +17,14 @@ public class User {
     @ColumnInfo(name = "photoURL")
     private String photoURL;
 
+    @ColumnInfo(name = "favorite")
+    private boolean favorite;
+
     @Ignore
     public User(String name, String photoURL) {
         this.name = name;
         this.photoURL = photoURL;
+        this.favorite = false;
     }
 
 //    @Ignore
@@ -28,6 +32,7 @@ public class User {
         this.id = id;
         this.name = name;
         this.photoURL = photoURL;
+        this.favorite = false;
     }
 
     public int getId() {
@@ -52,6 +57,14 @@ public class User {
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     @Override

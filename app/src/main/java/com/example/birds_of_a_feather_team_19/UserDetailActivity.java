@@ -49,6 +49,15 @@ public class UserDetailActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.nameUserDetailTextView)).setText(user.getName());
 
         updateRecylerView();
+
+        if (user.isFavorite()) {
+            findViewById(R.id.favoriteUserDetailButton).setVisibility(View.GONE);
+            findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.VISIBLE);
+        }
+        else {
+            findViewById(R.id.favoriteUserDetailButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.GONE);
+        }
     }
     private void updateRecylerView() {
         PriorityQueue<Course> coursesPriorityQueue = new PriorityQueue<>();
@@ -84,4 +93,15 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
 
+    public void onFavoriteUserDetailButtonClicked(View view) {
+        db.userDao().get(user.getId()).setFavorite(true);
+        findViewById(R.id.favoriteUserDetailButton).setVisibility(View.GONE);
+        findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.VISIBLE);
+    }
+
+    public void onUnfavoriteUserDetailButtonClicked(View view) {
+        db.userDao().get(user.getId()).setFavorite(false);
+        findViewById(R.id.favoriteUserDetailButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.GONE);
+    }
 }
