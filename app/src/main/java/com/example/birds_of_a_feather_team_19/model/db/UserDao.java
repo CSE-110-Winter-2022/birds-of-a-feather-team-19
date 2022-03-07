@@ -3,6 +3,7 @@ package com.example.birds_of_a_feather_team_19.model.db;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -25,4 +26,7 @@ public interface UserDao {
 
     @Insert
     void insert(User user);
+
+    @Update
+    void update(User user);
 }

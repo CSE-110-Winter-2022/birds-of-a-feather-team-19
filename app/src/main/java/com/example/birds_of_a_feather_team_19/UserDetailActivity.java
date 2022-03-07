@@ -94,13 +94,15 @@ public class UserDetailActivity extends AppCompatActivity {
 
 
     public void onFavoriteUserDetailButtonClicked(View view) {
-        db.userDao().get(user.getId()).setFavorite(true);
+        user.setFavorite(true);
+        db.userDao().update(user);
         findViewById(R.id.favoriteUserDetailButton).setVisibility(View.GONE);
         findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.VISIBLE);
     }
 
     public void onUnfavoriteUserDetailButtonClicked(View view) {
-        db.userDao().get(user.getId()).setFavorite(false);
+        user.setFavorite(false);
+        db.userDao().update(user);
         findViewById(R.id.favoriteUserDetailButton).setVisibility(View.VISIBLE);
         findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.GONE);
     }
