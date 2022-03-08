@@ -325,7 +325,7 @@ public class FilterTest2 {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText11.perform(replaceText("Will,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2021,SP,CSE,110,large\n2021,FA,CSE,105,large\n2020,FA,CSE,12,large"), closeSoftKeyboard());
+        appCompatEditText11.perform(replaceText("1,,,,\nWill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2021,SP,CSE,110,large\n2021,FA,CSE,105,large\n2020,FA,CSE,12,large"), closeSoftKeyboard());
 
         ViewInteraction materialButton9 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -347,7 +347,7 @@ public class FilterTest2 {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText13.perform(replaceText("Dill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2022,WI,CSE,140,tiny\n2021,SP,CSE,130,tiny\n2020,FA,CSE,12,tiny"), closeSoftKeyboard());
+        appCompatEditText13.perform(replaceText("2,,,,\nDill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2022,WI,CSE,140,tiny\n2021,SP,CSE,130,tiny\n2020,FA,CSE,12,tiny"), closeSoftKeyboard());
 
         ViewInteraction materialButton10 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -379,7 +379,7 @@ public class FilterTest2 {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText16.perform(replaceText("Fill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2020,FA,CSE,12,large"), closeSoftKeyboard());
+        appCompatEditText16.perform(replaceText("3,,,,\nFill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2020,FA,CSE,12,large"), closeSoftKeyboard());
 
         ViewInteraction materialButton11 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),

@@ -1,5 +1,6 @@
 package com.example.birds_of_a_feather_team_19.model.db;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -7,7 +8,8 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
 public class User {
-//    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "id")
     private String id;
 

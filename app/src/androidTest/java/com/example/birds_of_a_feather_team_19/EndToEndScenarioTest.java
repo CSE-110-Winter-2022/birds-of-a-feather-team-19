@@ -205,7 +205,7 @@ public class EndToEndScenarioTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText8.perform(replaceText("Bill,,,,\n,,,,\n2022,WI,CSE,110,large"), closeSoftKeyboard());
+        appCompatEditText8.perform(replaceText("1,,,,\nBill,,,,\n,,,,\n2022,WI,CSE,110,large"), closeSoftKeyboard());
 
         ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),

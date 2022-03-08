@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,8 +51,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
+//        Log.d(TAG, USER_ID);
+//        USER_ID = UUID.randomUUID().toString();
+        SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
+        if (preferences.getString("UUID", null) == null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            String newUUID = UUID.randomUUID().toString();
+            editor.putString("UUID", newUUID);
+            editor.commit();
+        }
+        this.USER_ID = preferences.getString("UUID", null);
+//        this.USER_ID = "TEMP_ID";
+        Log.d(TAG, "User ID: " + USER_ID);
 
-        USER_ID = UUID.randomUUID().toString();
 
         quarterMap.put("fa", "fall");
         quarterMap.put("wi", "winter");

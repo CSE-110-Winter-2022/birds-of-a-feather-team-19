@@ -13,8 +13,8 @@ import org.robolectric.annotation.Config;
 public class UserPriorityUnitTest {
     @Test
     public void testUserPriorityCompareTo() throws Exception {
-        User one = new User(1, "Test user one", "");
-        User two = new User(2, "Test user two", "");
+        User one = new User("1", "Test user one", "");
+        User two = new User("2", "Test user two", "");
 
         UserPriority upOne = new UserPriority(one, 1, 1);
         UserPriority upTwo = new UserPriority(two, 2, 2);
@@ -24,7 +24,7 @@ public class UserPriorityUnitTest {
 
     @Test
     public void userPriorityEqualsReturnsTrue() throws Exception {
-        User one = new User(1, "Test user one", "");
+        User one = new User("1", "Test user one", "");
 
         UserPriority upOne = new UserPriority(one, 1, 1);
         UserPriority upTwo = new UserPriority(one, 10, 10);
@@ -34,8 +34,8 @@ public class UserPriorityUnitTest {
 
     @Test
     public void userPriorityEqualsReturnsFalse() throws Exception {
-        User one = new User(1, "Test user one", "");
-        User two = new User(2, "Test user two", "");
+        User one = new User("1", "Test user one", "");
+        User two = new User("2", "Test user two", "");
 
         UserPriority upOne = new UserPriority(one, 1, 1);
         UserPriority upTwo = new UserPriority(two, 10, 10);
