@@ -1,0 +1,21 @@
+package com.example.birds_of_a_feather_team_19.model.db;
+
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Transaction;
+
+@Dao
+public interface SessionDao {
+    @Query("SELECT * FROM sessions WHERE id=:id")
+    Session get(int id);
+
+    @Query("SELECT * FROM sessions WHERE session_name=:sessionName")
+    Session get(String sessionName);
+
+    @Query("DELETE FROM courses")
+    void deleteAll();
+
+    @Insert
+    void insert(Session session);
+}
