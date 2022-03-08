@@ -42,14 +42,15 @@ public class UsersPriorityAssignerTests {
 
     @Before
     public void createTestClasses() {
-        c0 = new Course(1, "2022", "winter", "CSE", "110", "tiny");
-        c1 = new Course(1, "2022", "winter", "CSE", "101", "large");
-        c2 = new Course(1, "2021", "fall", "CSE", "100", "medium");
-        c3 = new Course(1, "2021", "summer", "BILD", "3", "huge");
-        c4 = new Course(1, "2021", "spring", "LIGN", "101", "gigantic");
-        c5 = new Course(1, "2021", "winter", "CSE", "21", "small");
-        c6 = new Course(1, "2020", "fall", "WCWP", "10A", "huge");
-        c7 = new Course(1, "2019", "spring", "CSE", "11", "gigantic");
+        String userId = "1";
+        c0 = new Course(userId, "2022", "winter", "CSE", "110", "tiny");
+        c1 = new Course(userId, "2022", "winter", "CSE", "101", "large");
+        c2 = new Course(userId, "2021", "fall", "CSE", "100", "medium");
+        c3 = new Course(userId, "2021", "summer", "BILD", "3", "huge");
+        c4 = new Course(userId, "2021", "spring", "LIGN", "101", "gigantic");
+        c5 = new Course(userId, "2021", "winter", "CSE", "21", "small");
+        c6 = new Course(userId, "2020", "fall", "WCWP", "10A", "huge");
+        c7 = new Course(userId, "2019", "spring", "CSE", "11", "gigantic");
         testCoursesList = new ArrayList<Course>();
         testCoursesList.add(c0);
         testCoursesList.add(c1);

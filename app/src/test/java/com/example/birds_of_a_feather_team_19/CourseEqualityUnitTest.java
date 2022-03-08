@@ -14,7 +14,7 @@ import org.robolectric.annotation.Config;
 public class CourseEqualityUnitTest {
     @Test
     public void twoCoursesAreEqual() throws Exception {
-        int userId = 1;
+        String userId = "1";
         Course one = new Course(userId, "2022", "WI", "CSE", "110",
                 "small");
         Course two = new Course(userId, "2022", "WI", "CSE", "110",
@@ -27,7 +27,7 @@ public class CourseEqualityUnitTest {
 
     @Test
     public void twoCoursesAreNotEqual() throws Exception {
-        int userId = 1;
+        String userId = "1";
         Course one = new Course(userId, "2022", "WI", "CSE", "110",
                 "small");
         Course two = new Course(userId, "2021", "FA", "ECON", "109",
