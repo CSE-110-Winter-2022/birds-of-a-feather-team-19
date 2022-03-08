@@ -45,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager usersLayoutManager;
     private UsersViewAdapter usersViewAdapter;
     private UserPriorityAssigner priorityAssigner;
+    private int currentSessionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
-//        Log.d(TAG, USER_ID);
-//        USER_ID = UUID.randomUUID().toString();
+        this.currentSessionId = 0;
         SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
         if (preferences.getString("UUID", null) == null) {
             SharedPreferences.Editor editor = preferences.edit();
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
         }
         this.USER_ID = preferences.getString("UUID", null);
-//        this.USER_ID = "TEMP_ID";
         Log.d(TAG, "User ID: " + USER_ID);
 
 
@@ -143,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
         if (button.getText().toString().equals("Start")) {
+            // Session newSession = new Session(Utilities.getCurrentDateTime());
+            // db.sessionDao.insert(newSession);
+            // this.currentSessionId = newSession.getId();
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG,userName + ", " + userPhotoUrl + ", " + uuid);
 
-        User studentUser = new User(uuid, userName, userPhotoUrl);
+        User studentUser = new User(uuid, userName, userPhotoUrl /*currentSessionId*/);
         db.userDao().insert(studentUser);
 
         int i = 15;
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<Course> userCourses = db.courseDao().getForUser(USER_ID);
         for (User user : db.userDao().getAll()) {
-            if (user.getId().equals(USER_ID))
+            if (user.getId().equals(USER_ID) /*|| user.getSessionId() != currentSessionId*/)
                 continue;
             List<Course> otherUserCourses = db.courseDao().getForUser(user.getId());
             double priority = 0;

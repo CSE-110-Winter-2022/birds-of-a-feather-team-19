@@ -83,6 +83,10 @@ public class Utilities {
         return quarterYear;
     }
 
+    public static String getCurrentDateTime() {
+        return Calendar.getInstance().getTime().toString();
+    }
+
     public static int getCourseAge(String courseYear, String courseQuarter, String currentYear, String currentQuarter) {
         //assumes input will give an output with an appropriate age (0-4)
 
