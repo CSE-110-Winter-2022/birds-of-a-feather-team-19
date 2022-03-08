@@ -37,8 +37,8 @@ public class AddUserUnitTest {
 
     @Test
     public void createUserAndAddToDb() throws Exception {
-        User one = new User("Test User One", "");
-        User two = new User("Test User One", "");
+        User one = new User("1", "Test User One", "");
+        User two = new User("2", "Test User One", "");
 
         db.userDao().insert(one);
         db.userDao().insert(two);

@@ -24,8 +24,8 @@ public class UserEqualityUnitTest {
         User one = new User("Test One", "");
         User two = new User("Test One", "");
 
-        one.setId(1);
-        two.setId(2);
+        one.setId("1");
+        two.setId("2");
 
         assertFalse(one.equals(two));
     }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,10 +32,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "BoF";
-    public static final int USER_ID = 1;
+    public static String USER_ID;
     private AppDatabase db;
     private Message message;
     private MessageListener messageListener;
@@ -49,6 +51,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
+//        Log.d(TAG, USER_ID);
+//        USER_ID = UUID.randomUUID().toString();
+        SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
+        if (preferences.getString("UUID", null) == null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            String newUUID = UUID.randomUUID().toString();
+            editor.putString("UUID", newUUID);
+            editor.commit();
+        }
+        this.USER_ID = preferences.getString("UUID", null);
+//        this.USER_ID = "TEMP_ID";
+        Log.d(TAG, "User ID: " + USER_ID);
+
 
         quarterMap.put("fa", "fall");
         quarterMap.put("wi", "winter");
@@ -145,16 +160,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,userData);
         String[] data = userData.split(",");
         Log.d(TAG,"Updating database");
-        String userName = data[0];
-        String userPhotoUrl = data[5];
-        int userId = db.userDao().count() + 1;
+        String uuid = data[0];
+        String userName = data[5];
+        String userPhotoUrl = data[10];
 
-        Log.d(TAG,userName + ", " + userPhotoUrl + ", " + userId);
+        Log.d(TAG,userName + ", " + userPhotoUrl + ", " + uuid);
 
-        User studentUser = new User(userId, userName, userPhotoUrl);
+        User studentUser = new User(uuid, userName, userPhotoUrl);
         db.userDao().insert(studentUser);
 
-        int i = 10;
+        int i = 15;
         while (i < data.length) {
             String year = data[i].toLowerCase();
             String quarter = quarterMap.get(data[i + 1].toLowerCase());
@@ -164,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG,year + quarter + " " + subject + number + " " + size);
 
-            db.courseDao().insert(new Course(userId, year, quarter, subject, number, size));
+            db.courseDao().insert(new Course(uuid, year, quarter, subject, number, size));
 
             i += 5;
         }
@@ -191,9 +206,9 @@ public class MainActivity extends AppCompatActivity {
 
         List<UserPriority> listUsers = new ArrayList<>();
 
-        List<Course> userCourses = db.courseDao().getForUser(1);
+        List<Course> userCourses = db.courseDao().getForUser(USER_ID);
         for (User user : db.userDao().getAll()) {
-            if (user.getId() == 1)
+            if (user.getId().equals(USER_ID))
                 continue;
             List<Course> otherUserCourses = db.courseDao().getForUser(user.getId());
             double priority = 0;

@@ -29,7 +29,7 @@ public class AddCoursesForSpecificUserUnitTest {
         Context context = ApplicationProvider.getApplicationContext();
         db = AppDatabase.useTestSingleton(context);
 
-        test = new User("Test one", "");
+        test = new User("1", "Test one", "");
         one = new Course(test.getId(), "2022", "WI", "CSE", "110",
                 "small");
         two = new Course(test.getId(), "2021", "FA", "CSE", "100",

@@ -38,7 +38,7 @@ public class UserDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_detail);
 
         db = AppDatabase.singleton(this);
-        user = db.userDao().get(getIntent().getIntExtra("id", 0));
+        user = db.userDao().get(getIntent().getStringExtra("id"));
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
         try {
@@ -53,7 +53,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private void updateRecylerView() {
         PriorityQueue<Course> coursesPriorityQueue = new PriorityQueue<>();
         List<Course> courses = new ArrayList<>();
-        for (Course userCourse : db.courseDao().getForUser(1)) {
+        for (Course userCourse : db.courseDao().getForUser(MainActivity.USER_ID)) {
             for (Course course : db.courseDao().getForUser(user.getId())) {
                 if (userCourse.equals(course)) {
                     coursesPriorityQueue.add(course);
@@ -65,7 +65,7 @@ public class UserDetailActivity extends AppCompatActivity {
             courses.add(coursesPriorityQueue.poll());
         }
 
-        Log.d(TAG, "List of Common Courses for " + user.getName() + " and " + db.userDao().get(1).getName());
+        Log.d(TAG, "List of Common Courses for " + user.getName() + " and " + db.userDao().get(MainActivity.USER_ID).getName());
         for (Course commonCourse : courses) {
             String courseString = commonCourse.getYear() + commonCourse.getQuarter() + commonCourse.getSubject() + commonCourse.getNumber();
             Log.d(TAG, courseString);

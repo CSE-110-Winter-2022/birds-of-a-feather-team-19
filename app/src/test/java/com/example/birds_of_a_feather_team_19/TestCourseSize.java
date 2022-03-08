@@ -39,7 +39,7 @@ public class TestCourseSize {
 
     @Test
     public void createCourseAndCheckSize() throws Exception {
-        int userId = 1;
+        String userId = "1";
         Course one = new Course(userId, "2022", "WI", "CSE",
                 "100", "small");
         Course two = new Course(userId, "2021", "FA", "POLI",

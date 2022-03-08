@@ -11,7 +11,7 @@ import java.util.List;
 public interface CourseDao {
     @Transaction
     @Query("SELECT * FROM courses WHERE user_id=:userId")
-    List<Course> getForUser(int userId);
+    List<Course> getForUser(String userId);
 
     @Query("SELECT * FROM courses WHERE id=:id")
     Course get(int id);
