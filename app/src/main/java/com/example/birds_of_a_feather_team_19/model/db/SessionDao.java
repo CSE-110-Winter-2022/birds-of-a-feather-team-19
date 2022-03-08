@@ -5,8 +5,14 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import java.util.List;
+
 @Dao
 public interface SessionDao {
+    @Transaction
+    @Query("SELECT * FROM users WHERE session_id=:sessionId")
+    List<User> getUsersInSession(int sessionId);
+
     @Query("SELECT * FROM sessions WHERE id=:id")
     Session get(int id);
 

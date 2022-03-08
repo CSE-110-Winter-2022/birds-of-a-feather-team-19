@@ -19,6 +19,9 @@ public class User {
     @ColumnInfo(name = "photoURL")
     private String photoURL;
 
+    @ColumnInfo(name = "session_id")
+    private int sessionId;
+
     @Ignore
     public User(String name, String photoURL) {
         this.name = name;
@@ -54,6 +57,14 @@ public class User {
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
     }
 
     @Override
