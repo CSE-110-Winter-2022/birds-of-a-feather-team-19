@@ -31,11 +31,15 @@ public class User {
 
     @ColumnInfo(name = "session_id")
     private HashSet<Integer> sessionIds;
+  
+    @ColumnInfo(name = "favorite")
+    private boolean favorite;
 
     @Ignore
     public User(String name, String photoURL) {
         this.name = name;
         this.photoURL = photoURL;
+        this.favorite = false;
     }
 
 //    @Ignore
@@ -44,6 +48,7 @@ public class User {
         this.name = name;
         this.photoURL = photoURL;
         this.sessionIds = new HashSet<>();
+        this.favorite = false;
     }
 
     public String getId() {
@@ -80,6 +85,13 @@ public class User {
 
     public void addSessionId(int sessionId) {
         this.sessionIds.add(sessionId);
+      
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     @Override
