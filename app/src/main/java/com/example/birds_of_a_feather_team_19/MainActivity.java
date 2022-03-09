@@ -1,6 +1,7 @@
 package com.example.birds_of_a_feather_team_19;
 
 import com.example.birds_of_a_feather_team_19.model.db.Course;
+import com.example.birds_of_a_feather_team_19.model.db.Session;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -45,14 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager usersLayoutManager;
     private UsersViewAdapter usersViewAdapter;
     private UserPriorityAssigner priorityAssigner;
+    private int currentSessionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
-//        Log.d(TAG, USER_ID);
-//        USER_ID = UUID.randomUUID().toString();
+        this.currentSessionId = 0;
         SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
         if (preferences.getString("UUID", null) == null) {
             SharedPreferences.Editor editor = preferences.edit();
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
         }
         this.USER_ID = preferences.getString("UUID", null);
-//        this.USER_ID = "TEMP_ID";
         Log.d(TAG, "User ID: " + USER_ID);
 
 
@@ -80,21 +80,18 @@ public class MainActivity extends AppCompatActivity {
                 switch ((int) id) {
                     case 0:
                         priorityAssigner = new SharedClassesPriorityAssigner();
-                        updateRecylerView();
                         break;
                     case 1:
                         priorityAssigner = new SharedRecentClassPriorityAssigner();
-                        updateRecylerView();
                         break;
                     case 2:
                         priorityAssigner = new SharedClassSizePriorityAssigner();
-                        updateRecylerView();
                         break;
                     case 3:
                         priorityAssigner = new SharedThisQuarterPriorityAssigner();
-                        updateRecylerView();
                         break;
                 }
+                updateRecyclerView();
             }
 
             @Override
@@ -128,27 +125,30 @@ public class MainActivity extends AppCompatActivity {
 
         this.messageListener = new MockNearbyMessageListener(realListener, 500, "Reloading");
 
-        updateRecylerView();
+        updateRecyclerView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
+        } else {
+            updateRecyclerView();
         }
     }
 
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
         if (button.getText().toString().equals("Start")) {
+            Session newSession = new Session(Utilities.getCurrentDateTime());
+            db.sessionDao().insert(newSession);
+            this.currentSessionId = newSession.getId();
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
-            updateRecylerView();
-        }
-        else {
+            updateRecyclerView();
+        } else {
             button.setText("Start");
             Nearby.getMessagesClient(this).unpublish(message);
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
@@ -161,12 +161,21 @@ public class MainActivity extends AppCompatActivity {
         String[] data = userData.split(",");
         Log.d(TAG,"Updating database");
         String uuid = data[0];
+        if (db.userDao().get(uuid) != null) {
+            User user = db.userDao().get(uuid);
+            user.addSessionId(currentSessionId);
+            if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("STOP")) {
+                updateRecyclerView();
+            }
+            return;
+        }
         String userName = data[5];
         String userPhotoUrl = data[10];
 
         Log.d(TAG,userName + ", " + userPhotoUrl + ", " + uuid);
 
         User studentUser = new User(uuid, userName, userPhotoUrl);
+        studentUser.addSessionId(currentSessionId);
         db.userDao().insert(studentUser);
 
         int i = 15;
@@ -185,30 +194,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("STOP")) {
-            updateRecylerView();
+            updateRecyclerView();
         }
     }
 
-    private void updateRecylerView() {
+    private void updateRecyclerView() {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
-//        List<UserPriority> userPriorities = new ArrayList<>();
-//        for (Course userCourse : db.courseDao().getForUser(1)) {
-//            for (Course course : db.courseDao().getUsers(userCourse.getYear(), userCourse.getQuarter(), userCourse.getSubject(), userCourse.getNumber())) {
-//                UserPriority userPriority = new UserPriority(db.userDao().get(course.getUserId()), 1);
-//                if (userPriorities.contains(userPriority)) {
-//                    userPriorities.get(userPriorities.indexOf(userPriority))
-//                            .setPriority(userPriorities.get(userPriorities.indexOf(userPriority)).getPriority() + 1);
-//                } else {
-//                    userPriorities.add(userPriority);
-//                }
-//            }
-//        }
 
         List<UserPriority> listUsers = new ArrayList<>();
 
         List<Course> userCourses = db.courseDao().getForUser(USER_ID);
         for (User user : db.userDao().getAll()) {
-            if (user.getId().equals(USER_ID))
+            if (user.getId().equals(USER_ID) || !user.getSessionIds().contains(currentSessionId))
                 continue;
             List<Course> otherUserCourses = db.courseDao().getForUser(user.getId());
             double priority = 0;

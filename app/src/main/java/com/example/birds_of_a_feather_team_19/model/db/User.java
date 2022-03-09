@@ -5,8 +5,18 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(tableName = "users")
+@TypeConverters({Converters.class})
 public class User {
     @PrimaryKey
     @NonNull
@@ -19,6 +29,9 @@ public class User {
     @ColumnInfo(name = "photoURL")
     private String photoURL;
 
+    @ColumnInfo(name = "session_id")
+    private HashSet<Integer> sessionIds;
+  
     @ColumnInfo(name = "favorite")
     private boolean favorite;
 
@@ -34,6 +47,7 @@ public class User {
         this.id = id;
         this.name = name;
         this.photoURL = photoURL;
+        this.sessionIds = new HashSet<>();
         this.favorite = false;
     }
 
@@ -59,6 +73,18 @@ public class User {
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
+    }
+
+    public void setSessionIds(HashSet<Integer> sessionIds) {
+        this.sessionIds = sessionIds;
+    }
+
+    public HashSet<Integer> getSessionIds() {
+        return sessionIds;
+    }
+
+    public void addSessionId(int sessionId) {
+        this.sessionIds.add(sessionId);
     }
 
     public boolean isFavorite() {
