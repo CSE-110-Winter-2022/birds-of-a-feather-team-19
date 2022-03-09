@@ -1,8 +1,11 @@
 package com.example.birds_of_a_feather_team_19.model.db;
 
+import static androidx.room.OnConflictStrategy.REPLACE;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Update;
 
 @Entity(tableName = "sessions")
 public class Session {

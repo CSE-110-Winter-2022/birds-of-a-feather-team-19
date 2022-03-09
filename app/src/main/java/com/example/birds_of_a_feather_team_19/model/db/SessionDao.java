@@ -19,9 +19,15 @@ public interface SessionDao {
     @Query("SELECT * FROM sessions WHERE session_name=:sessionName")
     Session get(String sessionName);
 
+    @Query("SELECT COUNT(*) FROM sessions")
+    int count();
+
     @Query("DELETE FROM courses")
     void deleteAll();
 
     @Insert
     void insert(Session session);
+
+    @Query("UPDATE sessions SET session_name=:newName WHERE id=:sessionId")
+    void update(int sessionId, String newName);
 }
