@@ -5,8 +5,18 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(tableName = "users")
+@TypeConverters({Converters.class})
 public class User {
     @PrimaryKey
     @NonNull
@@ -20,7 +30,7 @@ public class User {
     private String photoURL;
 
     @ColumnInfo(name = "session_id")
-    private int sessionId;
+    private HashSet<Integer> sessionIds;
 
     @Ignore
     public User(String name, String photoURL) {
@@ -33,6 +43,7 @@ public class User {
         this.id = id;
         this.name = name;
         this.photoURL = photoURL;
+        this.sessionIds = new HashSet<>();
     }
 
     public String getId() {
@@ -59,12 +70,16 @@ public class User {
         this.photoURL = photoURL;
     }
 
-    public int getSessionId() {
-        return sessionId;
+    public void setSessionIds(HashSet<Integer> sessionIds) {
+        this.sessionIds = sessionIds;
     }
 
-    public void setSessionId(int sessionId) {
-        this.sessionId = sessionId;
+    public HashSet<Integer> getSessionIds() {
+        return sessionIds;
+    }
+
+    public void addSessionId(int sessionId) {
+        this.sessionIds.add(sessionId);
     }
 
     @Override

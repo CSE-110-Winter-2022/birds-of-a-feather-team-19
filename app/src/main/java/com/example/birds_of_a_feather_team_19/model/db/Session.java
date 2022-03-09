@@ -13,8 +13,7 @@ public class Session {
     @ColumnInfo(name = "session_name")
     private String sessionName;
 
-    public Session(int id, String sessionName) {
-        this.id = id;
+    public Session(String sessionName) {
         this.sessionName = sessionName;
     }
 

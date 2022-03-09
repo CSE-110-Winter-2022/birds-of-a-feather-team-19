@@ -5,8 +5,10 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
-@Database(entities = {User.class, Course.class}, version = 1)
+@Database(entities = {User.class, Course.class, Session.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase singletonInstance;
 
@@ -30,4 +32,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract CourseDao courseDao();
     public abstract UserDao userDao();
+    public abstract SessionDao sessionDao();
 }
