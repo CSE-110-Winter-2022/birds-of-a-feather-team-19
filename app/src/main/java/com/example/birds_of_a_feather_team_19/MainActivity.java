@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
         } else {
@@ -149,8 +148,7 @@ public class MainActivity extends AppCompatActivity {
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
             updateRecyclerView();
-        }
-        else {
+        } else {
             button.setText("Start");
             Nearby.getMessagesClient(this).unpublish(message);
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
