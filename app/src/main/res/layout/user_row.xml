@@ -31,5 +31,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/user_default_photo" />
 
+    <ImageView
+        android:id="@+id/wave"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.988"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.526"
+        app:srcCompat="@drawable/wave" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

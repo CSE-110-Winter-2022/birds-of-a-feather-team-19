@@ -34,6 +34,7 @@
         android:layout_height="150dp"
         android:layout_margin="15dp"
         app:layout_constraintBottom_toTopOf="@id/nameUserDetailTextView"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -65,8 +66,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
+        android:layout_marginTop="112dp"
+        android:layout_marginRight="24dp"
         android:onClick="onUnfavoriteUserDetailButtonClicked"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
+
+    <ImageButton
+        android:id="@+id/waveHandButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="onWaveHandButtonClicked"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.971"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.132"
+        app:srcCompat="@drawable/hand" />
+
+    <ImageButton
+        android:id="@+id/unWaveHandButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:onClick="onUnwaveHandButtonClicked"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.971"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.132"
+        app:srcCompat="@drawable/wave" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

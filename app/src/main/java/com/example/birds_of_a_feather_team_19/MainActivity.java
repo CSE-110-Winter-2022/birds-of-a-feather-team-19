@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
         }
         this.USER_ID = preferences.getString("UUID", null);
+        //this.USER_ID = "4b295157-ba31-4f9f-8401-5d85d9cf659a";
         Log.d(TAG, "User ID: " + USER_ID);
 
 
@@ -159,11 +161,19 @@ public class MainActivity extends AppCompatActivity {
         userData = userData.replace('\n', ',');
         Log.d(TAG,userData);
         String[] data = userData.split(",");
+        int length = data.length;
         Log.d(TAG,"Updating database");
         String uuid = data[0];
+        String WaveToUser = data[length - 2];
+        String ifWave = data[length - 1];
+
         if (db.userDao().get(uuid) != null) {
             User user = db.userDao().get(uuid);
             user.addSessionId(currentSessionId);
+            if(WaveToUser.equals(USER_ID) && ifWave.equals("wave")){
+                user.setReceiveWave(true);
+                db.userDao().update(user);
+            }
             if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("STOP")) {
                 updateRecyclerView();
             }
@@ -171,13 +181,14 @@ public class MainActivity extends AppCompatActivity {
         }
         String userName = data[5];
         String userPhotoUrl = data[10];
-
         Log.d(TAG,userName + ", " + userPhotoUrl + ", " + uuid);
-
         User studentUser = new User(uuid, userName, userPhotoUrl);
         studentUser.addSessionId(currentSessionId);
         db.userDao().insert(studentUser);
-
+        if(WaveToUser.equals(USER_ID) && ifWave.equals("wave")){
+            studentUser.setReceiveWave(true);
+            db.userDao().update(studentUser);
+        }
         int i = 15;
         while (i < data.length) {
             String year = data[i].toLowerCase();

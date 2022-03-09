@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
@@ -57,6 +58,15 @@ public class UserDetailActivity extends AppCompatActivity {
         else {
             findViewById(R.id.favoriteUserDetailButton).setVisibility(View.VISIBLE);
             findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.GONE);
+        }
+
+        if (user.isWave()) {
+            findViewById(R.id.waveHandButton).setVisibility(View.GONE);
+            findViewById(R.id.unWaveHandButton).setVisibility(View.VISIBLE);
+        }
+        else {
+            findViewById(R.id.waveHandButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.unWaveHandButton).setVisibility(View.GONE);
         }
     }
     private void updateRecylerView() {
@@ -106,4 +116,23 @@ public class UserDetailActivity extends AppCompatActivity {
         findViewById(R.id.favoriteUserDetailButton).setVisibility(View.VISIBLE);
         findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.GONE);
     }
+
+    public void onWaveHandButtonClicked(View view) {
+        user.setWave(true);
+        db.userDao().update(user);
+        findViewById(R.id.waveHandButton).setVisibility(View.GONE);
+        findViewById(R.id.unWaveHandButton).setVisibility(View.VISIBLE);
+        Toast.makeText(this, "wave sent", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onUnwaveHandButtonClicked(View view) {
+        user.setWave(false);
+        db.userDao().update(user);
+        findViewById(R.id.waveHandButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.unWaveHandButton).setVisibility(View.GONE);
+    }
+
+
+
+
 }
