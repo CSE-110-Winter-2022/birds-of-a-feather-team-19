@@ -85,7 +85,8 @@ public class User {
 
     public void addSessionId(int sessionId) {
         this.sessionIds.add(sessionId);
-      
+    }
+
     public boolean isFavorite() {
         return favorite;
     }
