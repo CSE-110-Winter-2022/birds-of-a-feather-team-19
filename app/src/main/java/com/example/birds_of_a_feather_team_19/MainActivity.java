@@ -45,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
             "ss2", "summer session 2",
             "sss", "special summer session"
     );
+    private Map<String, Double> sizeMap = Map.of(
+            "tiny", 1.00,
+            "small", 0.33,
+            "medium", 0.18,
+            "large", 0.10,
+            "huge", 0.06,
+            "gigantic", 0.03
+    );
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private UsersViewAdapter usersViewAdapter;
@@ -205,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG,year + quarter + " " + subject + number + " " + size);
 
-            db.courseDao().insert(new Course(uuid, year, quarter, subject, number, size));
+            db.courseDao().insert(new Course(uuid, year, quarter, subject, number, sizeMap.get(size)));
 
             i += 5;
         }

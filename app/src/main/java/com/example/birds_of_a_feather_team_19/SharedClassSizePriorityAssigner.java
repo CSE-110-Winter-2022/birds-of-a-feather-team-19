@@ -8,7 +8,7 @@ public class SharedClassSizePriorityAssigner implements UserPriorityAssigner{
 
     @Override
     public double getPriority(Course course) {
-        switch (course.getSize().toLowerCase(Locale.ROOT)) {
+        /*switch (course.getSize().toLowerCase(Locale.ROOT)) {
             case "tiny":
                 return 1.00;
             case "small":
@@ -21,7 +21,7 @@ public class SharedClassSizePriorityAssigner implements UserPriorityAssigner{
                 return 0.06;
             case "gigantic":
                 return 0.03;
-        }
+        }*/
         return 0;
     }
 }

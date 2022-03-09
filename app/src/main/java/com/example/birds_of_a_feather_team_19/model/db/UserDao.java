@@ -15,7 +15,7 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE id=:id")
     User get(String id);
 
-    @Query("SELECT * FROM users WHERE favorite=favorite")
+    @Query("SELECT * FROM users WHERE favorite=:favorite")
     List<User> getFavorite(boolean favorite);
 
     @Query("SELECT COUNT(*) FROM users")
