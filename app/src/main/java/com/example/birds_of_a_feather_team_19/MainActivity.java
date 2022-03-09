@@ -141,14 +141,20 @@ public class MainActivity extends AppCompatActivity {
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
         if (button.getText().toString().equals("Start")) {
-            Session newSession = new Session(Utilities.getCurrentDateTime());
+            String defaultName = Utilities.getCurrentDateTime();
+            Session newSession = new Session(defaultName);
             db.sessionDao().insert(newSession);
-            this.currentSessionId = newSession.getId();
+            this.currentSessionId = db.sessionDao().get(defaultName).getId();
+            Log.d(TAG, "New sesssion id: " + currentSessionId);
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
             updateRecyclerView();
         } else {
+            Intent intent = new Intent(this, SaveSessionActivity.class);
+            intent.putExtra("session_id", this.currentSessionId);
+            Log.d(TAG, "Sesssion id: " + currentSessionId);
+            startActivity(intent);
             button.setText("Start");
             Nearby.getMessagesClient(this).unpublish(message);
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
