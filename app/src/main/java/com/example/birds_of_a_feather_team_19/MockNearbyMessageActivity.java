@@ -18,6 +18,7 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
     public void onBackClicked(View view) throws InterruptedException {
         Thread.sleep(1000);
         finish();
+        //dsds
     }
 
     public void onEnterMockNearbyMessageButtonClicked(View view) {
