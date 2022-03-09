@@ -18,10 +18,19 @@ import com.example.birds_of_a_feather_team_19.model.db.User;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class AddCourseActivity extends AppCompatActivity {
     public Set<List<String>> courses = new HashSet<>();
+    private Map<String, Double> sizeMap = Map.of(
+            "Tiny (<40)", 1.00,
+            "Small (40-75)", 0.33,
+            "Medium (75-150)", 0.18,
+            "Large (150-250)", 0.10,
+            "Huge (250-400)", 0.06,
+            "Gigantic (400+)", 0.03
+    );
     public AppDatabase db;
 
     @Override
@@ -83,7 +92,7 @@ public class AddCourseActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
         db.userDao().insert(new User(MainActivity.USER_ID, preferences.getString("name", null), preferences.getString("photoURL", null)));
         for (List<String> course : courses) {
-            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3), course.get(4)));
+            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3), sizeMap.get(course.get(4))));
         }
 
         Log.d(this.getString(R.string.TAG), "Add course activity finished");

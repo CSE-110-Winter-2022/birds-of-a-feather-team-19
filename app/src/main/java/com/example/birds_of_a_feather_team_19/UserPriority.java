@@ -8,8 +8,10 @@ public class UserPriority implements Comparable<UserPriority> {
     private double priority;
     private int sharedClasses;
 
-    public UserPriority(User user, double priority, int sharedClasses) {
+    public UserPriority(User user, double priority/*, int sharedClasses*/) {
+/*
         this.sharedClasses = sharedClasses;
+*/
         this.user = user;
         this.priority = priority;
     }
