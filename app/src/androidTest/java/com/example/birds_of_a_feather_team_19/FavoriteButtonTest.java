@@ -19,19 +19,25 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +48,15 @@ public class FavoriteButtonTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @BeforeClass
+    public static void clearDatabase() {
+        Context context = ApplicationProvider.getApplicationContext();
+        AppDatabase db = AppDatabase.singleton(context);
+        db.userDao().deleteAll();
+        db.courseDao().deleteAll();
+        Log.d("BoF", "Database cleared");
+    }
 
     @Test
     public void favoriteButtonTest() {
@@ -151,7 +166,7 @@ public class FavoriteButtonTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText5.perform(replaceText("Dill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2022,WI,CSE,110,tiny"), closeSoftKeyboard());
+        appCompatEditText5.perform(replaceText("1,,,,\nDill,,,,\nhttps://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,,\n2022,WI,CSE,110,tiny"), closeSoftKeyboard());
 
         ViewInteraction materialButton6 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),

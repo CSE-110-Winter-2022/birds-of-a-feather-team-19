@@ -53,7 +53,6 @@ public class AddMultipleUsersTest {
         AppDatabase db = AppDatabase.singleton(context);
         db.userDao().deleteAll();
         db.courseDao().deleteAll();
-//        System.out.println("Database Cleared");
         Log.d("BoF", "Database cleared");
 
 //        SharedPreferences preferences = context.getSharedPreferences("BoF", Context.MODE_PRIVATE);

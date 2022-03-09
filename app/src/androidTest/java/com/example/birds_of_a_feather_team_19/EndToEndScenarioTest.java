@@ -17,19 +17,25 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +46,15 @@ public class EndToEndScenarioTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+    @BeforeClass
+    public static void clearDatabase() {
+        Context context = ApplicationProvider.getApplicationContext();
+        AppDatabase db = AppDatabase.singleton(context);
+        db.userDao().deleteAll();
+        db.courseDao().deleteAll();
+        Log.d("BoF", "Database cleared");
+    }
 
     @Test
     public void endToEndScenarioTest() {
