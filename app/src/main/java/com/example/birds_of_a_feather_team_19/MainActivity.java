@@ -25,6 +25,7 @@ import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
 
+        db = AppDatabase.singleton(this);
+
         this.currentSessionId = 0;
         SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
         if (preferences.getString("UUID", null) == null) {
@@ -84,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
         Spinner filterSpinner = findViewById(R.id.filterMainSpinner);
         ArrayAdapter<CharSequence> filterAdapter =
                 ArrayAdapter.createFromResource(this, R.array.filter_type, android.R.layout.simple_spinner_item);
+        List<String> filterList = new ArrayList<>();
+        for (Session session : db.sessionDao().getAll()) {
+            filterList.add(session.getSessionName());
+        }
+        filterAdapter.addAll(filterList);
         filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(filterAdapter);
 
@@ -121,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
 //        filterSpinner.setAdapter(filterAdapter);*/
 
         priorityAssigner = new SharedClassesPriorityAssigner();
-
-        db = AppDatabase.singleton(this);
 
         MessageListener realListener = new MessageListener() {
             @Override
@@ -274,7 +280,9 @@ public class MainActivity extends AppCompatActivity {
     private List<User> filterUsers(String filter) {
         switch (filter) {
             case "None":
-                return db.userDao().getAll();
+                List<User> users = db.userDao().getAll();
+                users.remove(new User(getSharedPreferences(TAG, MODE_PRIVATE).getString("UUID", null), "", ""));
+                return users;
             case "Favorite":
                 return db.userDao().getFavorite(true);
             default:
@@ -284,35 +292,41 @@ public class MainActivity extends AppCompatActivity {
     private List<UserPriority> sortUsers(List<User> users, String sort) {
         List<UserPriority> usersPriorities = new ArrayList<>();
 
-        switch (sort) {
-            case "Course Recency":
-                for (User user : users) {
-                    double priority = 0;
+        for (User user : users) {
+            double priority = 0;
+            int sharedClasses = getSharedClasses(user);
+            switch (sort) {
+                case "Course Recency":
                     for (Course course : db.courseDao().getForUser(user.getId())) {
                         String[] currentQuarterYear = Utilities.getCurrentQuarterYear();
-                        int age = Utilities.getCourseAge(course.getYear(), course.getQuarter(), currentQuarterYear[1], currentQuarterYear[0]);
+                        int age = Utilities.getCourseAge(course.getYear(), course.getQuarter(), currentQuarterYear[1], currentQuarterYear[2]);
                         age = 5 - age;
                         if (age < 1) {
                             age = 1;
                         }
                         priority += age;
                     }
-                }
-                return usersPriorities;
-            case "Course Size":
-                for (User user : users) {
-                    double priority = 0;
+                case "Course Size":
                     for (Course course : db.courseDao().getForUser(user.getId())) {
                         priority += course.getSize();
                     }
-                    usersPriorities.add(new UserPriority(user, priority));
-                }
-                return usersPriorities;
-            default:
-                for (User user : users) {
-                    double priority = 0;
-                }
-                return usersPriorities;
+                default:
+                    priority = sharedClasses;
+            }
+            usersPriorities.add(new UserPriority(user, priority, sharedClasses));
         }
+        return usersPriorities;
+    }
+    private int getSharedClasses(User user) {
+        int sharedClasses = 0;
+        for (Course course : db.courseDao().getForUser(getSharedPreferences(TAG, MODE_PRIVATE).getString("UUID", null))) {
+            for (Course userCourse : db.courseDao().getForUser(user.getId())) {
+                if (course.equals(userCourse)) {
+                    sharedClasses++;
+                }
+            }
+        }
+
+        return sharedClasses;
     }
 }

@@ -96,6 +96,6 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        return this.id == ((User) o).getId();
+        return this.id.equals(((User) o).getId());
     }
 }
