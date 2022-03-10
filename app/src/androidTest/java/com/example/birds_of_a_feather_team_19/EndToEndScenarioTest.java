@@ -27,8 +27,12 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiSelector;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 
@@ -251,6 +255,11 @@ public class EndToEndScenarioTest {
                                 1),
                         isDisplayed()));
         materialButton8.perform(click());
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject allowButton = device.findObject(new UiSelector()
+                .text("ALLOW")
+                .className("android.widget.Button"));
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Bill (1)"),

@@ -26,9 +26,17 @@ import android.view.ViewParent;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.matcher.RootMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 
@@ -457,7 +465,6 @@ public class AddMultipleUsersTest {
                         isDisplayed()));
         materialButton12.perform(click());
 
-
         ViewInteraction materialButton13 = onView(
                 allOf(withId(R.id.startStopMainButton), withText("Start"),
                         childAtPosition(
@@ -468,6 +475,18 @@ public class AddMultipleUsersTest {
                         isDisplayed()));
         materialButton13.perform(click());
 
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiObject allowButton = device.findObject(new UiSelector()
+                .text("ALLOW")
+                .className("android.widget.Button"));
+
+        try {
+            if(allowButton.exists() && allowButton.isEnabled()) {
+                allowButton.click();
+            }
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (3)"),
