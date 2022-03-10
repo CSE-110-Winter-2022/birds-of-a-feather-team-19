@@ -24,4 +24,7 @@ public interface SessionDao {
 
     @Insert
     void insert(Session session);
+
+    @Query("UPDATE sessions SET session_name=:newName WHERE id=:sessionId")
+    void update(int sessionId, String newName);
 }
