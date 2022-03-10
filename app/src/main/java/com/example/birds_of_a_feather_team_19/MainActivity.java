@@ -251,4 +251,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MockNearbyMessageActivity.class);
         startActivity(intent);
     }
+
+    public void onPreviousSessionsButtonClicked(View view) {
+        Intent intent = new Intent();
+        startActivity(intent);
+    }
 }
