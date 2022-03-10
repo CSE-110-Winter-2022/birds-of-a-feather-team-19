@@ -15,8 +15,11 @@ import android.widget.Toast;
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
+import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.messages.Message;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -123,6 +126,11 @@ public class UserDetailActivity extends AppCompatActivity {
         findViewById(R.id.waveHandButton).setVisibility(View.GONE);
         findViewById(R.id.unWaveHandButton).setVisibility(View.VISIBLE);
         Toast.makeText(this, "wave sent", Toast.LENGTH_SHORT).show();
+        String currMessage = MainActivity.message.toString();
+        currMessage = currMessage + user.getId() + ",wave,,,\n";
+        MainActivity.message = new Message(currMessage.getBytes());
+
+
     }
 
     public void onUnwaveHandButtonClicked(View view) {

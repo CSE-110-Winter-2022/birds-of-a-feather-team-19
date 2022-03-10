@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "BoF";
     public static String USER_ID;
     private AppDatabase db;
-    private Message message;
+    public static Message message;
     private MessageListener messageListener;
     private Map<String, String> quarterMap = new HashMap<>();
     private RecyclerView usersRecyclerView;
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("UUID", newUUID);
             editor.commit();
         }
-        this.USER_ID = preferences.getString("UUID", null);
-        //this.USER_ID = "4b295157-ba31-4f9f-8401-5d85d9cf659a";
+        //this.USER_ID = preferences.getString("UUID", null);
+        this.USER_ID = "4b295157-ba31-4f9f-8401-5d85d9cf659a";
         Log.d(TAG, "User ID: " + USER_ID);
 
 
@@ -122,8 +122,9 @@ public class MainActivity extends AppCompatActivity {
             public void onLost(@NonNull Message message) {
                 Log.d(TAG, "Lost user: " + new String(message.getContent()));
             }
+
         };
-        this.message = new Message("hello".getBytes(StandardCharsets.UTF_8));
+        //this.message = new Message("hello".getBytes(StandardCharsets.UTF_8));
 
         this.messageListener = new MockNearbyMessageListener(realListener, 500, "Reloading");
 
@@ -139,6 +140,69 @@ public class MainActivity extends AppCompatActivity {
             updateRecyclerView();
         }
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("Stop")){
+            publish();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (((Button) findViewById(R.id.startStopMainButton)).getText().toString() == "Stop"){
+            unPublish();
+        }
+    }
+
+
+    public void publish() {
+        User me = db.userDao().get(USER_ID);
+        String myName = me.getName();
+        String photoURL = me.getPhotoURL();
+        List<Course> myCourses = db.courseDao().getForUser(USER_ID);
+        StringBuilder courses = new StringBuilder();
+        for (int i = 0; i < myCourses.size(); i++) {
+            courses.append(myCourses.get(i).getYear());
+            courses.append(",");
+            courses.append(myCourses.get(i).getQuarter());
+            courses.append(",");
+            courses.append(myCourses.get(i).getClass());
+            courses.append(",");
+            courses.append(myCourses.get(i).getNumber());
+            courses.append(",");
+            courses.append(myCourses.get(i).getSize());
+            courses.append("\n");
+        }
+        String allMyCourse = courses.toString();
+
+        String sentMessage = USER_ID + ",,,,\n" +
+                myName + ",,,,\n" +
+                photoURL + ",,,,\n" +
+                allMyCourse;
+
+        List<User> allUsers = db.userDao().getAll();
+        for (int i = 0; i < allUsers.size(); i++) {
+            User curr = allUsers.get(i);
+            if(curr.isWave() == true){
+                if(i > 0){
+                    sentMessage = sentMessage + "\n";
+                }
+                sentMessage = sentMessage + curr.getId() + ",wave,,,";
+            }
+        }
+
+        Log.i(TAG, "Publishing message: " + sentMessage);
+        message = new Message(sentMessage.getBytes());
+        Nearby.getMessagesClient(this).publish(message);
+    }
+
+    public void unPublish() {
+        Log.i(TAG, "UnPublishing.");
+        Nearby.getMessagesClient(this).unpublish(message);
+    }
+
 
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
@@ -147,30 +211,35 @@ public class MainActivity extends AppCompatActivity {
             db.sessionDao().insert(newSession);
             this.currentSessionId = newSession.getId();
             button.setText("Stop");
-            Nearby.getMessagesClient(this).publish(message);
+            publish();
             Nearby.getMessagesClient(this).subscribe(messageListener);
             updateRecyclerView();
         } else {
             button.setText("Start");
-            Nearby.getMessagesClient(this).unpublish(message);
+            unPublish();
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
         }
     }
 
     private void updateDatabase(String userData) {
+
         userData = userData.replace('\n', ',');
         Log.d(TAG,userData);
         String[] data = userData.split(",");
         int length = data.length;
         Log.d(TAG,"Updating database");
         String uuid = data[0];
-        String WaveToUser = data[length - 2];
-        String ifWave = data[length - 1];
+        Map<String, String> allWaveUser = new HashMap<>();
+        for (int i = 1; i < length; i+=5) {
+            if(data[i].equals("wave")){
+                allWaveUser.put(data[i - 1], data[i]);
+            }
+        }
 
         if (db.userDao().get(uuid) != null) {
             User user = db.userDao().get(uuid);
             user.addSessionId(currentSessionId);
-            if(WaveToUser.equals(USER_ID) && ifWave.equals("wave")){
+            if(allWaveUser.containsKey(USER_ID)){
                 user.setReceiveWave(true);
                 db.userDao().update(user);
             }
@@ -185,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         User studentUser = new User(uuid, userName, userPhotoUrl);
         studentUser.addSessionId(currentSessionId);
         db.userDao().insert(studentUser);
-        if(WaveToUser.equals(USER_ID) && ifWave.equals("wave")){
+        if(allWaveUser.containsKey(USER_ID)){
             studentUser.setReceiveWave(true);
             db.userDao().update(studentUser);
         }
