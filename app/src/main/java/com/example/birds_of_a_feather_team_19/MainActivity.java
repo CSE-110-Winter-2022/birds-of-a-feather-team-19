@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         }
         this.USER_ID = preferences.getString("UUID", null);
         Log.d(TAG, "User ID: " + USER_ID);
-
 
         quarterMap.put("fa", "fall");
         quarterMap.put("wi", "winter");
@@ -134,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
         } else {
+//            TextView sessionNameTextView = findViewById(R.id.session_name_view);
+//            TextView editSessionNameView = findViewById(R.id.edit_session_name_view);
+//            String sessionName = db.sessionDao().get(currentSessionId).getSessionName();
+//            sessionNameTextView.setText(sessionName);
+//            editSessionNameView.setText(sessionName);
             updateRecyclerView();
         }
     }
@@ -152,6 +157,30 @@ public class MainActivity extends AppCompatActivity {
             button.setText("Start");
             Nearby.getMessagesClient(this).unpublish(message);
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
+        }
+    }
+
+    public void onEditSaveSessionNameButtonClicked(View view) {
+        Button button = findViewById(R.id.edit_session_name_button);
+        if (button.getText().toString().equals("Edit")) {
+            TextView sessionNameTextView = findViewById(R.id.session_name_view);
+            TextView editSessionNameView = findViewById(R.id.edit_session_name_view);
+            String newSessionName = sessionNameTextView.getText().toString();
+            editSessionNameView.setText(newSessionName);
+            sessionNameTextView.setVisibility(View.GONE);
+            editSessionNameView.setVisibility(View.VISIBLE);
+
+            button.setText("Save");
+        } else {
+            TextView sessionNameTextView = findViewById(R.id.session_name_view);
+            TextView editSessionNameView = findViewById(R.id.edit_session_name_view);
+            String newSessionName = editSessionNameView.getText().toString();
+            sessionNameTextView.setText(newSessionName);
+            // db.sessionDao().update(currentSessionId, newSessionName);
+            sessionNameTextView.setVisibility(View.VISIBLE);
+            editSessionNameView.setVisibility(View.GONE);
+
+            button.setText("Edit");
         }
     }
 

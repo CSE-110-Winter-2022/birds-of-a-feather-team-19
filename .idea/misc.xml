@@ -23,7 +23,8 @@
         <entry key="app/src/main/res/layout/activity_user_phote.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/activity_user_photo.xml" value="0.18614130434782608" />
         <entry key="app/src/main/res/layout/course_row.xml" value="0.15070921985815602" />
-        <entry key="app/src/main/res/layout/user_row.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/session_row.xml" value="0.2192240397135416" />
+        <entry key="app/src/main/res/layout/user_row.xml" value="0.7073391637058125" />
       </map>
     </option>
   </component>
