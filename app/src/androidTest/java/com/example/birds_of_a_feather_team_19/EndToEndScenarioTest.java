@@ -32,6 +32,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
@@ -260,6 +261,14 @@ public class EndToEndScenarioTest {
         UiObject allowButton = device.findObject(new UiSelector()
                 .text("ALLOW")
                 .className("android.widget.Button"));
+
+        try {
+            if(allowButton.exists() && allowButton.isEnabled()) {
+                allowButton.click();
+            }
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Bill (1)"),
