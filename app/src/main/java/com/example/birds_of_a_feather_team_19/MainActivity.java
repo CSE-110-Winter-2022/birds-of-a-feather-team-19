@@ -31,10 +31,12 @@ import android.widget.TextView;
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.UUID;
@@ -42,6 +44,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "BoF";
     public static Message message;
+    public static Message newMessage;
     public static String USER_ID;
     private AppDatabase db;
     private Map<String, String> quarterMap;
@@ -79,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put("ss2", "summer session 2");
         quarterMap.put("sss", "special summer session");
         sizeMap = new HashMap<>();
-        sizeMap.put("tiny", 1.00);
-        sizeMap.put("small", 0.33);
-        sizeMap.put("medium", 0.18);
-        sizeMap.put("large", 0.10);
-        sizeMap.put("huge", 0.06);
-        sizeMap.put("gigantic", 0.03);
+        sizeMap.put("Tiny", 1.00);
+        sizeMap.put("Small", 0.33);
+        sizeMap.put("Medium", 0.18);
+        sizeMap.put("Large", 0.10);
+        sizeMap.put("Huge", 0.06);
+        sizeMap.put("Gigantic", 0.03);
 
         messageListener = new MockNearbyMessageListener(new MessageListener() {
             @Override
@@ -159,6 +162,24 @@ public class MainActivity extends AppCompatActivity {
 
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
+        }
+        else {
+            User thisUser = db.userDao().get(USER_ID);
+            String message = thisUser.getId() + ",,,,\n";
+            message += thisUser.getName() + ",,,,\n";
+            message += thisUser.getPhotoURL() + ",,,,\n";
+            for (Course course : db.courseDao().getForUser(thisUser.getId())) {
+                message += course.getYear() + "," + course.getQuarter() + "," + course.getSubject() + "," + course.getNumber() + "," + course.getSize() + "\n";
+            }
+            for (User user : db.userDao().getAll()) {
+                if (user.isWave()) {
+                    message += user.getId() + ",wave,,,\n";
+                }
+            }
+            String newMessage = "";
+
+            this.message = new Message(message.getBytes());
+            this.newMessage = new Message(newMessage.getBytes());
         }
     }
 
@@ -304,53 +325,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDatabase(String userData) {
-        Log.d(TAG, userData);
-        userData = userData.replace('\n', ',');
-        String[] data = userData.split(",");
-        int length = data.length;
-        Log.d(TAG,"Updating database");
-        String uuid = data[0];
-        Map<String, String> allWaveUser = new HashMap<>();
-        for (int i = 1; i < length; i+=5) {
-            if(data[i].equals("wave")){
-                allWaveUser.put(data[i - 1], data[i]);
-            }
-        }
-
-        if (db.userDao().get(uuid) != null) {
-            User user = db.userDao().get(uuid);
-            if(allWaveUser.containsKey(USER_ID)){
-                user.setReceivedWave(true);
-                db.userDao().update(user);
-            }
-            if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("STOP")) {
-                updateRecyclerView();
-            }
-            return;
-        }
         Log.d(TAG, "New user encountered");
-        String userName = data[5];
-        String userPhotoUrl = data[10];
-        Log.d(TAG,userName + ", " + userPhotoUrl + ", " + uuid);
-        User studentUser = new User(uuid, userName, userPhotoUrl);
-        db.userDao().insert(studentUser);
-        if(allWaveUser.containsKey(USER_ID)){
-            studentUser.setReceivedWave(true);
-            db.userDao().update(studentUser);
+        Log.d(TAG, userData);
+        String[] dataLines = userData.split("\n");
+        List<List<String>> data = new ArrayList<>();
+        for (String line : dataLines) {
+            data.add(Arrays.asList(line.split(",")));
         }
-        int i = 15;
-        while (i < data.length) {
-            String year = data[i].toLowerCase();
-            String quarter = quarterMap.get(data[i + 1].toLowerCase());
-            String subject = data[i + 2].toLowerCase();
-            String number = data[i + 3].toLowerCase();
-            String size = data[i + 4].toLowerCase();
 
-            Log.d(TAG,year + quarter + " " + subject + number + " " + size);
+        User user = db.userDao().get(data.get(0).get(0)) == null ? new User(data.get(0).get(0), data.get(1).get(0), data.get(2).get(0)) : db.userDao().get(data.get(0).get(0));
+        List<Course> courses = new ArrayList<>();
+        for (int i = 3; i < data.size(); i++) {
+            List<String> entry = data.get(i);
+            if (entry.get(1).equals("wave")) {
+                if (data.get(i).get(0).equals(USER_ID)) {
+                    user.setReceivedWave(true);
+                }
+            }
+            else {
+                courses.add(new Course(user.getId(),
+                        entry.get(0),
+                        quarterMap.get(entry.get(1)),
+                        entry.get(2).toUpperCase(Locale.ENGLISH),
+                        entry.get(3).toUpperCase(Locale.ENGLISH),
+                        sizeMap.get(entry.get(4))));
+            }
+        }
 
-            db.courseDao().insert(new Course(uuid, year, quarter, subject, number, sizeMap.get(size)));
-
-            i += 5;
+        if (db.userDao().get(user.getId()) == null) {
+            db.userDao().insert(user);
+        }
+        else {
+            db.userDao().update(user);
+        }
+        for (Course course : courses) {
+            for (Course dbCourse : db.courseDao().getForUser(user.getId())) {
+                if (course.equals(dbCourse)) {
+                    continue;
+                }
+                db.courseDao().insert(course);
+            }
         }
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("STOP")) {
@@ -359,48 +373,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void publish() {
-        User me = db.userDao().get(USER_ID);
-        String myName = me.getName();
-        String photoURL = me.getPhotoURL();
-        List<Course> myCourses = db.courseDao().getForUser(USER_ID);
-        StringBuilder courses = new StringBuilder();
-        for (int i = 0; i < myCourses.size(); i++) {
-            courses.append(myCourses.get(i).getYear());
-            courses.append(",");
-            courses.append(myCourses.get(i).getQuarter());
-            courses.append(",");
-            courses.append(myCourses.get(i).getClass());
-            courses.append(",");
-            courses.append(myCourses.get(i).getNumber());
-            courses.append(",");
-            courses.append(myCourses.get(i).getSize());
-            courses.append("\n");
-        }
-        String allMyCourse = courses.toString();
+        String newMessage = this.newMessage.toString();
 
-        String sentMessage = USER_ID + ",,,,\n" +
-                myName + ",,,,\n" +
-                photoURL + ",,,,\n" +
-                allMyCourse;
-
-        List<User> allUsers = db.userDao().getAll();
-        for (int i = 0; i < allUsers.size(); i++) {
-            User curr = allUsers.get(i);
-            if(curr.isWave() == true){
-                if(i > 0){
-                    sentMessage = sentMessage + "\n";
-                }
-                sentMessage = sentMessage + curr.getId() + ",wave,,,";
-            }
+        if (newMessage.isEmpty()) {
+            return;
         }
 
-        Log.i(TAG, "Publishing message: " + sentMessage);
-        message = new Message(sentMessage.getBytes());
-        Nearby.getMessagesClient(this).publish(message);
+        Nearby.getMessagesClient(this).unpublish(this.message);
+        String message = this.message.toString() + newMessage;
+        newMessage = "";
+        Log.i(TAG, "Publishing message: " + message);
+        this.message = new Message(message.getBytes());
+        this.newMessage = new Message(newMessage.getBytes());
+        Nearby.getMessagesClient(this).publish(this.message);
     }
     public void unPublish() {
         Log.i(TAG, "UnPublishing message. ");
-        Nearby.getMessagesClient(this).unpublish(message);
+        Nearby.getMessagesClient(this).unpublish(this.message);
     }
 
     private void updateRecyclerView() {

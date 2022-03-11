@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/nameUserRowTextView"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/wave" />
+        app:srcCompat="@drawable/unwave" />
 
     <ImageButton
         android:id="@+id/favoriteUserRowButton"

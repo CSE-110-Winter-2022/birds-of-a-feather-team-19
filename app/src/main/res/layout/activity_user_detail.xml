@@ -6,37 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".UserDetailActivity">
 
-    <Button
-        android:id="@+id/goBackUserDetailButton"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/UUIDUserDetailextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:onClick="onGoBackUserDetailButtonClicked"
-        android:text="GO BACK"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coursesUserDetailRecyclerView" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/coursesUserDetailRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="15dp"
-        app:layout_constraintBottom_toTopOf="@id/goBackUserDetailButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/UUIDUserDetailextView" />
-
-    <ImageView
-        android:id="@+id/photoUserDetailImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_margin="15dp"
+        android:text="TextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/user_default_photo" />
+        app:layout_constraintTop_toBottomOf="@id/nameUserDetailTextView" />
 
     <TextView
         android:id="@+id/nameUserDetailTextView"
@@ -48,16 +26,25 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/photoUserDetailImageView" />
 
-    <TextView
-        android:id="@+id/UUIDUserDetailextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/photoUserDetailImageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_margin="15dp"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@id/nameUserDetailTextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteX="175dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/user_default_photo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/coursesUserDetailRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
+        app:layout_constraintBottom_toTopOf="@id/goBackUserDetailButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/UUIDUserDetailextView" />
 
     <ImageButton
         android:id="@+id/favoriteUserDetailButton"
@@ -86,24 +73,24 @@
         android:layout_margin="15dp"
         android:adjustViewBounds="true"
         android:maxHeight="50dp"
-        android:onClick="onWaveHandButtonClicked"
+        android:onClick="onWaveUserDetailButtonClicked"
         android:scaleType="centerInside"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favoriteUserDetailButton"
-        app:srcCompat="@drawable/hand" />
+        app:srcCompat="@drawable/wave" />
 
     <ImageButton
-        android:id="@+id/unWaveUserDetailButton"
+        android:id="@+id/unwaveUserDetailButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:adjustViewBounds="true"
         android:maxHeight="50dp"
-        android:onClick="onWaveHandButtonClicked"
+        android:onClick="onUnwaveUserDetailButtonClicked"
         android:scaleType="centerInside"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/unfavoriteUserDetailButton"
-        app:srcCompat="@drawable/wave" />
+        app:srcCompat="@drawable/unwave" />
 
     <ImageView
         android:id="@+id/wavedUserDetailImageView"
@@ -116,5 +103,17 @@
         android:scaleX="-1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/wave" />
+        app:srcCompat="@drawable/unwave" />
+
+    <Button
+        android:id="@+id/goBackUserDetailButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:onClick="onGoBackUserDetailButtonClicked"
+        android:text="GO BACK"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/coursesUserDetailRecyclerView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
