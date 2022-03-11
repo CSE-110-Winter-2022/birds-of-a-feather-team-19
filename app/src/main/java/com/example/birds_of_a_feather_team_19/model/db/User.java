@@ -35,11 +35,21 @@ public class User {
     @ColumnInfo(name = "favorite")
     private boolean favorite;
 
+    @ColumnInfo(name = "wave")
+    private boolean wave;
+
+    @ColumnInfo(name = "receive_wave")
+    private boolean receivedWave;
+
+
+
     @Ignore
     public User(String name, String photoURL) {
         this.name = name;
         this.photoURL = photoURL;
         this.favorite = false;
+        this.wave = false;
+        this.receivedWave = false;
     }
 
     public User(String id, String name, String photoURL) {
@@ -48,6 +58,8 @@ public class User {
         this.photoURL = photoURL;
         this.sessionIds = new HashSet<>();
         this.favorite = false;
+        this.wave = false;
+        this.receivedWave = false;
     }
 
     public String getId() {
@@ -93,6 +105,23 @@ public class User {
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
     }
+
+    public boolean isWave() {
+        return wave;
+    }
+
+    public void setWave(boolean wave) {
+        this.wave = wave;
+    }
+
+    public boolean isReceivedWave() {
+        return receivedWave;
+    }
+
+    public void setReceivedWave(boolean receivedWave) {
+        this.receivedWave = receivedWave;
+    }
+
 
     @Override
     public boolean equals(Object o) {

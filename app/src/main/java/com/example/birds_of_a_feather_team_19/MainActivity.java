@@ -20,9 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
+
+import org.w3c.dom.Text;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -37,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "BoF";
     public static String USER_ID;
     private AppDatabase db;
-    private Message message;
+    public static Message message;
     private MessageListener messageListener;
     private Map<String, String> quarterMap;
     private Map<String, Double> sizeMap;
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             editor.commit();
         }
         this.USER_ID = preferences.getString("UUID", null);
+        ((TextView) findViewById(R.id.UUIDMainTextView)).setText("UUID: " + this.USER_ID);
         Log.d(TAG, "User ID: " + USER_ID);
         Spinner sortSpinner = findViewById(R.id.sortMainSpinner);
         ArrayAdapter<CharSequence> sortAdapter =
@@ -100,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         filterSpinner.setAdapter(filterAdapter);
 
         /* Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
->>>>>>> main
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -146,16 +149,27 @@ public class MainActivity extends AppCompatActivity {
             public void onLost(@NonNull Message message) {
                 Log.d(TAG, "Lost user: " + new String(message.getContent()));
             }
+
         };
-        this.message = new Message("hello".getBytes(StandardCharsets.UTF_8));
+        //this.message = new Message("hello".getBytes(StandardCharsets.UTF_8));
         this.messageListener = new MockNearbyMessageListener(realListener, 500, "Reloading");
 
         updateRecyclerView();
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("Stop")){
+            publish();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
         } else {
@@ -166,6 +180,60 @@ public class MainActivity extends AppCompatActivity {
 //            editSessionNameView.setText(sessionName);
             updateRecyclerView();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (((Button) findViewById(R.id.startStopMainButton)).getText().toString() == "Stop"){
+            unPublish();
+        }
+    }
+
+    public void publish() {
+        User me = db.userDao().get(USER_ID);
+        String myName = me.getName();
+        String photoURL = me.getPhotoURL();
+        List<Course> myCourses = db.courseDao().getForUser(USER_ID);
+        StringBuilder courses = new StringBuilder();
+        for (int i = 0; i < myCourses.size(); i++) {
+            courses.append(myCourses.get(i).getYear());
+            courses.append(",");
+            courses.append(myCourses.get(i).getQuarter());
+            courses.append(",");
+            courses.append(myCourses.get(i).getClass());
+            courses.append(",");
+            courses.append(myCourses.get(i).getNumber());
+            courses.append(",");
+            courses.append(myCourses.get(i).getSize());
+            courses.append("\n");
+        }
+        String allMyCourse = courses.toString();
+
+        String sentMessage = USER_ID + ",,,,\n" +
+                myName + ",,,,\n" +
+                photoURL + ",,,,\n" +
+                allMyCourse;
+
+        List<User> allUsers = db.userDao().getAll();
+        for (int i = 0; i < allUsers.size(); i++) {
+            User curr = allUsers.get(i);
+            if(curr.isWave() == true){
+                if(i > 0){
+                    sentMessage = sentMessage + "\n";
+                }
+                sentMessage = sentMessage + curr.getId() + ",wave,,,";
+            }
+        }
+
+        Log.i(TAG, "Publishing message: " + sentMessage);
+        message = new Message(sentMessage.getBytes());
+        Nearby.getMessagesClient(this).publish(message);
+    }
+    public void unPublish() {
+        Log.i(TAG, "UnPublishing message. ");
+        Nearby.getMessagesClient(this).unpublish(message);
     }
 
     public void onStartStopMainButtonClicked(View view) {
@@ -182,11 +250,11 @@ public class MainActivity extends AppCompatActivity {
             //db.sessionDao.get(dsjfas)
             Log.d(TAG, "New session created with ID " + currentSessionId);
             button.setText("Stop");
-            Nearby.getMessagesClient(this).publish(message);
+            publish();
             Nearby.getMessagesClient(this).subscribe(messageListener);
         } else {
             button.setText("Start");
-            Nearby.getMessagesClient(this).unpublish(message);
+            unPublish();
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
         }
     }
@@ -236,11 +304,23 @@ public class MainActivity extends AppCompatActivity {
         userData = userData.replace('\n', ',');
         Log.d(TAG,userData);
         String[] data = userData.split(",");
+        int length = data.length;
         Log.d(TAG,"Updating database");
         String uuid = data[0];
+        Map<String, String> allWaveUser = new HashMap<>();
+        for (int i = 1; i < length; i+=5) {
+            if(data[i].equals("wave")){
+                allWaveUser.put(data[i - 1], data[i]);
+            }
+        }
+
         if (db.userDao().get(uuid) != null) {
             User user = db.userDao().get(uuid);
             user.addSessionId(currentSessionId);
+            if(allWaveUser.containsKey(USER_ID)){
+                user.setReceivedWave(true);
+                db.userDao().update(user);
+            }
             if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("STOP")) {
                 updateRecyclerView();
             }
@@ -249,13 +329,14 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "New user encountered");
         String userName = data[5];
         String userPhotoUrl = data[10];
-
         Log.d(TAG,userName + ", " + userPhotoUrl + ", " + uuid);
-
         User studentUser = new User(uuid, userName, userPhotoUrl);
         studentUser.addSessionId(currentSessionId);
         db.userDao().insert(studentUser);
-
+        if(allWaveUser.containsKey(USER_ID)){
+            studentUser.setReceivedWave(true);
+            db.userDao().update(studentUser);
+        }
         int i = 15;
         while (i < data.length) {
             String year = data[i].toLowerCase();
@@ -325,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
-        usersViewAdapter = new UsersViewAdapter(
+        usersViewAdapter = new UsersViewAdapter(db,
                 sortUsers(filterUsers(((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString()),
                 ((Spinner) findViewById(R.id.sortMainSpinner)).getSelectedItem().toString()));
         usersRecyclerView.setAdapter(usersViewAdapter);

@@ -9,10 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 
@@ -25,11 +28,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.ViewHolder> {
+    private AppDatabase db;
     private final List<UserPriority> userPriorities;
     private static final String TAG = "BoF";
 
-    public UsersViewAdapter(List<UserPriority> usersPriorities) {
+    public UsersViewAdapter(AppDatabase db, List<UserPriority> usersPriorities) {
         super();
+        this.db = db;
         this.userPriorities = usersPriorities;
     }
 
@@ -39,7 +44,7 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.user_row, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(db, view);
     }
 
     @Override
@@ -60,11 +65,29 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         private final ImageView photo;
         private final TextView name;
 
-        ViewHolder(View itemView) {
+        ViewHolder(AppDatabase db, View itemView) {
             super(itemView);
             photo = itemView.findViewById(R.id.photoUserRowImageView);
             name = itemView.findViewById(R.id.nameUserRowTextView);
             itemView.setOnClickListener(this);
+            itemView.findViewById(R.id.favoriteUserRowButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    user.setFavorite(true);
+                    db.userDao().update(user);
+                    itemView.findViewById(R.id.favoriteUserRowButton).setVisibility(View.GONE);
+                    itemView.findViewById(R.id.unfavoriteUserRowButton).setVisibility(View.VISIBLE);
+                }
+            });
+            itemView.findViewById(R.id.unfavoriteUserRowButton).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    user.setFavorite(false);
+                    db.userDao().update(user);
+                    itemView.findViewById(R.id.favoriteUserRowButton).setVisibility(View.VISIBLE);
+                    itemView.findViewById(R.id.unfavoriteUserRowButton).setVisibility(View.GONE);
+                }
+            });
         }
 
         public void setUser(UserPriority userPriority) {
@@ -79,6 +102,15 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            if (user.isFavorite()) {
+                itemView.findViewById(R.id.favoriteUserRowButton).setVisibility(View.GONE);
+            }
+            else {
+                itemView.findViewById(R.id.unfavoriteUserRowButton).setVisibility(View.GONE);
+            }
+            if(user.isReceivedWave() == false){
+                itemView.findViewById(R.id.waveUserRowImageView).setVisibility(View.GONE);
             }
         }
       
