@@ -447,22 +447,60 @@ public class FilterTest2 {
                         isDisplayed()));
         textView3.check(matches(withText("Fill (1)")));
 
-        ViewInteraction appCompatSpinner7 = onView(
-                allOf(withId(R.id.sort_list_students_filter),
+        ViewInteraction appCompatImageButton = onView(
+                allOf(withId(R.id.sortFilterMainButton),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 3),
                         isDisplayed()));
+        appCompatImageButton.perform(click());
+
+        ViewInteraction appCompatSpinner7 = onView(
+                allOf(withId(R.id.sortMainSpinner),
+                        childAtPosition(
+                                allOf(withId(R.id.sortFilterMainLinearLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                4)),
+                                1),
+                        isDisplayed()));
         appCompatSpinner7.perform(click());
 
-        DataInteraction materialTextView = onData(anything())
+        DataInteraction appCompatCheckedTextView7 = onData(anything())
                 .inAdapterView(childAtPosition(
                         withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
                         0))
                 .atPosition(1);
-        materialTextView.perform(click());
+        appCompatCheckedTextView7.perform(click());
+
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withId(R.id.sortFilterMainButton),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatImageButton2.perform(click());
+
+//        ViewInteraction appCompatSpinner7 = onView(
+//                allOf(withId(R.id.sort_list_students_filter),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        withId(android.R.id.content),
+//                                        0),
+//                                3),
+//                        isDisplayed()));
+//        appCompatSpinner7.perform(click());
+
+//        DataInteraction materialTextView = onData(anything())
+//                .inAdapterView(childAtPosition(
+//                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+//                        0))
+//                .atPosition(1);
+//        materialTextView.perform(click());
 
         ViewInteraction textView4 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Will (3)"),
@@ -485,22 +523,60 @@ public class FilterTest2 {
                         isDisplayed()));
         textView6.check(matches(withText("Fill (1)")));
 
-        ViewInteraction appCompatSpinner8 = onView(
-                allOf(withId(R.id.sort_list_students_filter),
+        ViewInteraction appCompatImageButton3 = onView(
+                allOf(withId(R.id.sortFilterMainButton),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 3),
                         isDisplayed()));
+        appCompatImageButton3.perform(click());
+
+        ViewInteraction appCompatSpinner8 = onView(
+                allOf(withId(R.id.sortMainSpinner),
+                        childAtPosition(
+                                allOf(withId(R.id.sortFilterMainLinearLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                4)),
+                                1),
+                        isDisplayed()));
         appCompatSpinner8.perform(click());
 
-        DataInteraction materialTextView2 = onData(anything())
+        DataInteraction appCompatCheckedTextView8 = onData(anything())
                 .inAdapterView(childAtPosition(
                         withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
                         0))
                 .atPosition(2);
-        materialTextView2.perform(click());
+        appCompatCheckedTextView8.perform(click());
+
+        ViewInteraction appCompatImageButton4 = onView(
+                allOf(withId(R.id.sortFilterMainButton),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatImageButton4.perform(click());
+
+//        ViewInteraction appCompatSpinner8 = onView(
+//                allOf(withId(R.id.sort_list_students_filter),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        withId(android.R.id.content),
+//                                        0),
+//                                3),
+//                        isDisplayed()));
+//        appCompatSpinner8.perform(click());
+
+//        DataInteraction materialTextView2 = onData(anything())
+//                .inAdapterView(childAtPosition(
+//                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+//                        0))
+//                .atPosition(2);
+//        materialTextView2.perform(click());
 
         ViewInteraction textView7 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (2)"),
@@ -523,22 +599,78 @@ public class FilterTest2 {
                         isDisplayed()));
         textView9.check(matches(withText("Fill (1)")));
 
-        ViewInteraction appCompatSpinner9 = onView(
-                allOf(withId(R.id.sort_list_students_filter),
+        ViewInteraction appCompatImageButton5 = onView(
+                allOf(withId(R.id.sortFilterMainButton),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 3),
                         isDisplayed()));
+        appCompatImageButton5.perform(click());
+
+        ViewInteraction appCompatSpinner9 = onView(
+                allOf(withId(R.id.sortMainSpinner),
+                        childAtPosition(
+                                allOf(withId(R.id.sortFilterMainLinearLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                4)),
+                                1),
+                        isDisplayed()));
         appCompatSpinner9.perform(click());
 
-        DataInteraction materialTextView3 = onData(anything())
+        DataInteraction appCompatCheckedTextView9 = onData(anything())
                 .inAdapterView(childAtPosition(
                         withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
                         0))
-                .atPosition(3);
-        materialTextView3.perform(click());
+                .atPosition(0);
+        appCompatCheckedTextView9.perform(click());
+
+        ViewInteraction appCompatSpinner10 = onView(
+                allOf(withId(R.id.filterMainSpinner),
+                        childAtPosition(
+                                allOf(withId(R.id.sortFilterMainLinearLayout),
+                                        childAtPosition(
+                                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                                4)),
+                                3),
+                        isDisplayed()));
+        appCompatSpinner9.perform(click());
+
+        DataInteraction appCompatCheckedTextView10 = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(2);
+        appCompatCheckedTextView10.perform(click());
+
+        ViewInteraction appCompatImageButton6 = onView(
+                allOf(withId(R.id.sortFilterMainButton),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatImageButton6.perform(click());
+
+//        ViewInteraction appCompatSpinner9 = onView(
+//                allOf(withId(R.id.sort_list_students_filter),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        withId(android.R.id.content),
+//                                        0),
+//                                3),
+//                        isDisplayed()));
+//        appCompatSpinner9.perform(click());
+
+//        DataInteraction materialTextView3 = onData(anything())
+//                .inAdapterView(childAtPosition(
+//                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+//                        0))
+//                .atPosition(3);
+//        materialTextView3.perform(click());
 
         ViewInteraction textView10 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (2)"),

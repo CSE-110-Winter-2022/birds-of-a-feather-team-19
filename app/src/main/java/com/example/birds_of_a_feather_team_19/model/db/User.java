@@ -42,7 +42,6 @@ public class User {
         this.favorite = false;
     }
 
-//    @Ignore
     public User(String id, String name, String photoURL) {
         this.id = id;
         this.name = name;
@@ -97,6 +96,6 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        return this.id == ((User) o).getId();
+        return this.id.equals(((User) o).getId());
     }
 }

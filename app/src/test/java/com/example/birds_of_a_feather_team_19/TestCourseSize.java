@@ -41,11 +41,11 @@ public class TestCourseSize {
     public void createCourseAndCheckSize() throws Exception {
         String userId = "1";
         Course one = new Course(userId, "2022", "WI", "CSE",
-                "100", "small");
+                "100", 0.33);
         Course two = new Course(userId, "2021", "FA", "POLI",
-                "27", "large");
+                "27", 0.10);
         Course three = new Course(userId, "2022", "WI", "MUS",
-                "114", "huge");
+                "114", 0.06);
 
         one.setId(1);
         two.setId(2);
@@ -55,9 +55,9 @@ public class TestCourseSize {
         db.courseDao().insert(two);
         db.courseDao().insert(three);
 
-        assertEquals("small", db.courseDao().get(1).getSize());
-        assertEquals("large", db.courseDao().get(2).getSize());
-        assertEquals("huge", db.courseDao().get(3).getSize());
+        assertEquals(0.33, db.courseDao().get(1).getSize(), 0);
+        assertEquals(0.10, db.courseDao().get(2).getSize(), 0);
+        assertEquals(0.06, db.courseDao().get(3).getSize(), 0);
     }
 
     @After
