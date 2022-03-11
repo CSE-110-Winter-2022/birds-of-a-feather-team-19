@@ -80,6 +80,9 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if(user.isReceiveWave() == false){
+                itemView.findViewById(R.id.wave).setVisibility(View.INVISIBLE);
+            }
         }
       
         @Override
