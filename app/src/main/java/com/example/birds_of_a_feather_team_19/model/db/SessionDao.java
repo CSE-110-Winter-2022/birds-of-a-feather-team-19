@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -27,4 +28,7 @@ public interface SessionDao {
 
     @Insert
     void insert(Session session);
+
+    @Query("UPDATE sessions SET session_name=:newName WHERE id=:id")
+    void update(int id, String newName);
 }

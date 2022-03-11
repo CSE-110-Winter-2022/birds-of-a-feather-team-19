@@ -11,20 +11,16 @@
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19/app/src/main/res/layout/activity_class_view.xml" value="0.296195652173913" />
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19/app/src/main/res/layout/activity_main.xml" value="0.296195652173913" />
         <entry key="app/src/main/res/layout/activity_add_class.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_add_course.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/activity_add_course.xml" value="0.16621376811594202" />
         <entry key="app/src/main/res/layout/activity_add_name.xml" value="0.16621376811594202" />
         <entry key="app/src/main/res/layout/activity_add_photo_url.xml" value="0.20244565217391305" />
-        <entry key="app/src/main/res/layout/activity_mock_nearby_message.xml" value="0.17135416666666667" />
-        <entry key="app/src/main/res/layout/activity_save_session.xml" value="0.17552083333333332" />
-        <entry key="app/src/main/res/layout/activity_select_previous_session.xml" value="0.17135416666666667" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_user_detail.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/layout/activity_user_name.xml" value="0.18614130434782608" />
         <entry key="app/src/main/res/layout/activity_user_phote.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/activity_user_photo.xml" value="0.18614130434782608" />
         <entry key="app/src/main/res/layout/course_row.xml" value="0.15070921985815602" />
-        <entry key="app/src/main/res/layout/session_row.xml" value="0.2192240397135416" />
-        <entry key="app/src/main/res/layout/user_row.xml" value="0.7073391637058125" />
+        <entry key="app/src/main/res/layout/user_row.xml" value="0.15070921985815602" />
       </map>
     </option>
   </component>

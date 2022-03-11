@@ -170,10 +170,16 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
+        TextView textView = findViewById(R.id.session_name_view);
         if (button.getText().toString().equals("Start")) {
             Session newSession = new Session(Utilities.getCurrentDateTime());
             db.sessionDao().insert(newSession);
             this.currentSessionId = newSession.getId();
+
+            //set text of text box after clicking start
+            //default name here, date and time as initialized by a new session
+            textView.setText(newSession.getSessionName());
+            //db.sessionDao.get(dsjfas)
             Log.d(TAG, "New session created with ID " + currentSessionId);
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
@@ -201,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             TextView editSessionNameView = findViewById(R.id.edit_session_name_view);
             String newSessionName = editSessionNameView.getText().toString();
             sessionNameTextView.setText(newSessionName);
-            // db.sessionDao().update(currentSessionId, newSessionName);
+            db.sessionDao().update(currentSessionId, newSessionName);
             sessionNameTextView.setVisibility(View.VISIBLE);
             editSessionNameView.setVisibility(View.GONE);
 
@@ -334,6 +340,12 @@ public class MainActivity extends AppCompatActivity {
             case "Favorite":
                 return db.userDao().getFavorite(true);
             default:
+                //option has name of session
+                //set textbox view name after chosing session from filter
+
+                //set textview to reflect new session clicked by the user
+                TextView textView = findViewById(R.id.session_name_view);
+                textView.setText(db.sessionDao().get(filter).getId());
                 return db.sessionDao().getUsersInSession(db.sessionDao().get(filter).getId());
         }
     }
