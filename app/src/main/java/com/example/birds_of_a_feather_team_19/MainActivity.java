@@ -19,10 +19,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
+
+import org.w3c.dom.Text;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -79,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("UUID", newUUID);
             editor.commit();
         }
-        //this.USER_ID = preferences.getString("UUID", null);
-        this.USER_ID = "4b295157-ba31-4f9f-8401-5d85d9cf659a";
+        this.USER_ID = preferences.getString("UUID", null);
+        ((TextView) findViewById(R.id.UUIDMainTextView)).setText("UUID: " + this.USER_ID);
         Log.d(TAG, "User ID: " + USER_ID);
 
         Spinner sortSpinner = findViewById(R.id.sortMainSpinner);
@@ -156,30 +159,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (db.userDao().get(USER_ID) == null) {
-            startActivity(new Intent(this, AddNameActivity.class));
-        } else {
-            updateRecyclerView();
-        }
-    }
-    @Override
     protected void onStart() {
         super.onStart();
+
         if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("Stop")){
             publish();
         }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onResume() {
+        super.onResume();
+
+        if (db.userDao().get(USER_ID) == null) {
+            startActivity(new Intent(this, AddNameActivity.class));
+        } else {
+            updateRecyclerView();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
         if (((Button) findViewById(R.id.startStopMainButton)).getText().toString() == "Stop"){
             unPublish();
         }
     }
-
 
     public void publish() {
         User me = db.userDao().get(USER_ID);
@@ -221,12 +227,10 @@ public class MainActivity extends AppCompatActivity {
         message = new Message(sentMessage.getBytes());
         Nearby.getMessagesClient(this).publish(message);
     }
-
     public void unPublish() {
-        Log.i(TAG, "UnPublishing.");
+        Log.i(TAG, "UnPublishing message. ");
         Nearby.getMessagesClient(this).unpublish(message);
     }
-
 
     public void onStartStopMainButtonClicked(View view) {
         Button button = findViewById(R.id.startStopMainButton);
@@ -263,7 +267,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDatabase(String userData) {
-
         userData = userData.replace('\n', ',');
         Log.d(TAG,userData);
         String[] data = userData.split(",");
@@ -281,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
             User user = db.userDao().get(uuid);
             user.addSessionId(currentSessionId);
             if(allWaveUser.containsKey(USER_ID)){
-                user.setReceiveWave(true);
+                user.setReceivedWave(true);
                 db.userDao().update(user);
             }
             if (((Button) findViewById(R.id.startStopMainButton)).getText().toString().equals("STOP")) {
@@ -297,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         studentUser.addSessionId(currentSessionId);
         db.userDao().insert(studentUser);
         if(allWaveUser.containsKey(USER_ID)){
-            studentUser.setReceiveWave(true);
+            studentUser.setReceivedWave(true);
             db.userDao().update(studentUser);
         }
         int i = 15;
@@ -369,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
-        usersViewAdapter = new UsersViewAdapter(
+        usersViewAdapter = new UsersViewAdapter(db,
                 sortUsers(filterUsers(((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString()),
                 ((Spinner) findViewById(R.id.sortMainSpinner)).getSelectedItem().toString()));
         usersRecyclerView.setAdapter(usersViewAdapter);

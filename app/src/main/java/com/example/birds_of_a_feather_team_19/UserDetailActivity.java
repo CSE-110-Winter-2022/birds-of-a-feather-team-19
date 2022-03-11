@@ -41,12 +41,15 @@ public class UserDetailActivity extends AppCompatActivity {
 
         db = AppDatabase.singleton(this);
         user = db.userDao().get(getIntent().getStringExtra("id"));
+        ((TextView) findViewById(R.id.UUIDUserDetailextView)).setText("UUID: " + user.getId());
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<Bitmap> future = (executor.submit(() -> BitmapFactory.decodeStream(new URL(user.getPhotoURL()).openStream())));
         try {
             ((ImageView) findViewById(R.id.photoUserDetailImageView)).setImageBitmap(future.get());
         } catch (ExecutionException e) {
+            e.printStackTrace();
         } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         ((TextView) findViewById(R.id.nameUserDetailTextView)).setText(user.getName());
 
@@ -69,7 +72,12 @@ public class UserDetailActivity extends AppCompatActivity {
             findViewById(R.id.waveUserDetailButton).setVisibility(View.VISIBLE);
             findViewById(R.id.unWaveUserDetailButton).setVisibility(View.GONE);
         }
+
+        if (!user.isReceivedWave()) {
+            findViewById(R.id.wavedUserDetailImageView).setVisibility(View.GONE);
+        }
     }
+
     private void updateRecylerView() {
         PriorityQueue<Course> coursesPriorityQueue = new PriorityQueue<>();
         List<Course> courses = new ArrayList<>();
@@ -96,7 +104,6 @@ public class UserDetailActivity extends AppCompatActivity {
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
         coursesViewAdapter = new CoursesViewAdapter(courses);
         coursesRecyclerView.setAdapter(coursesViewAdapter);
-
     }
 
     public void onGoBackUserDetailButtonClicked(View view) {
@@ -123,12 +130,9 @@ public class UserDetailActivity extends AppCompatActivity {
         db.userDao().update(user);
         findViewById(R.id.waveUserDetailButton).setVisibility(View.GONE);
         findViewById(R.id.unWaveUserDetailButton).setVisibility(View.VISIBLE);
-        Toast.makeText(this, "wave sent", Toast.LENGTH_SHORT).show();
         String currMessage = MainActivity.message.toString();
         currMessage = currMessage + user.getId() + ",wave,,,\n";
         MainActivity.message = new Message(currMessage.getBytes());
-
-
     }
 
     public void onUnwaveHandButtonClicked(View view) {
@@ -136,6 +140,9 @@ public class UserDetailActivity extends AppCompatActivity {
         db.userDao().update(user);
         findViewById(R.id.waveUserDetailButton).setVisibility(View.VISIBLE);
         findViewById(R.id.unWaveUserDetailButton).setVisibility(View.GONE);
+        String currMessage = MainActivity.message.toString();
+        currMessage = currMessage.replaceAll(currMessage + user.getId() + ",wave,,,\n", "");
+        MainActivity.message = new Message(currMessage.getBytes());
     }
 
 

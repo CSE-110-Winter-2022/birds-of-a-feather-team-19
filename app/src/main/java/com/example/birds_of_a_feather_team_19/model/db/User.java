@@ -39,7 +39,7 @@ public class User {
     private boolean wave;
 
     @ColumnInfo(name = "receive_wave")
-    private boolean receiveWave;
+    private boolean receivedWave;
 
 
 
@@ -49,7 +49,7 @@ public class User {
         this.photoURL = photoURL;
         this.favorite = false;
         this.wave = false;
-        this.receiveWave = false;
+        this.receivedWave = false;
     }
 
     public User(String id, String name, String photoURL) {
@@ -59,7 +59,7 @@ public class User {
         this.sessionIds = new HashSet<>();
         this.favorite = false;
         this.wave = false;
-        this.receiveWave = false;
+        this.receivedWave = false;
     }
 
     public String getId() {
@@ -114,12 +114,12 @@ public class User {
         this.wave = wave;
     }
 
-    public boolean isReceiveWave() {
-        return receiveWave;
+    public boolean isReceivedWave() {
+        return receivedWave;
     }
 
-    public void setReceiveWave(boolean receiveWave) {
-        this.receiveWave = receiveWave;
+    public void setReceivedWave(boolean receivedWave) {
+        this.receivedWave = receivedWave;
     }
 
 
