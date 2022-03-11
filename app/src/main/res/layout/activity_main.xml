@@ -23,7 +23,6 @@
         android:layout_margin="15dp"
         android:onClick="onStartStopMainButtonClicked"
         android:text="Start"
-        app:layout_constraintBottom_toTopOf="@id/usersMainRecyclerView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,21 +33,63 @@
         android:layout_margin="15dp"
         android:onClick="onMockMessageMainButtonClicked"
         android:text="Mock"
-        app:layout_constraintBottom_toTopOf="@id/usersMainRecyclerView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/sort_list_students_filter"
-        android:layout_width="180dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="11dp"
-        android:layout_marginBottom="39dp"
-        android:entries="@array/sort_type"
-        app:layout_constraintBottom_toTopOf="@+id/usersMainRecyclerView"
-        app:layout_constraintEnd_toStartOf="@+id/mockMessageMainButton"
-        app:layout_constraintStart_toEndOf="@+id/startStopMainButton"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageButton
+        android:id="@+id/sortFilterMainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:adjustViewBounds="true"
+        android:maxHeight="50dp"
+        android:onClick="onSortFilterMainButtonClicked"
+        android:scaleType="centerInside"
+        app:layout_constraintRight_toLeftOf="@id/mockMessageMainButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/sort_filter" />
+
+    <LinearLayout
+        android:id="@+id/sortFilterMainLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sortFilterMainButton">
+
+        <EditText
+            android:id="@+id/sortMainEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/sort_by" />
+
+        <Spinner
+            android:id="@+id/sortMainSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:prompt="@string/sort_by"
+            android:spinnerMode="dropdown" />
+
+        <EditText
+            android:id="@+id/filterMainEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:text="@string/filter_by" />
+
+        <Spinner
+            android:id="@+id/filterMainSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:prompt="@string/filter_by"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

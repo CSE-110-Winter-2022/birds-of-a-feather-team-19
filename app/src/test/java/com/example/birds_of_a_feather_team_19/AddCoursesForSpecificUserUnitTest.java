@@ -31,11 +31,11 @@ public class AddCoursesForSpecificUserUnitTest {
 
         test = new User("1", "Test one", "");
         one = new Course(test.getId(), "2022", "WI", "CSE", "110",
-                "small");
+                0.33);
         two = new Course(test.getId(), "2021", "FA", "CSE", "100",
-                "small");
+                0.33);
         three = new Course(test.getId(), "2021", "FA", "CSE", "105",
-                "small");
+                0.33);
 
 
         db.userDao().insert(test);

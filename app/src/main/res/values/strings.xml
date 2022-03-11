@@ -3,6 +3,8 @@
     <string name="toast_add_course">Course added</string>
     <string name="toast_add_mock_user">Mock user added</string>
     <string name="TAG">BoF</string>
+    <string name="sort_by">Sort By</string>
+    <string name="filter_by">Filter By</string>
     <string-array name="year">
         <item>2022</item>
         <item>2021</item>
@@ -32,8 +34,12 @@
     </string-array>
     <string-array name="sort_type">
         <item>Default</item>
-        <item>Prioritize Recent</item>
-        <item>Prioritize Small Classes</item>
-        <item>This Quarter Only</item>
+        <item>Course Recency</item>
+        <item>Course Size</item>
+    </string-array>
+    <string-array name="filter_type">
+        <item>None</item>
+        <item>Favorite</item>
+        <item>This Quarter</item>
     </string-array>
 </resources>

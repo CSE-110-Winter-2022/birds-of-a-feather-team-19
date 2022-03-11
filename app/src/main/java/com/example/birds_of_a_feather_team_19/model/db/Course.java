@@ -29,7 +29,7 @@ public class Course implements Comparable<Course> {
     private String number;
 
     @ColumnInfo(name = "size")
-    private String size;
+    private double size;
 
     private static final Map<String, Integer> quarterMap = new HashMap<String, Integer>() {{
         put("winter", 0);
@@ -40,7 +40,7 @@ public class Course implements Comparable<Course> {
         put("fall", 5);
     }};
 
-    public Course(String userId, String year, String quarter, String subject, String number, String size) {
+    public Course(String userId, String year, String quarter, String subject, String number, double size) {
         this.userId = userId;
         this.year = year;
         this.quarter = quarter;
@@ -69,7 +69,7 @@ public class Course implements Comparable<Course> {
 
     public String getNumber() { return number; }
 
-    public String getSize() {
+    public double getSize() {
         return size;
     }
 

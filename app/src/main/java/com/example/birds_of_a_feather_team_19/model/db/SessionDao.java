@@ -9,6 +9,9 @@ import java.util.List;
 
 @Dao
 public interface SessionDao {
+    @Query("SELECT * FROM sessions")
+    List<Session> getAll();
+
     @Transaction
     @Query("SELECT * FROM users WHERE session_id=:sessionId")
     List<User> getUsersInSession(int sessionId);
