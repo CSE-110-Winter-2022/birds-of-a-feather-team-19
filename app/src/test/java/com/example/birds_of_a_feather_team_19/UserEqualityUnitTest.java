@@ -14,6 +14,7 @@ public class UserEqualityUnitTest {
     @Test
     public void usersAreEqual() throws Exception {
         User one = new User("Test one", "");
+        one.setId("1110");
         User two = one;
 
         assertTrue(one.equals(two));

@@ -90,7 +90,7 @@ public class AddMultipleUsersTest {
     }
 
     @Test
-    public void addMultipleUsersTest2() {
+    public void addMultipleUsersTest2()  {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.nameAddNameEditText),
                         childAtPosition(
@@ -326,6 +326,16 @@ public class AddMultipleUsersTest {
                         isDisplayed()));
         materialButton6.perform(click());
 
+        ViewInteraction materialButton13 = onView(
+                allOf(withId(R.id.startStopMainButton), withText("Start"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton13.perform(click());
+
 
         ViewInteraction materialButton7 = onView(
                 allOf(withId(R.id.mockMessageMainButton), withText("Mock"),
@@ -435,7 +445,7 @@ public class AddMultipleUsersTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText16.perform(replaceText("5,,,,\nJill,,,\n,,,,\n2020,FA,CSE,120,medium\n2022,SP,CSE,110,medium"), closeSoftKeyboard());
+        appCompatEditText16.perform(replaceText("5,,,,\nJill,,,,\n,,,,\n2020,FA,CSE,120,medium\n2022,SP,CSE,110,medium"), closeSoftKeyboard());
 
         ViewInteraction materialButton11 = onView(
                 allOf(withId(R.id.enterMockNearbyMessageButton), withText("Enter"),
@@ -456,17 +466,6 @@ public class AddMultipleUsersTest {
                                 2),
                         isDisplayed()));
         materialButton12.perform(click());
-
-
-        ViewInteraction materialButton13 = onView(
-                allOf(withId(R.id.startStopMainButton), withText("Start"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialButton13.perform(click());
 
 
         ViewInteraction textView = onView(

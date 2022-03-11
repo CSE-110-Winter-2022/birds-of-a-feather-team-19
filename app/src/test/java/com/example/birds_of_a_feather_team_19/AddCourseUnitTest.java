@@ -40,11 +40,11 @@ public class AddCourseUnitTest {
     public void createCourseAndAddToDb() throws Exception {
         String userId = "1";
         Course one = new Course(userId, "2022", "WI", "CSE",
-                "100", "small");
+                "100", 0.33);
         Course two = new Course(userId, "2021", "FA", "POLI",
-                "27", "small");
+                "27", 0.33);
         Course three = new Course(userId, "2022", "WI", "MUS",
-                "114", "small");
+                "114", 0.33);
 
         db.courseDao().insert(one);
         db.courseDao().insert(two);

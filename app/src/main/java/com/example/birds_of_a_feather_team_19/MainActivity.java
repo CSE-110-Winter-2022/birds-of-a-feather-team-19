@@ -6,8 +6,6 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +16,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -27,8 +24,8 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.nio.charset.StandardCharsets;
-import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private AppDatabase db;
     private Message message;
     private MessageListener messageListener;
-    private Map<String, String> quarterMap = new HashMap<>();
+    private Map<String, String> quarterMap;
+    private Map<String, Double> sizeMap;
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private UsersViewAdapter usersViewAdapter;
@@ -53,6 +51,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Birds of a Feather");
+
+        db = AppDatabase.singleton(this);
+
+        quarterMap = new HashMap<>();
+        quarterMap.put("fa", "fall");
+        quarterMap.put("wi", "winter");
+        quarterMap.put("sp", "spring");
+        quarterMap.put("ss1", "summer session 1");
+        quarterMap.put("ss2", "summer session 2");
+        quarterMap.put("sss", "special summer session");
+
+        sizeMap = new HashMap<>();
+        sizeMap.put("tiny", 1.00);
+        sizeMap.put("small", 0.33);
+        sizeMap.put("medium", 0.18);
+        sizeMap.put("large", 0.10);
+        sizeMap.put("huge", 0.06);
+        sizeMap.put("gigantic", 0.03);
+
         this.currentSessionId = 0;
         SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
         if (preferences.getString("UUID", null) == null) {
@@ -64,15 +81,25 @@ public class MainActivity extends AppCompatActivity {
         this.USER_ID = preferences.getString("UUID", null);
         Log.d(TAG, "User ID: " + USER_ID);
 
+        Spinner sortSpinner = findViewById(R.id.sortMainSpinner);
+        ArrayAdapter<CharSequence> sortAdapter =
+                ArrayAdapter.createFromResource(this, R.array.sort_type, android.R.layout.simple_spinner_item);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(sortAdapter);
+        Spinner filterSpinner = findViewById(R.id.filterMainSpinner);
+        ArrayList<String> filterList = new ArrayList<>();
+        for (String filter : getResources().getStringArray(R.array.filter_type)) {
+            filterList.add(filter);
+        }
+        for (Session session : db.sessionDao().getAll()) {
+            filterList.add(session.getSessionName());
+        }
+        ArrayAdapter<CharSequence> filterAdapter =
+                ArrayAdapter.createFromResource(this, R.array.filter_type, android.R.layout.simple_spinner_item);
+        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(filterAdapter);
 
-        quarterMap.put("fa", "fall");
-        quarterMap.put("wi", "winter");
-        quarterMap.put("sp", "spring");
-        quarterMap.put("ss1", "summer session 1");
-        quarterMap.put("ss2", "summer session 2");
-        quarterMap.put("sss", "special summer session");
-
-        Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
+        /* Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -103,11 +130,9 @@ public class MainActivity extends AppCompatActivity {
 //        ArrayAdapter<CharSequence> filterAdapter =
 //                ArrayAdapter.createFromResource(this, R.array.sort_type, android.R.layout.simple_spinner_item);
 //        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        filterSpinner.setAdapter(filterAdapter);
+//        filterSpinner.setAdapter(filterAdapter); */
 
         priorityAssigner = new SharedClassesPriorityAssigner();
-
-        db = AppDatabase.singleton(this);
 
         MessageListener realListener = new MessageListener() {
             @Override
@@ -122,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         this.message = new Message("hello".getBytes(StandardCharsets.UTF_8));
-
         this.messageListener = new MockNearbyMessageListener(realListener, 500, "Reloading");
 
         updateRecyclerView();
@@ -144,15 +168,32 @@ public class MainActivity extends AppCompatActivity {
             Session newSession = new Session(Utilities.getCurrentDateTime());
             db.sessionDao().insert(newSession);
             this.currentSessionId = newSession.getId();
+            Log.d(TAG, "New session created with ID " + currentSessionId);
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
-            updateRecyclerView();
         } else {
             button.setText("Start");
             Nearby.getMessagesClient(this).unpublish(message);
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
         }
+    }
+
+    public void onSortFilterMainButtonClicked(View view) {
+        View sortFilterLinearLayout = findViewById(R.id.sortFilterMainLinearLayout);
+        RecyclerView usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
+        if (sortFilterLinearLayout.getVisibility() == View.GONE) {
+            usersRecyclerView.setVisibility(View.GONE);
+            sortFilterLinearLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            usersRecyclerView.setVisibility(View.VISIBLE);
+            sortFilterLinearLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public void onMockMessageMainButtonClicked(View view) {
+        startActivity(new Intent(this, MockNearbyMessageActivity.class));
     }
 
     private void updateDatabase(String userData) {
@@ -169,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return;
         }
+        Log.d(TAG, "New user encountered");
         String userName = data[5];
         String userPhotoUrl = data[10];
 
@@ -188,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
             Log.d(TAG,year + quarter + " " + subject + number + " " + size);
 
-            db.courseDao().insert(new Course(uuid, year, quarter, subject, number, size));
+            db.courseDao().insert(new Course(uuid, year, quarter, subject, number, sizeMap.get(size)));
 
             i += 5;
         }
@@ -201,9 +243,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateRecyclerView() {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
 
-        List<UserPriority> listUsers = new ArrayList<>();
-
-        List<Course> userCourses = db.courseDao().getForUser(USER_ID);
+        /* List<Course> userCourses = db.courseDao().getForUser(USER_ID);
         for (User user : db.userDao().getAll()) {
             if (user.getId().equals(USER_ID) || !user.getSessionIds().contains(currentSessionId))
                 continue;
@@ -238,17 +278,77 @@ public class MainActivity extends AppCompatActivity {
         for (UserPriority priorityUsers : users) {
             String courseString = "User: " + priorityUsers.getUser().getName() + " with priority " + priorityUsers.getPriority();
             Log.d(TAG, courseString);
-        }
+        } */
+
+
+
+        Log.d(TAG, "Filter method: " + ((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString());
+        Log.d(TAG, "Sort method: " + ((Spinner) findViewById(R.id.sortMainSpinner)).getSelectedItem().toString());
+
 
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
         usersLayoutManager = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(usersLayoutManager);
-        usersViewAdapter = new UsersViewAdapter(users);
+        usersViewAdapter = new UsersViewAdapter(
+                sortUsers(filterUsers(((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString()),
+                ((Spinner) findViewById(R.id.sortMainSpinner)).getSelectedItem().toString()));
         usersRecyclerView.setAdapter(usersViewAdapter);
     }
 
-    public void onMockMessageMainButtonClicked(View view) {
-        Intent intent = new Intent(this, MockNearbyMessageActivity.class);
-        startActivity(intent);
+    private List<User> filterUsers(String filter) {
+        switch (filter) {
+            case "None":
+                List<User> users = db.userDao().getAll();
+                users.remove(new User(getSharedPreferences(TAG, MODE_PRIVATE).getString("UUID", null), "", ""));
+                return users;
+            case "Favorite":
+                return db.userDao().getFavorite(true);
+            default:
+                return db.sessionDao().getUsersInSession(db.sessionDao().get(filter).getId());
+        }
+    }
+
+    private List<UserPriority> sortUsers(List<User> users, String sort) {
+        List<UserPriority> usersPriorities = new ArrayList<>();
+        PriorityQueue<UserPriority> userPrioritiesPQ = new PriorityQueue<>();
+        for (User user : users) {
+            double priority = 0;
+            int sharedClasses = getSharedClasses(user);
+            switch (sort) {
+                case "Course Recency":
+                    for (Course course : db.courseDao().getForUser(user.getId())) {
+                        String[] currentQuarterYear = Utilities.getCurrentQuarterYear();
+                        int age = Utilities.getCourseAge(course.getYear(), course.getQuarter(), currentQuarterYear[1], currentQuarterYear[2]);
+                        age = 5 - age;
+                        if (age < 1) {
+                            age = 1;
+                        }
+                        priority += age;
+                    }
+                case "Course Size":
+                    for (Course course : db.courseDao().getForUser(user.getId())) {
+                        priority += course.getSize();
+                    }
+                default:
+                    priority = sharedClasses;
+            }
+            userPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
+        }
+        while (!userPrioritiesPQ.isEmpty()) {
+            usersPriorities.add(userPrioritiesPQ.poll());
+        }
+        return usersPriorities;
+    }
+    private int getSharedClasses(User user) {
+        int sharedClasses = 0;
+        for (Course course : db.courseDao().getForUser(getSharedPreferences(TAG, MODE_PRIVATE).getString("UUID", null))) {
+            for (Course userCourse : db.courseDao().getForUser(user.getId())) {
+                if (course.equals(userCourse)) {
+                    sharedClasses++;
+                }
+            }
+        }
+
+        return sharedClasses;
     }
 }
