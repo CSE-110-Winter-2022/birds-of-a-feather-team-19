@@ -13,14 +13,14 @@ public class AddNameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(this.getString(R.string.TAG), "Add name activity started");
+        Log.d(getString(R.string.TAG), "Add name activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_name);
     }
 
     @Override
     protected void onStop() {
-        Log.d(this.getString(R.string.TAG), "Add name activity finished");
+        Log.d(getString(R.string.TAG), "Add name activity finished");
         super.onStop();
         finish();
     }
@@ -32,8 +32,8 @@ public class AddNameActivity extends AppCompatActivity {
             return;
         }
 
-        SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
-        Log.d(this.getString(R.string.TAG), "Name set: " + name);
+        SharedPreferences.Editor editor = getSharedPreferences(this.getString(R.string.TAG), MODE_PRIVATE).edit();
+        Log.d(getString(R.string.TAG), "Name set: " + name);
         editor.putString("name", name);
         editor.apply();
 

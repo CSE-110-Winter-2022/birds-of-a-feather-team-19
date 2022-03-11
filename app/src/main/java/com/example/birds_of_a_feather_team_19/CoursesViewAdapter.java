@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.birds_of_a_feather_team_19.model.db.Course;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.ViewHolder> {
     private final List<Course> courses;
@@ -47,14 +49,23 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView courseNameView;
+        private Map<Integer, String> quarterMap;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.courseNameView = itemView.findViewById(R.id.titleCourseRowTextView);
+
+            quarterMap = new HashMap<>();
+            quarterMap.put(1, "Winter");
+            quarterMap.put(3, "Spring");
+            quarterMap.put(6, "Summer Session 1");
+            quarterMap.put(8, "Summer Session 2");
+            quarterMap.put(6, "Special Summer Session");
+            quarterMap.put(9, "Fall");
         }
 
         public void setCourse(Course course) {
-            this.courseNameView.setText(course.getYear() + " " + course.getQuarter() + " " +
+            this.courseNameView.setText(course.getYear() + " " + quarterMap.get(course.getQuarter()) + " " +
                     course.getSubject() + " " + course.getNumber());
         }
 

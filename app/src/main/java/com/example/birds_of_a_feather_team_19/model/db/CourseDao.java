@@ -9,6 +9,9 @@ import java.util.List;
 
 @Dao
 public interface CourseDao {
+    @Query("SELECT * FROM courses")
+    List<Course> getAll();
+
     @Transaction
     @Query("SELECT * FROM courses WHERE user_id=:userId")
     List<Course> getForUser(String userId);

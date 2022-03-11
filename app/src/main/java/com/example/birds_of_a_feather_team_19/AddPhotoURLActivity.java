@@ -13,27 +13,27 @@ public class AddPhotoURLActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(this.getString(R.string.TAG), "Add photo URL activity started");
+        Log.d(getString(R.string.TAG), "Add photo URL activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo_url);
     }
 
     @Override
     protected void onStop() {
-        Log.d(this.getString(R.string.TAG), "Add photo URL activity finished");
+        Log.d(getString(R.string.TAG), "Add photo URL activity finished");
         super.onStop();
         finish();
     }
 
     public void onSubmitAddPhotoURLButtonClicked(View view) {
         String photoURL = ((TextView) findViewById(R.id.photoURLAddPhotoURLEditText)).getText().toString();
-        Log.d(this.getString(R.string.TAG), "Photo URL entered: " + photoURL);
+        Log.d(getString(R.string.TAG), "Photo URL entered: " + photoURL);
         if (Utilities.invalidPhotoURL(photoURL)) {
             Utilities.showAlert(this, "Please enter a valid URL");
             return;
         }
 
-        SharedPreferences.Editor editor = getSharedPreferences("Birds of a Feather", MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.TAG), MODE_PRIVATE).edit();
         editor.putString("photoURL", photoURL);
         editor.apply();
 

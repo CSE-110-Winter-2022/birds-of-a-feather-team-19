@@ -19,24 +19,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 public class AddCourseActivity extends AppCompatActivity {
     public Set<List<String>> courses = new HashSet<>();
+    private Map<String, Integer> quarterMap;
     private Map<String, Double> sizeMap;
     public AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        quarterMap = new HashMap<>();
+        quarterMap.put("Winter", 1);
+        quarterMap.put("Spring", 3);
+        quarterMap.put("Summer Session 1", 6);
+        quarterMap.put("Summer Session 2", 8);
+        quarterMap.put("Special Summer Session", 6);
+        quarterMap.put("Fall", 9);
         sizeMap = new HashMap<>();
-        sizeMap.put("tiny (<40)", 1.00);
-        sizeMap.put("small (40-75)", 0.33);
-        sizeMap.put("medium (75-150)", 0.18);
-        sizeMap.put("large (150-250)", 0.10);
-        sizeMap.put("huge (250-400)", 0.06);
-        sizeMap.put("gigantic (400+)", 0.03);
-        Log.d(this.getString(R.string.TAG), "Add course activity started");
+        sizeMap.put("Tiny (<40)", 1.00);
+        sizeMap.put("Small (40-75)", 0.33);
+        sizeMap.put("Medium (75-150)", 0.18);
+        sizeMap.put("Large (150-250)", 0.10);
+        sizeMap.put("Huge (250-400)", 0.06);
+        sizeMap.put("Gigantic (400+)", 0.03);
+        Log.d(getString(R.string.TAG), "Add course activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
@@ -60,11 +69,11 @@ public class AddCourseActivity extends AppCompatActivity {
     }
 
     public void onEnterAddCourseButtonClicked(View view) {
-        String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
-        String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
-        String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString().toLowerCase();
-        String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString().toLowerCase();
-        String size = ((Spinner) findViewById(R.id.sizeAddCourseSpinner)).getSelectedItem().toString().toLowerCase();
+        String year = ((Spinner) findViewById(R.id.yearAddCourseSpinner)).getSelectedItem().toString();
+        String quarter = ((Spinner) findViewById(R.id.quarterAddCourseSpinner)).getSelectedItem().toString();
+        String subject = ((TextView) findViewById(R.id.subjectAddCourseEditText)).getText().toString().toUpperCase(Locale.ENGLISH);
+        String number = ((TextView) findViewById(R.id.numberAddCourseEditText)).getText().toString().toUpperCase(Locale.ENGLISH);
+        String size = ((Spinner) findViewById(R.id.sizeAddCourseSpinner)).getSelectedItem().toString();
         if (subject.isEmpty()) {
             Utilities.showAlert(this, "Please enter course subject");
             return;
@@ -80,7 +89,7 @@ public class AddCourseActivity extends AppCompatActivity {
             Utilities.showAlert(this, "Course previously entered");
             return;
         }
-        Log.d(this.getString(R.string.TAG), "Course added: " + year + quarter + subject + number);
+        Log.d(getString(R.string.TAG), "Course added: " + year + quarter + subject + number);
         Toast.makeText(this, R.string.toast_add_course, Toast.LENGTH_SHORT).show();
     }
 
@@ -90,13 +99,13 @@ public class AddCourseActivity extends AppCompatActivity {
             return;
         }
 
-        SharedPreferences preferences = getSharedPreferences("Birds of a Feather", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.TAG), MODE_PRIVATE);
         db.userDao().insert(new User(MainActivity.USER_ID, preferences.getString("name", null), preferences.getString("photoURL", null)));
         for (List<String> course : courses) {
-            db.courseDao().insert(new Course(MainActivity.USER_ID, course.get(0), course.get(1), course.get(2), course.get(3), sizeMap.get(course.get(4))));
+            db.courseDao().insert(new Course(MainActivity.USER_ID, Integer.parseInt(course.get(0)), quarterMap.get(course.get(1)), course.get(2), course.get(3), sizeMap.get(course.get(4))));
         }
 
-        Log.d(this.getString(R.string.TAG), "Add course activity finished");
+        Log.d(getString(R.string.TAG), "Add course activity finished");
 
         finish();
     }

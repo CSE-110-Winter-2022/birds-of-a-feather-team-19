@@ -17,10 +17,10 @@ public class Course implements Comparable<Course> {
     private String userId;
 
     @ColumnInfo(name = "year")
-    private String year;
+    private int year;
 
     @ColumnInfo(name = "quarter")
-    private String quarter;
+    private int quarter;
 
     @ColumnInfo(name = "subject")
     private String subject;
@@ -31,16 +31,7 @@ public class Course implements Comparable<Course> {
     @ColumnInfo(name = "size")
     private double size;
 
-    private static final Map<String, Integer> quarterMap = new HashMap<String, Integer>() {{
-        put("winter", 0);
-        put("spring", 1);
-        put("summer session 1", 2);
-        put("summer session 2", 3);
-        put("special summer session", 4);
-        put("fall", 5);
-    }};
-
-    public Course(String userId, String year, String quarter, String subject, String number, double size) {
+    public Course(String userId, int year, int quarter, String subject, String number, double size) {
         this.userId = userId;
         this.year = year;
         this.quarter = quarter;
@@ -61,9 +52,9 @@ public class Course implements Comparable<Course> {
         return userId;
     }
 
-    public String getYear() { return year; }
+    public int getYear() { return year; }
 
-    public String getQuarter() { return quarter; }
+    public int getQuarter() { return quarter; }
 
     public String getSubject() { return subject; }
 
@@ -75,22 +66,22 @@ public class Course implements Comparable<Course> {
 
     @Override
     public boolean equals(Object o) {
-        return (year.equals(((Course) o).getYear()) &&
-                quarter.equals(((Course) o).getQuarter()) &&
+        return (year == ((Course) o).getYear() &&
+                quarter == ((Course) o).getQuarter() &&
                 subject.equals(((Course) o).getSubject()) &&
                 number.equals(((Course) o).getNumber()));
     }
 
     @Override
     public int compareTo(Course course) {
-        if (!this.year.equals(course.getYear())) {
-            return Integer.parseInt(this.year) - Integer.parseInt(course.year);
-        } else if (!this.quarter.equals(course.getQuarter())) {
-            return quarterMap.get(this.quarter) - quarterMap.get(course.getQuarter());
+        if (!(this.year == course.getYear())) {
+            return this.year - course.getYear();
+        } else if (!(this.quarter == course.getQuarter())) {
+            return this.quarter - course.getQuarter();
         } else if (!this.subject.equals(course.getSubject())) {
             return this.subject.compareTo(course.getSubject());
         } else {
-            return Integer.parseInt(this.number) - Integer.parseInt(course.getNumber());
+            return this.number.compareTo(course.getNumber());
         }
     }
 }

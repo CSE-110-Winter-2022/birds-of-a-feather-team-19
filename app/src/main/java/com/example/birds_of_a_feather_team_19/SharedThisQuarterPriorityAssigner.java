@@ -1,3 +1,4 @@
+/*
 package com.example.birds_of_a_feather_team_19;
 
 import com.example.birds_of_a_feather_team_19.model.db.Course;
@@ -13,3 +14,4 @@ public class SharedThisQuarterPriorityAssigner implements UserPriorityAssigner {
         return (course.getQuarter().equals(quarterYear[0]) && course.getYear().equals(quarterYear[1])) ? 1 : 0;
     }
 }
+*/
