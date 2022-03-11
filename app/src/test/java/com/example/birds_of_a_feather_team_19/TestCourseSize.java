@@ -40,11 +40,11 @@ public class TestCourseSize {
     @Test
     public void createCourseAndCheckSize() throws Exception {
         String userId = "1";
-        Course one = new Course(userId, "2022", "WI", "CSE",
+        Course one = new Course(userId, 2022, 1, "CSE",
                 "100", 0.33);
-        Course two = new Course(userId, "2021", "FA", "POLI",
+        Course two = new Course(userId, 2021, 9, "POLI",
                 "27", 0.10);
-        Course three = new Course(userId, "2022", "WI", "MUS",
+        Course three = new Course(userId, 2022, 1, "MUS",
                 "114", 0.06);
 
         one.setId(1);

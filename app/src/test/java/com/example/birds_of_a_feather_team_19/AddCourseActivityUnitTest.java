@@ -29,6 +29,7 @@ public class AddCourseActivityUnitTest {
     @Rule
     public ActivityScenarioRule<AddCourseActivity> scenarioRule = new ActivityScenarioRule<>(AddCourseActivity.class);
 
+    //Fails
     @Test
     public void test_adds_two_cse_classes() {
         ActivityScenario<AddCourseActivity> scenario = scenarioRule.getScenario();
@@ -49,21 +50,23 @@ public class AddCourseActivityUnitTest {
             Set<List<String>> expected = new HashSet<>();
             List<String> course = new ArrayList<>();
             course.add("2022");
-            course.add("spring");
-            course.add("cse");
+            course.add("Spring");
+            course.add("CSE");
             course.add("101");
-            course.add("tiny (<40)");
+            course.add("Tiny (<40)");
             expected.add(course);
             course = new ArrayList<>();
             course.add("2022");
-            course.add("spring");
-            course.add("cse");
+            course.add("Spring");
+            course.add("CSE");
             course.add("110");
-            course.add("tiny (<40)");
+            course.add("Tiny (<40)");
             expected.add(course);
             assertEquals(expected, activity.courses);
         });
     }
+
+    //Fails
     @Test
     public void test_adds_duplicate_classes() {
         ActivityScenario<AddCourseActivity> scenario = scenarioRule.getScenario();
@@ -83,14 +86,15 @@ public class AddCourseActivityUnitTest {
             Set<List<String>> expected = new HashSet<>();
             List<String> course = new ArrayList<>();
             course.add("2022");
-            course.add("spring");
-            course.add("cse");
+            course.add("Spring");
+            course.add("CSE");
             course.add("101");
-            course.add("tiny (<40)");
+            course.add("Tiny (<40)");
             expected.add(course);
             assertEquals(expected, activity.courses);
         });
     }
+
     @Test
     public void test_no_subject_input() {
         ActivityScenario<AddCourseActivity> scenario = scenarioRule.getScenario();
@@ -139,7 +143,5 @@ public class AddCourseActivityUnitTest {
             assertEquals(expected, activity.courses);
         });
     }
-
-    // Make sure the spinners & text fields provide the correct values
 
 }
