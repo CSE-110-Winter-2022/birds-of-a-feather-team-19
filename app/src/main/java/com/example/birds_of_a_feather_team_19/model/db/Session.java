@@ -35,6 +35,6 @@ public class Session {
 
     @Override
     public boolean equals(Object o) {
-        return name.equals(((Session) o).getName());
+        return id == ((Session) o).getId();
     }
 }

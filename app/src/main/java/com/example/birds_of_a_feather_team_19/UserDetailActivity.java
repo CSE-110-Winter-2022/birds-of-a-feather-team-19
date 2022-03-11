@@ -55,25 +55,25 @@ public class UserDetailActivity extends AppCompatActivity {
         updateRecylerView();
 
         if (user.isFavorite()) {
-            findViewById(R.id.favoriteUserDetailButton).setVisibility(View.GONE);
+            findViewById(R.id.favoriteUserDetailButton).setVisibility(View.INVISIBLE);
             findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.VISIBLE);
         }
         else {
             findViewById(R.id.favoriteUserDetailButton).setVisibility(View.VISIBLE);
-            findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.GONE);
+            findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.INVISIBLE);
         }
 
         if (user.isWave()) {
-            findViewById(R.id.waveUserDetailButton).setVisibility(View.GONE);
+            findViewById(R.id.waveUserDetailButton).setVisibility(View.INVISIBLE);
             findViewById(R.id.unwaveUserDetailButton).setVisibility(View.VISIBLE);
         }
         else {
             findViewById(R.id.waveUserDetailButton).setVisibility(View.VISIBLE);
-            findViewById(R.id.unwaveUserDetailButton).setVisibility(View.GONE);
+            findViewById(R.id.unwaveUserDetailButton).setVisibility(View.INVISIBLE);
         }
 
         if (!user.isReceivedWave()) {
-            findViewById(R.id.wavedUserDetailImageView).setVisibility(View.GONE);
+            findViewById(R.id.wavedUserDetailImageView).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -84,7 +84,7 @@ public class UserDetailActivity extends AppCompatActivity {
     public void onFavoriteUserDetailButtonClicked(View view) {
         user.setFavorite(true);
         db.userDao().update(user);
-        findViewById(R.id.favoriteUserDetailButton).setVisibility(View.GONE);
+        findViewById(R.id.favoriteUserDetailButton).setVisibility(View.INVISIBLE);
         findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.VISIBLE);
     }
 
@@ -92,13 +92,13 @@ public class UserDetailActivity extends AppCompatActivity {
         user.setFavorite(false);
         db.userDao().update(user);
         findViewById(R.id.favoriteUserDetailButton).setVisibility(View.VISIBLE);
-        findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.GONE);
+        findViewById(R.id.unfavoriteUserDetailButton).setVisibility(View.INVISIBLE);
     }
 
     public void onWaveUserDetailButtonClicked(View view) {
         user.setWave(true);
         db.userDao().update(user);
-        findViewById(R.id.waveUserDetailButton).setVisibility(View.GONE);
+        findViewById(R.id.waveUserDetailButton).setVisibility(View.INVISIBLE);
         findViewById(R.id.unwaveUserDetailButton).setVisibility(View.VISIBLE);
         String currMessage = MainActivity.newMessage.toString();
         currMessage = currMessage + user.getId() + ",wave,,,\n";
@@ -109,7 +109,7 @@ public class UserDetailActivity extends AppCompatActivity {
         user.setWave(false);
         db.userDao().update(user);
         findViewById(R.id.waveUserDetailButton).setVisibility(View.VISIBLE);
-        findViewById(R.id.unwaveUserDetailButton).setVisibility(View.GONE);
+        findViewById(R.id.unwaveUserDetailButton).setVisibility(View.INVISIBLE);
         String currMessage = MainActivity.message.toString();
         currMessage = currMessage.replaceAll(user.getId() + ",wave,,,\n", "");
         MainActivity.message = new Message(currMessage.getBytes());
