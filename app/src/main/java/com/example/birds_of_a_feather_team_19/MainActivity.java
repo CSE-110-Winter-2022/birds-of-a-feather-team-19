@@ -38,22 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private AppDatabase db;
     private Message message;
     private MessageListener messageListener;
-    private Map<String, String> quarterMap = Map.of(
-            "fa", "fall",
-            "wi", "winter",
-            "sp", "spring",
-            "ss1", "summer session 1",
-            "ss2", "summer session 2",
-            "sss", "special summer session"
-    );
-    private Map<String, Double> sizeMap = Map.of(
-            "tiny", 1.00,
-            "small", 0.33,
-            "medium", 0.18,
-            "large", 0.10,
-            "huge", 0.06,
-            "gigantic", 0.03
-    );
+    private Map<String, String> quarterMap;
+    private Map<String, Double> sizeMap;
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private UsersViewAdapter usersViewAdapter;
@@ -67,6 +53,22 @@ public class MainActivity extends AppCompatActivity {
         setTitle("Birds of a Feather");
 
         db = AppDatabase.singleton(this);
+
+        quarterMap = new HashMap<>();
+        quarterMap.put("fa", "fall");
+        quarterMap.put("wi", "winter");
+        quarterMap.put("sp", "spring");
+        quarterMap.put("ss1", "summer session 1");
+        quarterMap.put("ss2", "summer session 2");
+        quarterMap.put("sss", "special summer session");
+
+        sizeMap = new HashMap<>();
+        sizeMap.put("tiny", 1.00);
+        sizeMap.put("small", 0.33);
+        sizeMap.put("medium", 0.18);
+        sizeMap.put("large", 0.10);
+        sizeMap.put("huge", 0.06);
+        sizeMap.put("gigantic", 0.03);
 
         this.currentSessionId = 0;
         SharedPreferences preferences = getSharedPreferences(TAG, MODE_PRIVATE);
@@ -85,17 +87,19 @@ public class MainActivity extends AppCompatActivity {
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sortSpinner.setAdapter(sortAdapter);
         Spinner filterSpinner = findViewById(R.id.filterMainSpinner);
-        ArrayAdapter<CharSequence> filterAdapter =
-                ArrayAdapter.createFromResource(this, R.array.filter_type, android.R.layout.simple_spinner_item);
-        List<String> filterList = new ArrayList<>();
+        ArrayList<String> filterList = new ArrayList<>();
+        for (String filter : getResources().getStringArray(R.array.filter_type)) {
+            filterList.add(filter);
+        }
         for (Session session : db.sessionDao().getAll()) {
             filterList.add(session.getSessionName());
         }
-        filterAdapter.addAll(filterList);
+        ArrayAdapter<CharSequence> filterAdapter =
+                ArrayAdapter.createFromResource(this, R.array.filter_type, android.R.layout.simple_spinner_item);
         filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(filterAdapter);
 
-        /*Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
+        /* Spinner filterSpinner = findViewById(R.id.sort_list_students_filter);
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 //        ArrayAdapter<CharSequence> filterAdapter =
 //                ArrayAdapter.createFromResource(this, R.array.sort_type, android.R.layout.simple_spinner_item);
 //        filterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        filterSpinner.setAdapter(filterAdapter);*/
+//        filterSpinner.setAdapter(filterAdapter); */
 
         priorityAssigner = new SharedClassesPriorityAssigner();
 
@@ -153,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (db.userDao().get(USER_ID) == null) {
             startActivity(new Intent(this, AddNameActivity.class));
+        } else {
+            updateRecyclerView();
         }
     }
 
@@ -162,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
             Session newSession = new Session(Utilities.getCurrentDateTime());
             db.sessionDao().insert(newSession);
             this.currentSessionId = newSession.getId();
+            Log.d(TAG, "New session created with ID " + currentSessionId);
             button.setText("Stop");
             Nearby.getMessagesClient(this).publish(message);
             Nearby.getMessagesClient(this).subscribe(messageListener);
@@ -174,10 +181,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSortFilterMainButtonClicked(View view) {
         View sortFilterLinearLayout = findViewById(R.id.sortFilterMainLinearLayout);
+        RecyclerView usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
         if (sortFilterLinearLayout.getVisibility() == View.GONE) {
+            usersRecyclerView.setVisibility(View.GONE);
             sortFilterLinearLayout.setVisibility(View.VISIBLE);
         }
         else {
+            usersRecyclerView.setVisibility(View.VISIBLE);
             sortFilterLinearLayout.setVisibility(View.GONE);
         }
     }
@@ -200,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return;
         }
+        Log.d(TAG, "New user encountered");
         String userName = data[5];
         String userPhotoUrl = data[10];
 
@@ -232,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateRecyclerView() {
         Log.d(TAG,"UPDATING RECYCLER VIEW");
 
-        /*List<Course> userCourses = db.courseDao().getForUser(USER_ID);
+        /* List<Course> userCourses = db.courseDao().getForUser(USER_ID);
         for (User user : db.userDao().getAll()) {
             if (user.getId().equals(USER_ID) || !user.getSessionIds().contains(currentSessionId))
                 continue;
@@ -267,7 +278,13 @@ public class MainActivity extends AppCompatActivity {
         for (UserPriority priorityUsers : users) {
             String courseString = "User: " + priorityUsers.getUser().getName() + " with priority " + priorityUsers.getPriority();
             Log.d(TAG, courseString);
-        }*/
+        } */
+
+
+
+        Log.d(TAG, "Filter method: " + ((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString());
+        Log.d(TAG, "Sort method: " + ((Spinner) findViewById(R.id.sortMainSpinner)).getSelectedItem().toString());
+
 
         usersRecyclerView = findViewById(R.id.usersMainRecyclerView);
         usersLayoutManager = new LinearLayoutManager(this);
@@ -277,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 ((Spinner) findViewById(R.id.sortMainSpinner)).getSelectedItem().toString()));
         usersRecyclerView.setAdapter(usersViewAdapter);
     }
+
     private List<User> filterUsers(String filter) {
         switch (filter) {
             case "None":
@@ -289,9 +307,10 @@ public class MainActivity extends AppCompatActivity {
                 return db.sessionDao().getUsersInSession(db.sessionDao().get(filter).getId());
         }
     }
+
     private List<UserPriority> sortUsers(List<User> users, String sort) {
         List<UserPriority> usersPriorities = new ArrayList<>();
-
+        PriorityQueue<UserPriority> userPrioritiesPQ = new PriorityQueue<>();
         for (User user : users) {
             double priority = 0;
             int sharedClasses = getSharedClasses(user);
@@ -313,7 +332,10 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     priority = sharedClasses;
             }
-            usersPriorities.add(new UserPriority(user, priority, sharedClasses));
+            userPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
+        }
+        while (!userPrioritiesPQ.isEmpty()) {
+            usersPriorities.add(userPrioritiesPQ.poll());
         }
         return usersPriorities;
     }

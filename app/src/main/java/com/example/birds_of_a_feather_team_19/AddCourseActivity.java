@@ -16,6 +16,7 @@ import com.example.birds_of_a_feather_team_19.model.db.Course;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,18 +24,18 @@ import java.util.Set;
 
 public class AddCourseActivity extends AppCompatActivity {
     public Set<List<String>> courses = new HashSet<>();
-    private Map<String, Double> sizeMap = Map.of(
-            "Tiny (<40)", 1.00,
-            "Small (40-75)", 0.33,
-            "Medium (75-150)", 0.18,
-            "Large (150-250)", 0.10,
-            "Huge (250-400)", 0.06,
-            "Gigantic (400+)", 0.03
-    );
+    private Map<String, Double> sizeMap;
     public AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sizeMap = new HashMap<>();
+        sizeMap.put("tiny (<40)", 1.00);
+        sizeMap.put("small (40-75)", 0.33);
+        sizeMap.put("medium (75-150)", 0.18);
+        sizeMap.put("large (150-250)", 0.10);
+        sizeMap.put("huge (250-400)", 0.06);
+        sizeMap.put("gigantic (400+)", 0.03);
         Log.d(this.getString(R.string.TAG), "Add course activity started");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);

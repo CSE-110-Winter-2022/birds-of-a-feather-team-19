@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:prompt="@string/sort_by"
-            android:spinnerMode="dialog" />
+            android:spinnerMode="dropdown" />
 
         <EditText
             android:id="@+id/filterMainEditText"
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:prompt="@string/filter_by"
-            android:spinnerMode="dialog" />
+            android:spinnerMode="dropdown" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
