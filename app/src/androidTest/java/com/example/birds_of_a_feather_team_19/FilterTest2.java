@@ -5,7 +5,6 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -417,7 +416,7 @@ public class FilterTest2 {
         materialButton12.perform(click());
 
         ViewInteraction materialButton13 = onView(
-                allOf(withId(R.id.startStopMainButton), withText("Start"),
+                allOf(withId(R.id.startStopSessionMainButton), withText("Start"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -429,21 +428,21 @@ public class FilterTest2 {
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Will (3)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView.check(matches(withText("Will (3)")));
 
         ViewInteraction textView2 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (2)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView2.check(matches(withText("Dill (2)")));
 
         ViewInteraction textView3 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Fill (1)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView3.check(matches(withText("Fill (1)")));
 
@@ -505,21 +504,21 @@ public class FilterTest2 {
         ViewInteraction textView4 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Will (3)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView4.check(matches(withText("Will (3)")));
 
         ViewInteraction textView5 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (2)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView5.check(matches(withText("Dill (2)")));
 
         ViewInteraction textView6 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Fill (1)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView6.check(matches(withText("Fill (1)")));
 
@@ -581,21 +580,21 @@ public class FilterTest2 {
         ViewInteraction textView7 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (2)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView7.check(matches(withText("Dill (2)")));
 
         ViewInteraction textView8 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Will (3)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView8.check(matches(withText("Will (3)")));
 
         ViewInteraction textView9 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Fill (1)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView9.check(matches(withText("Fill (1)")));
 
@@ -675,7 +674,7 @@ public class FilterTest2 {
         ViewInteraction textView10 = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (2)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView10.check(matches(withText("Dill (2)")));
     }

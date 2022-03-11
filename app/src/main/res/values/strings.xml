@@ -40,6 +40,5 @@
     <string-array name="filter_type">
         <item>None</item>
         <item>Favorite</item>
-        <item>This Quarter</item>
     </string-array>
 </resources>

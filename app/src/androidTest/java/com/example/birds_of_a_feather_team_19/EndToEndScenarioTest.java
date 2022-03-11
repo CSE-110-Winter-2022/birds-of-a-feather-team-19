@@ -243,7 +243,7 @@ public class EndToEndScenarioTest {
         materialButton7.perform(click());
 
         ViewInteraction materialButton8 = onView(
-                allOf(withId(R.id.startStopMainButton), withText("Start"),
+                allOf(withId(R.id.startStopSessionMainButton), withText("Start"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -255,12 +255,12 @@ public class EndToEndScenarioTest {
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Bill (1)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView.check(matches(withText("Bill (1)")));
 
         ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.usersMainRecyclerView),
+                allOf(withId(R.id.sessionUsersMainRecyclerView),
                         childAtPosition(
                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                 0)));

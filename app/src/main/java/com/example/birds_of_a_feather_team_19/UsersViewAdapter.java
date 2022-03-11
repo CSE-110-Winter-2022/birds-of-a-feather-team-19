@@ -58,6 +58,10 @@ public class UsersViewAdapter extends RecyclerView.Adapter<UsersViewAdapter.View
         return userPriorities.size();
     }
 
+    public List<UserPriority> getUserPriorities() {
+        return userPriorities;
+    }
+
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {

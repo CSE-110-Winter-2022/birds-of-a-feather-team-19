@@ -5,7 +5,6 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
@@ -189,7 +188,7 @@ public class FavoriteButtonTest {
         materialButton7.perform(click());
 
         ViewInteraction materialButton8 = onView(
-                allOf(withId(R.id.startStopMainButton), withText("Start"),
+                allOf(withId(R.id.startStopSessionMainButton), withText("Start"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -199,7 +198,7 @@ public class FavoriteButtonTest {
         materialButton8.perform(click());
 
         ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.usersMainRecyclerView),
+                allOf(withId(R.id.sessionUsersMainRecyclerView),
                         childAtPosition(
                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                 0)));
@@ -242,7 +241,7 @@ public class FavoriteButtonTest {
         materialButton9.perform(click());
 
         ViewInteraction recyclerView2 = onView(
-                allOf(withId(R.id.usersMainRecyclerView),
+                allOf(withId(R.id.sessionUsersMainRecyclerView),
                         childAtPosition(
                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                 0)));

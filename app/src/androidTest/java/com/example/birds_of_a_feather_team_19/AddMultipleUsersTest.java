@@ -327,7 +327,7 @@ public class AddMultipleUsersTest {
         materialButton6.perform(click());
 
         ViewInteraction materialButton13 = onView(
-                allOf(withId(R.id.startStopMainButton), withText("Start"),
+                allOf(withId(R.id.startStopSessionMainButton), withText("Start"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -471,12 +471,12 @@ public class AddMultipleUsersTest {
         ViewInteraction textView = onView(
                 allOf(withId(R.id.nameUserRowTextView), withText("Dill (3)"),
                         withParent(allOf(withId(R.id.personsRowsLayout),
-                                withParent(withId(R.id.usersMainRecyclerView)))),
+                                withParent(withId(R.id.sessionUsersMainRecyclerView)))),
                         isDisplayed()));
         textView.check(matches(withText("Dill (3)")));
 
         ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.usersMainRecyclerView),
+                allOf(withId(R.id.sessionUsersMainRecyclerView),
                         childAtPosition(
                                 withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
                                 0)));

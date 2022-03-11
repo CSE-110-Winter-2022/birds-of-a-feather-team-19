@@ -7,90 +7,55 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/usersMainRecyclerView"
-        android:layout_width="397dp"
-        android:layout_height="550dp"
-        android:layout_margin="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.911" />
-
-    <Button
-        android:id="@+id/startStopMainButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_marginLeft="16dp"
-        android:onClick="onStartStopMainButtonClicked"
-        android:text="Start"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18" />
-
-    <Button
-        android:id="@+id/mockMessageMainButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_marginRight="16dp"
-        android:onClick="onMockMessageMainButtonClicked"
-        android:text="Mock"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18" />
-
-    <Button
-        android:id="@+id/edit_session_name_button"
-        android:layout_width="74dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="321dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
-        android:text="Edit"
-        android:onClick="onEditSaveSessionNameButtonClicked"
-        app:layout_constraintBottom_toTopOf="@+id/usersMainRecyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mockMessageMainButton" />
-
     <TextView
-        android:id="@+id/session_name_view"
-        android:layout_width="213dp"
+        android:id="@+id/UUIDMainTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="26dp"
-        android:text="session"
-        android:textAlignment="center"
-        android:textColor="#434343"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/usersMainRecyclerView"
-        app:layout_constraintEnd_toStartOf="@+id/edit_session_name_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startStopMainButton" />
+        android:text="UUID: "
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/edit_session_name_view"
-        android:layout_width="223dp"
-        android:layout_height="51dp"
-        android:layout_marginTop="17dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="session"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:visibility="gone"
+        android:id="@+id/sessionNameMainEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:textSize="22dp"
+        app:layout_constraintLeft_toRightOf="@id/startStopSessionMainButton"
+        app:layout_constraintRight_toLeftOf="@id/editSaveSessionNameMainButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/sessionUsersMainRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sortFilterMainButton" />
+
+    <Button
+        android:id="@+id/startStopSessionMainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:onClick="onStartStopSessionMainButtonClicked"
+        android:text="Start"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/editSaveSessionNameMainButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:onClick="onEditSaveSessionNameMainButtonClicked"
+        android:text="Edit"
+        android:visibility="invisible"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/sortFilterMainButton"
@@ -101,8 +66,8 @@
         android:maxHeight="50dp"
         android:onClick="onSortFilterMainButtonClicked"
         android:scaleType="centerInside"
-        app:layout_constraintRight_toLeftOf="@id/mockMessageMainButton"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editSaveSessionNameMainButton"
         app:srcCompat="@drawable/sort_filter" />
 
     <LinearLayout
@@ -129,8 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:prompt="@string/sort_by"
-            android:spinnerMode="dropdown" />
+            android:prompt="@string/sort_by" />
 
         <EditText
             android:id="@+id/filterMainEditText"
@@ -144,17 +108,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:prompt="@string/filter_by"
-            android:spinnerMode="dropdown" />
-
+            android:prompt="@string/filter_by" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/UUIDMainTextView"
+    <Button
+        android:id="@+id/mockMessageMainButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:layout_margin="15dp"
+        android:onClick="onMockMessageMainButtonClicked"
+        android:text="Mock"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/startStopSessionMainButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

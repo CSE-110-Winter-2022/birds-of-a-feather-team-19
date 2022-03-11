@@ -13,22 +13,22 @@ public interface SessionDao {
     @Query("SELECT * FROM sessions")
     List<Session> getAll();
 
-    @Transaction
-    @Query("SELECT * FROM users WHERE session_id=:sessionId")
-    List<User> getUsersInSession(int sessionId);
-
     @Query("SELECT * FROM sessions WHERE id=:id")
     Session get(int id);
 
-    @Query("SELECT * FROM sessions WHERE session_name=:sessionName")
+    @Query("SELECT * FROM sessions WHERE name=:sessionName")
     Session get(String sessionName);
 
-    @Query("DELETE FROM courses")
-    void deleteAll();
+    @Transaction
+    @Query("SELECT * FROM users WHERE session_id=:id")
+    List<User> getUsersInSession(int id);
 
     @Insert
     void insert(Session session);
 
-    @Query("UPDATE sessions SET session_name=:newName WHERE id=:id")
-    void update(int id, String newName);
+    @Update
+    void update(Session session);
+
+    @Query("DELETE FROM courses")
+    void deleteAll();
 }

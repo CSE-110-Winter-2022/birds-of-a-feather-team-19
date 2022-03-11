@@ -10,11 +10,11 @@ public class Session {
     @ColumnInfo(name = "id")
     private int id;
 
-    @ColumnInfo(name = "session_name")
-    private String sessionName;
+    @ColumnInfo(name = "name")
+    private String name;
 
-    public Session(String sessionName) {
-        this.sessionName = sessionName;
+    public Session(String name) {
+        this.name = name;
     }
 
     public int getId() {
@@ -25,16 +25,16 @@ public class Session {
         this.id = id;
     }
 
-    public String getSessionName() {
-        return this.sessionName;
+    public String getName() {
+        return this.name;
     }
 
-    public void setSessionName(String sessionName) {
-        this.sessionName = sessionName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public boolean equals(Object o) {
-        return id == ((Session) o).getId() && sessionName.equals(((Session) o).getSessionName());
+        return name.equals(((Session) o).getName());
     }
 }

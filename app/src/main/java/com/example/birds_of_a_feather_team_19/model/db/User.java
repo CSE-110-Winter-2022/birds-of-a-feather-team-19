@@ -41,8 +41,6 @@ public class User {
     @ColumnInfo(name = "receive_wave")
     private boolean receivedWave;
 
-
-
     @Ignore
     public User(String name, String photoURL) {
         this.name = name;
@@ -121,7 +119,6 @@ public class User {
     public void setReceivedWave(boolean receivedWave) {
         this.receivedWave = receivedWave;
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -10,11 +10,14 @@
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19/app/src/main/res/layout/activity_add_class.xml" value="0.3151041666666667" />
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19/app/src/main/res/layout/activity_class_view.xml" value="0.296195652173913" />
         <entry key="..\:/Users/David/AndroidStudioProjects/birds-of-a-feather-team-19/app/src/main/res/layout/activity_main.xml" value="0.296195652173913" />
+        <entry key="app/src/main/res/drawable/btn_star_big_on.xml" value="0.2985" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1645" />
         <entry key="app/src/main/res/layout/activity_add_class.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_add_course.xml" value="0.16621376811594202" />
+        <entry key="app/src/main/res/layout/activity_add_course.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_add_name.xml" value="0.16621376811594202" />
         <entry key="app/src/main/res/layout/activity_add_photo_url.xml" value="0.20244565217391305" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.29347826086956524" />
+        <entry key="app/src/main/res/layout/activity_mock_nearby_message.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_user_detail.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_user_name.xml" value="0.18614130434782608" />
         <entry key="app/src/main/res/layout/activity_user_phote.xml" value="0.15070921985815602" />
