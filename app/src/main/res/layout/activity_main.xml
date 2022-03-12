@@ -118,6 +118,7 @@
         android:layout_margin="15dp"
         android:onClick="onMockMessageMainButtonClicked"
         android:text="Mock"
+        android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/startStopSessionMainButton" />
 

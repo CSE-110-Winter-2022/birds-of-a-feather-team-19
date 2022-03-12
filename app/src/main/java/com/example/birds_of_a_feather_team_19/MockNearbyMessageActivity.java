@@ -15,8 +15,7 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mock_nearby_message);
     }
 
-    public void onBackClicked(View view) throws InterruptedException {
-        Thread.sleep(1000);
+    public void onBackClicked(View view) {
         finish();
     }
 
