@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         mockMessageListener = new MockNearbyMessageListener(new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
-                Log.d(getString(R.string.TAG), "Found user: " + new String(message.getContent()));
+                Log.d(getString(R.string.TAG), "Found mock user: " + new String(message.getContent()));
                 updateDatabase(new String(message.getContent()));
             }
 
@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
             this.message = new Message(message.getBytes());
             this.newMessage = new Message(newMessage.getBytes());
+            updateRecyclerView();
         }
     }
 
@@ -256,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
             String defaultName = Utilities.getCurrentDateTime();
             db.sessionDao().insert(new Session(defaultName));
             this.session = db.sessionDao().get(defaultName);
+            this.currentSessionId = session.getId();
             Log.d(getString(R.string.TAG), "New session " + session.getId() + " saved with default name: " + session.getName());
 
             mockMessageListener.start();
@@ -267,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.mockMessageMainButton).setVisibility(View.VISIBLE);
             ((Spinner) findViewById(R.id.sortMainSpinner)).setSelection(0);
             updateFilterSpinner(defaultName);
-            findViewById(R.id.filterMainSpinner).setEnabled(true);
+            findViewById(R.id.filterMainSpinner).setEnabled(false);
             updateRecyclerView();
         }
         else {
@@ -323,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
 
             startStopSessionButton.setText("Start");
-            findViewById(R.id.filterMainSpinner).setEnabled(false);
+            findViewById(R.id.filterMainSpinner).setEnabled(true);
             findViewById(R.id.mockMessageMainButton).setVisibility(View.INVISIBLE);
         }
     }
@@ -403,11 +405,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDatabase(String userData) {
-        Log.d(getString(R.string.TAG), "New user encountered");
+        Log.d(getString(R.string.TAG), "User encountered");
         Log.d(getString(R.string.TAG), userData);
-        String[] dataLines = userData.split("\n");
+        Log.d(getString(R.string.TAG), "Updating database");
+        String[] dataLines = userData.split("\n", -1);
         List<List<String>> data = new ArrayList<>();
         for (String line : dataLines) {
+            Log.d(getString(R.string.TAG), line);
+            Log.d(getString(R.string.TAG), Arrays.asList(line.split(",")).toString());
             data.add(Arrays.asList(line.split(",")));
         }
         Log.d(getString(R.string.TAG), data.get(0).get(0) + ", " + data.get(1).get(0) + ", " + data.get(2).get(0));
@@ -437,6 +442,7 @@ public class MainActivity extends AppCompatActivity {
         else {
             user.addSessionId(currentSessionId);
             db.userDao().update(user);
+            Log.d(getString(R.string.TAG), "Session ids for user " + user.getName() + ", " + user.getId() + ": " + user.getSessionIds().toString());
         }
         for (Course course : courses) {
             if (!db.courseDao().getForUser(user.getId()).contains(course)) {
@@ -444,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("STOP")) {
+        if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("`Stop`")) {
             updateRecyclerView();
         }
     }
@@ -500,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
     private List<User> getUsersInSession(int sessionId) {
         List<User> users = new ArrayList<>();
         for (User user : db.userDao().getAll()) {
-            if (user.getSessionIds().contains(currentSessionId))
+            if (user.getSessionIds().contains(sessionId))
                 users.add(user);
         }
         return users;
