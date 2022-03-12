@@ -128,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
             filterList.add("Session: " + session.getName());
         }
 
+        this.currentSessionId = 0;
+
         ((TextView) findViewById(R.id.UUIDMainTextView)).setText("UUID: " + this.USER_ID);
 
         Button editSaveSessionNameMainButton = findViewById(R.id.editSaveSessionNameMainButton);
