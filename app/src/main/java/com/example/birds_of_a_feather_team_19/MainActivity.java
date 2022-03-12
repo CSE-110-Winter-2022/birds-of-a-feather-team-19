@@ -493,20 +493,23 @@ public class MainActivity extends AppCompatActivity {
                 case "Course Recency":
                     for (Course course : db.courseDao().getForUser(user.getId())) {
                         String[] currentQuarterYear = Utilities.getCurrentQuarterYear();
-                        int age = Utilities.getCourseAge(Integer.toString(course.getYear()), quarterMap.get(course.getQuarter()).toLowerCase(), currentQuarterYear[1], currentQuarterYear[2]);
+                        int age = Utilities.getCourseAge(Integer.toString(course.getYear()), quarterMap.get(course.getQuarter()).toLowerCase(), currentQuarterYear[1], currentQuarterYear[0]);
                         age = 5 - age;
                         if (age < 1) {
                             age = 1;
                         }
                         priority += age;
                     }
+                    break;
                 case "Course Size":
                     for (Course course : db.courseDao().getForUser(user.getId())) {
                         priority += course.getSize();
                     }
+                    break;
                 default:
                     priority = sharedClasses;
             }
+            Log.d(getString(R.string.TAG), "User " + user.getName() + "with priority " + priority);
             userPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
         }
         while (!userPrioritiesPQ.isEmpty()) {
@@ -518,6 +521,7 @@ public class MainActivity extends AppCompatActivity {
             if (userPriority.getUser().isWave()) {
                 wavedUsers.add(userPriority);
                 usersPriorities.remove(i);
+                i--;
             }
         }
         usersPriorities.addAll(0, wavedUsers);
