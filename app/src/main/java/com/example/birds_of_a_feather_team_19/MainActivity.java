@@ -223,13 +223,13 @@ public class MainActivity extends AppCompatActivity {
 
             this.message = new Message(message.getBytes());
             this.newMessage = new Message(newMessage.getBytes());
-            updateRecyclerView();
+            //updateRecyclerView();
         }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
             Log.d(getString(R.string.TAG), "New session " + session.getId() + " saved with default name: " + session.getName());
@@ -443,9 +443,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
-            updateRecyclerView();
-        }
+        updateRecyclerView();
     }
 
     public void publish() {
@@ -491,8 +489,16 @@ public class MainActivity extends AppCompatActivity {
             default:
                 this.session = db.sessionDao().get(filter.replaceFirst("Session: ", ""));
                 Log.d(getString(R.string.TAG), "Showing users in session " + this.session.getId() + ": " + this.session.getName());
-                return db.sessionDao().getUsersInSession(session.getId());
+                return getUsersInSession(session.getId());
         }
+    }
+    private List<User> getUsersInSession(int sessionId) {
+        List<User> users = new ArrayList<>();
+        for (User user : db.userDao().getAll()) {
+            if (user.getSessionIds().contains(sessionId))
+                users.add(user);
+        }
+        return users;
     }
 
     private List<UserPriority> sortUsers(List<User> users, String sort) {
