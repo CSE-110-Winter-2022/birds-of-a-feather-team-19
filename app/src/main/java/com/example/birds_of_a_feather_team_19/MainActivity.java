@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private Map<String, Integer> quarterMockingMap;
     private Map<String, Double> sizeMockingMap;
     private MessageListener messageListener;
+    private MessageListener mockMessageListener;
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private Session session;
@@ -103,7 +104,20 @@ public class MainActivity extends AppCompatActivity {
         sizeMockingMap.put("Huge", 0.06);
         sizeMockingMap.put("Gigantic", 0.03);
 
-        messageListener = new MockNearbyMessageListener(new MessageListener() {
+        messageListener = new MessageListener() {
+            @Override
+            public void onFound(@NonNull Message message) {
+                Log.d(getString(R.string.TAG), "Found user: " + new String(message.getContent()));
+                updateDatabase(new String(message.getContent()));
+            }
+
+            @Override
+            public void onLost(@NonNull Message message) {
+                Log.d(getString(R.string.TAG), "Lost user: " + new String(message.getContent()));
+            }
+        };
+
+        mockMessageListener = new MockNearbyMessageListener(new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
                 Log.d(getString(R.string.TAG), "Found user: " + new String(message.getContent()));
@@ -234,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
         Button startStopSessionMainButton = findViewById(R.id.startStopSessionMainButton);
 
         if (startStopSessionMainButton.getText().toString().equals("Start")) {
+            Nearby.getMessagesClient(this).subscribe(messageListener);
             String defaultName = Utilities.getCurrentDateTime();
             startStopSessionMainButton.setText("Stop");
             this.session = new Session(defaultName);
@@ -247,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
             updateRecyclerView();
         }
         else {
+            Nearby.getMessagesClient(this).unsubscribe(messageListener);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Save new session name: ")
                     .setView(R.layout.new_session_name_dialog)
@@ -379,10 +395,18 @@ public class MainActivity extends AppCompatActivity {
     private void updateDatabase(String userData) {
         Log.d(getString(R.string.TAG), "New user encountered");
         Log.d(getString(R.string.TAG), userData);
-        String[] dataLines = userData.split("\n");
+        Log.d(getString(R.string.TAG), "Updating database");
+        String[] dataLines = userData.split("\n", -1);
         List<List<String>> data = new ArrayList<>();
-        for (String line : dataLines) {
-            data.add(Arrays.asList(line.split(",")));
+        for (int i = 0; i < dataLines.length; i++) {
+            String line = dataLines[i];
+            Log.d(getString(R.string.TAG), line);
+            Log.d(getString(R.string.TAG), Arrays.asList(line.split(",")).toString());
+            List<String> dataList = Arrays.asList(line.split(","));
+            if (i == 2 && line.length() == 0) {
+                dataList.add("");
+            }
+            data.add(dataList);
         }
         Log.d(getString(R.string.TAG), data.get(0).get(0) + ", " + data.get(1).get(0) + ", " + data.get(2).get(0));
         User user = db.userDao().get(data.get(0).get(0)) == null ? new User(data.get(0).get(0), data.get(1).get(0), data.get(2).get(0)) : db.userDao().get(data.get(0).get(0));
