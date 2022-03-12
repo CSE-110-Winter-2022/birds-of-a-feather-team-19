@@ -121,7 +121,7 @@ public class UserDetailActivity extends AppCompatActivity {
     private void updateRecylerView() {
         PriorityQueue<Course> coursesPriorityQueue = new PriorityQueue<>();
         List<Course> courses = new ArrayList<>();
-        for (Course userCourse : db.courseDao().getForUser(MainActivity.USER_ID)) {
+        for (Course userCourse : db.courseDao().getForUser(getSharedPreferences(getString(R.string.TAG), MODE_PRIVATE).getString("UUID", null))) {
             for (Course course : db.courseDao().getForUser(user.getId())) {
                 if (userCourse.equals(course)) {
                     coursesPriorityQueue.add(course);
@@ -133,7 +133,7 @@ public class UserDetailActivity extends AppCompatActivity {
             courses.add(coursesPriorityQueue.poll());
         }
 
-        Log.d(TAG, "List of Common Courses for " + user.getName() + " and " + db.userDao().get(MainActivity.USER_ID).getName());
+        Log.d(TAG, "List of Common Courses for " + user.getName() + " and " + db.userDao().get(getSharedPreferences(getString(R.string.TAG), MODE_PRIVATE).getString("UUID", null)).getName());
         for (Course commonCourse : courses) {
             String courseString = commonCourse.getYear() + commonCourse.getQuarter() + commonCourse.getSubject() + commonCourse.getNumber();
             Log.d(TAG, courseString);
