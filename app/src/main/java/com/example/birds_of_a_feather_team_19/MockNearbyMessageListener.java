@@ -26,7 +26,7 @@ public class MockNearbyMessageListener extends MessageListener {
             messages.add(message);
     }
 
-    public MockNearbyMessageListener(MessageListener realMessageListener, int frequency, String messageStr) {
+    public MockNearbyMessageListener(MessageListener realMessageListener, int frequency) {
         this.index = 0;
 
         this.messageListener = realMessageListener;

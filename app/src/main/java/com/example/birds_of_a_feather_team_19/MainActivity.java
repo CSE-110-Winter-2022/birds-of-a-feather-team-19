@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(getString(R.string.TAG), "Lost user: " + new String(message.getContent()));
             }
 
-        }, 500, "Reloading");
+        }, 100);
 
         priorityAssigner = new SharedClassesPriorityAssigner();
 
@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
             publish();
+            Nearby.getMessagesClient(this).subscribe(messageListener);
         }
 
         updateRecyclerView(); // Need to confirm that this goes here instead of other Lifecycle
@@ -199,6 +200,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+/*
+        unPublish();
+        Nearby.getMessagesClient(this).unsubscribe(messageListener);
+*/
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
@@ -214,6 +225,9 @@ public class MainActivity extends AppCompatActivity {
             unPublish();
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
         }
+
+        unPublish();
+        Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
 
     public void onStartStopSessionMainButtonClicked(View view) {
@@ -410,14 +424,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void publish() {
-        String newMessage = this.newMessage.toString();
+        String newMessage = new String(this.newMessage.getContent());
 
         if (newMessage.isEmpty()) {
             return;
         }
 
-        Nearby.getMessagesClient(this).unpublish(this.message);
-        String message = this.message.toString() + newMessage;
+        unPublish();
+        String message = new String(this.message.getContent()) + newMessage;
         newMessage = "";
         Log.i(getString(R.string.TAG), "Publishing message: " + message);
         this.message = new Message(message.getBytes());
@@ -426,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void unPublish() {
         Log.i(getString(R.string.TAG), "UnPublishing message. ");
-        Nearby.getMessagesClient(this).unpublish(this.message);
+        Nearby.getMessagesClient(this).unpublish(message);
     }
 
     private void updateRecyclerView() {
