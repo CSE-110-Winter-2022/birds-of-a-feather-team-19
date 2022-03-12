@@ -521,13 +521,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                         priority += age;
                     }
+                    break;
                 case "Course Size":
                     for (Course course : db.courseDao().getForUser(user.getId())) {
                         priority += course.getSize();
                     }
+                    break;
                 default:
                     priority = sharedClasses;
             }
+            Log.d(getString(R.string.TAG), "User " + user.getName() + "with priority " + priority);
             userPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
         }
         while (!userPrioritiesPQ.isEmpty()) {
@@ -539,6 +542,7 @@ public class MainActivity extends AppCompatActivity {
             if (userPriority.getUser().isWave()) {
                 wavedUsers.add(userPriority);
                 usersPriorities.remove(i);
+                i--;
             }
         }
         usersPriorities.addAll(0, wavedUsers);
