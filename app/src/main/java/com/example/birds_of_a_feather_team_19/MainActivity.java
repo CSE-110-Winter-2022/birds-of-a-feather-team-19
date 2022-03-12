@@ -32,6 +32,7 @@ import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private Session session;
-    public static String sessionName;
+    private String sessionName;
+    private int currentSessionId;
     private UserPriorityAssigner priorityAssigner;
     private UsersViewAdapter usersViewAdapter;
 
@@ -69,11 +71,14 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("UUID", UUID.randomUUID().toString());
             editor.apply();
         }
+
         this.USER_ID = preferences.getString("UUID", null);
         Log.d(getString(R.string.TAG), "App user ID: " + this.USER_ID);
+        this.currentSessionId = -1;
 
         db = AppDatabase.singleton(this);
 
+        // TODO: Change key value
         quarterMap = new HashMap<>();
         quarterMap.put(1, "Winter");
         quarterMap.put(3, "Spring");
@@ -81,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put(8, "Summer Session 2");
         quarterMap.put(6, "Special Summer Session");
         quarterMap.put(9, "Fall");
+
+        // TODO: Change key value
         quarterMockingMap = new HashMap<>();
         quarterMockingMap.put("WI", 1);
         quarterMockingMap.put("SP", 3);
@@ -116,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         for (String filter : getResources().getStringArray(R.array.filter_type)) {
             filterList.add(filter);
         }
+
         for (Session session : db.sessionDao().getAll()) {
             filterList.add("Session: " + session.getName());
         }
@@ -195,14 +203,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
-            Session session = new Session(Utilities.getCurrentDateTime());
             Log.d(getString(R.string.TAG), "New session created with name: " + session.getName());
-            db.sessionDao().insert(session);
-            for (UserPriority userPriority : ((UsersViewAdapter) ((RecyclerView) findViewById(R.id.sessionUsersMainRecyclerView)).getAdapter()).getUserPriorities()) {
-                User user = userPriority.getUser();
-                user.addSessionId(session.getId());
-                db.userDao().update(user);
-            }
+//            db.sessionDao().insert(session);
+//            for (UserPriority userPriority : ((UsersViewAdapter) ((RecyclerView) findViewById(R.id.sessionUsersMainRecyclerView)).getAdapter()).getUserPriorities()) {
+//                User user = userPriority.getUser();
+//                user.addSessionId(session.getId());
+//                db.userDao().update(user);
+//            }
 
             unPublish();
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
@@ -213,10 +220,17 @@ public class MainActivity extends AppCompatActivity {
         Button startStopSessionMainButton = findViewById(R.id.startStopSessionMainButton);
 
         if (startStopSessionMainButton.getText().toString().equals("Start")) {
+            String defaultName = Utilities.getCurrentDateTime();
             startStopSessionMainButton.setText("Stop");
-
+            this.session = new Session(defaultName);
+            db.sessionDao().insert(this.session);
+            this.currentSessionId = db.sessionDao().get(defaultName).getId();
+            Log.d(getString(R.string.TAG), "New session id: " + currentSessionId);
             publish();
             Nearby.getMessagesClient(this).subscribe(messageListener);
+            ((Spinner) findViewById(R.id.filterMainSpinner)).setSelection(0);
+            ((Spinner) findViewById(R.id.sortMainSpinner)).setSelection(0);
+            updateRecyclerView();
         }
         else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -253,15 +267,26 @@ public class MainActivity extends AppCompatActivity {
                         Utilities.showAlert(MainActivity.this, "Session name used. ");
                         return;
                     }
+                    Log.d(getString(R.string.TAG), "new name: " + sessionName);
+                    // TODO: Figure out how updating the session name works and if it actually updates in the db
+                    // TODO: Figure out how to make the save change the name of session in the database
+                    // session = new Session(sessionName);
+                    Session updatedSession = db.sessionDao().get(currentSessionId);
+                    Log.d(getString(R.string.TAG), "Current session ID: " + currentSessionId);
+                    Log.d(getString(R.string.TAG), "Session ID updating: " + updatedSession.getId());
+                    Log.d(getString(R.string.TAG), "Name in db: " + db.sessionDao().get(currentSessionId).getName());
+                    updatedSession.setName(sessionName);
+                    db.sessionDao().update(updatedSession);
+                    Log.d(getString(R.string.TAG), "Name in db: " + db.sessionDao().get(currentSessionId).getName());
+                    ((EditText) findViewById(R.id.sessionNameMainEditText)).setText("Session: " + updatedSession.getName());
 
-                    session = new Session(sessionName);
-                    ((EditText) findViewById(R.id.sessionNameMainEditText)).setText("Session: " + session.getName());
-                    db.sessionDao().insert(session);
-                    for (UserPriority userPriority : ((UsersViewAdapter) ((RecyclerView) findViewById(R.id.sessionUsersMainRecyclerView)).getAdapter()).getUserPriorities()) {
-                        User user = userPriority.getUser();
-                        user.addSessionId(session.getId());
-                        db.userDao().update(user);
-                    }
+//                    db.sessionDao().insert(session);
+                    // TODO:
+//                    for (UserPriority userPriority : ((UsersViewAdapter) ((RecyclerView) findViewById(R.id.sessionUsersMainRecyclerView)).getAdapter()).getUserPriorities()) {
+//                        User user = userPriority.getUser();
+//                        user.addSessionId(session.getId());
+//                        db.userDao().update(user);
+//                    }
 
                     dialog.dismiss();
                 });
@@ -279,14 +304,20 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.editSaveSessionNameMainButton);
         EditText sessionNameEditText = findViewById(R.id.sessionNameMainEditText);
 
+        // TODO: Figure out how to make the app not crash when save is pressed
+
         if (button.getText().toString().equals("Edit")) {
             button.setText("Save");
             sessionNameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         }
         else {
             button.setText("Edit");
-            session.setName(sessionNameEditText.getText().toString());
-            db.sessionDao().update(session);
+            Session updatedSession = db.sessionDao().get(currentSessionId);
+            updatedSession.setName(sessionNameEditText.getText().toString());
+            Log.d(getString(R.string.TAG), "Saving new name of session " + updatedSession.getName());
+            Log.d(getString(R.string.TAG), "Saving new name of session " + updatedSession.getId());
+            db.sessionDao().update(updatedSession);
+            Log.d(getString(R.string.TAG), "New name in database: " + db.sessionDao().get(currentSessionId).getName());
             sessionNameEditText.setInputType(0);
         }
     }
@@ -339,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
         for (String line : dataLines) {
             data.add(Arrays.asList(line.split(",")));
         }
-
+        Log.d(getString(R.string.TAG), data.get(0).get(0) + ", " + data.get(1).get(0) + ", " + data.get(2).get(0));
         User user = db.userDao().get(data.get(0).get(0)) == null ? new User(data.get(0).get(0), data.get(1).get(0), data.get(2).get(0)) : db.userDao().get(data.get(0).get(0));
         List<Course> courses = new ArrayList<>();
         for (int i = 3; i < data.size(); i++) {
@@ -360,9 +391,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (db.userDao().get(user.getId()) == null) {
+            user.addSessionId(currentSessionId);
             db.userDao().insert(user);
         }
         else {
+            user.addSessionId(currentSessionId);
             db.userDao().update(user);
         }
         for (Course course : courses) {
@@ -413,15 +446,27 @@ public class MainActivity extends AppCompatActivity {
     private List<User> filterUsers(String filter) {
         switch (filter) {
             case "None":
-                List<User> users = db.userDao().getAll();
+                List<User> users = getUsersInSession(currentSessionId);
                 users.remove(new User(getSharedPreferences(getString(R.string.TAG), MODE_PRIVATE).getString("UUID", null), "", ""));
                 return users;
             case "Favorite":
                 return db.userDao().getFavorite(true);
             default:
                 filter = filter.replaceFirst("Session: ", "");
-                return db.sessionDao().getUsersInSession(db.sessionDao().get(filter).getId());
+                Session currentSession = db.sessionDao().get(filter);
+                Log.d(getString(R.string.TAG), "Showing users in session " + currentSession.getName() + ", "+ currentSession.getId());
+                this.currentSessionId = currentSession.getId();
+                return getUsersInSession(currentSessionId);
         }
+    }
+
+    private List<User> getUsersInSession(int sessionId) {
+        List<User> users = new ArrayList<>();
+        for (User user : db.userDao().getAll()) {
+            if (user.getSessionIds().contains(currentSessionId))
+                users.add(user);
+        }
+        return users;
     }
 
     private List<UserPriority> sortUsers(List<User> users, String sort) {
