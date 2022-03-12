@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import android.widget.TextView;
 import com.example.birds_of_a_feather_team_19.model.db.AppDatabase;
 import com.example.birds_of_a_feather_team_19.model.db.User;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
     private Map<Integer, String> quarterMap;
     private Map<String, Integer> quarterMockingMap;
     private Map<String, Double> sizeMockingMap;
+    private Map<Integer, String> quarterCodeMap;
+    private Map<Double, String> classSizeMap;
     private MessageListener messageListener;
+    private MockNearbyMessageListener mockMessageListener;
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private Session session;
@@ -79,15 +80,29 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put(3, "Spring");
         quarterMap.put(6, "Summer Session 1");
         quarterMap.put(8, "Summer Session 2");
-        quarterMap.put(6, "Special Summer Session");
+        quarterMap.put(7, "Special Summer Session");
         quarterMap.put(9, "Fall");
         quarterMockingMap = new HashMap<>();
         quarterMockingMap.put("WI", 1);
         quarterMockingMap.put("SP", 3);
         quarterMockingMap.put("SS1", 6);
         quarterMockingMap.put("SS2", 8);
-        quarterMockingMap.put("SSS", 6);
+        quarterMockingMap.put("SSS", 7);
         quarterMockingMap.put("FA", 9);
+        quarterCodeMap = new HashMap<>();
+        quarterCodeMap.put(1, "WI");
+        quarterCodeMap.put(3, "SP");
+        quarterCodeMap.put(6, "SS1");
+        quarterCodeMap.put(8, "SS2");
+        quarterCodeMap.put(7, "SSS");
+        quarterCodeMap.put(9, "FA");
+        classSizeMap = new HashMap<>();
+        classSizeMap.put(1.00, "Tiny");
+        classSizeMap.put(0.33, "Small");
+        classSizeMap.put(0.18, "Medium");
+        classSizeMap.put(0.10, "Large");
+        classSizeMap.put(0.06, "Huge");
+        classSizeMap.put(0.03, "Gigantic");
         sizeMockingMap = new HashMap<>();
         sizeMockingMap.put("Tiny", 1.00);
         sizeMockingMap.put("Small", 0.33);
@@ -96,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         sizeMockingMap.put("Huge", 0.06);
         sizeMockingMap.put("Gigantic", 0.03);
 
-        messageListener = new MockNearbyMessageListener(new MessageListener() {
+        mockMessageListener = new MockNearbyMessageListener(new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
                 Log.d(getString(R.string.TAG), "Found user: " + new String(message.getContent()));
@@ -108,7 +123,20 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(getString(R.string.TAG), "Lost user: " + new String(message.getContent()));
             }
 
-        }, 100);
+        });
+
+        messageListener = new MessageListener() {
+            @Override
+            public void onFound(@NonNull Message message) {
+                Log.d(getString(R.string.TAG), "Message found");
+                updateDatabase(new String(message.getContent()));
+            }
+
+            @Override
+            public void onLost(@NonNull Message message) {
+                Log.d(getString(R.string.TAG), "Lost user: " + new String(message.getContent()));
+            }
+        };
 
         priorityAssigner = new SharedClassesPriorityAssigner();
 
@@ -157,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
+            mockMessageListener.start();
             publish();
             Nearby.getMessagesClient(this).subscribe(messageListener);
         }
@@ -177,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             message += thisUser.getName() + ",,,,\n";
             message += thisUser.getPhotoURL() + ",,,,\n";
             for (Course course : db.courseDao().getForUser(thisUser.getId())) {
-                message += course.getYear() + "," + course.getQuarter() + "," + course.getSubject() + "," + course.getNumber() + "," + course.getSize() + "\n";
+                message += course.getYear() + "," + quarterCodeMap.get(course.getQuarter()) + "," + course.getSubject() + "," + course.getNumber() + "," + classSizeMap.get(course.getSize()) + "\n";
             }
             for (User user : db.userDao().getAll()) {
                 if (user.isWave()) {
@@ -206,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
-            Session session = new Session(Utilities.getCurrentDateTime());
             Log.d(getString(R.string.TAG), "New session created with name: " + session.getName());
             db.sessionDao().insert(session);
             for (UserPriority userPriority : ((UsersViewAdapter) ((RecyclerView) findViewById(R.id.sessionUsersMainRecyclerView)).getAdapter()).getUserPriorities()) {
@@ -216,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        mockMessageListener.stop();
         unPublish();
         Nearby.getMessagesClient(this).unsubscribe(messageListener);
     }
@@ -225,11 +254,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (startStopSessionMainButton.getText().toString().equals("Start")) {
             startStopSessionMainButton.setText("Stop");
+            findViewById(R.id.mockMessageMainButton).setVisibility(View.VISIBLE);
 
+            this.session = new Session(Utilities.getCurrentDateTime());
+
+            mockMessageListener.start();
             publish();
             Nearby.getMessagesClient(this).subscribe(messageListener);
         }
         else {
+            findViewById(R.id.mockMessageMainButton).setVisibility(View.INVISIBLE);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Save new session name: ")
                     .setView(R.layout.new_session_name_dialog)
@@ -265,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
 
-                    session = new Session(sessionName);
+                    this.session.setName(sessionName);
                     ((EditText) findViewById(R.id.sessionNameMainEditText)).setText("Session: " + session.getName());
                     db.sessionDao().insert(session);
                     for (UserPriority userPriority : ((UsersViewAdapter) ((RecyclerView) findViewById(R.id.sessionUsersMainRecyclerView)).getAdapter()).getUserPriorities()) {
@@ -281,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
 
             startStopSessionMainButton.setText("Start");
 
+            mockMessageListener.stop();
             unPublish();
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
         }
@@ -296,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             button.setText("Edit");
-            session.setName(sessionNameEditText.getText().toString());
+            session.setName(sessionNameEditText.getText().toString().replaceFirst("Session: ", ""));
             db.sessionDao().update(session);
             sessionNameEditText.setInputType(0);
         }
@@ -331,8 +366,9 @@ public class MainActivity extends AppCompatActivity {
             }
             if (changeSessionNameMainEditText) {
                 EditText sessionNameMainEditText = findViewById(R.id.sessionNameMainEditText);
-                session = db.sessionDao().get(sessionNameMainEditText.getText().toString());
-                sessionNameMainEditText.setText(((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString(), TextView.BufferType.NORMAL);
+                String sessionName = ((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString();
+                session = db.sessionDao().get(sessionName.replaceFirst("Session: ", ""));
+                sessionNameMainEditText.setText(sessionName, TextView.BufferType.NORMAL);
             }
             updateRecyclerView();
         }
@@ -390,9 +426,9 @@ public class MainActivity extends AppCompatActivity {
     public void publish() {
         String newMessage = new String(this.newMessage.getContent());
 
-        if (newMessage.isEmpty()) {
-            return;
-        }
+//        if (newMessage.isEmpty()) {
+//            return;
+//        }
 
         unPublish();
         String message = new String(this.message.getContent()) + newMessage;

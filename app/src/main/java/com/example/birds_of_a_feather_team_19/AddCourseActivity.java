@@ -36,7 +36,7 @@ public class AddCourseActivity extends AppCompatActivity {
         quarterMap.put("Spring", 3);
         quarterMap.put("Summer Session 1", 6);
         quarterMap.put("Summer Session 2", 8);
-        quarterMap.put("Special Summer Session", 6);
+        quarterMap.put("Special Summer Session", 7);
         quarterMap.put("Fall", 9);
         sizeMap = new HashMap<>();
         sizeMap.put("Tiny (<40)", 1.00);
