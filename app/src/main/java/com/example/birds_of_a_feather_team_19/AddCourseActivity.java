@@ -100,9 +100,9 @@ public class AddCourseActivity extends AppCompatActivity {
         }
 
         SharedPreferences preferences = getSharedPreferences(getString(R.string.TAG), MODE_PRIVATE);
-        db.userDao().insert(new User(MainActivity.USER_ID, preferences.getString("name", null), preferences.getString("photoURL", null)));
+        db.userDao().insert(new User(preferences.getString("UUID", null), preferences.getString("name", null), preferences.getString("photoURL", null)));
         for (List<String> course : courses) {
-            db.courseDao().insert(new Course(MainActivity.USER_ID, Integer.parseInt(course.get(0)), quarterMap.get(course.get(1)), course.get(2), course.get(3), sizeMap.get(course.get(4))));
+            db.courseDao().insert(new Course(preferences.getString("UUID", null), Integer.parseInt(course.get(0)), quarterMap.get(course.get(1)), course.get(2), course.get(3), sizeMap.get(course.get(4))));
         }
 
         Log.d(getString(R.string.TAG), "Add course activity finished");
