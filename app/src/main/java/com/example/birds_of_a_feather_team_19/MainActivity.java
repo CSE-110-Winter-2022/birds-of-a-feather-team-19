@@ -400,15 +400,18 @@ public class MainActivity extends AppCompatActivity {
         List<List<String>> data = new ArrayList<>();
         for (int i = 0; i < dataLines.length; i++) {
             String line = dataLines[i];
+//            Log.d(getString(R.string.TAG), "Updating database " + line);
             Log.d(getString(R.string.TAG), line);
             Log.d(getString(R.string.TAG), Arrays.asList(line.split(",")).toString());
-            List<String> dataList = Arrays.asList(line.split(","));
-            if (i == 2 && line.length() == 0) {
-                dataList.add("");
+            if (i == 2 && line.length() == 4) {
+                Log.d(getString(R.string.TAG), "Special line " + line);
+                line = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.personality-insights.com%2Fdefault-profile-pic%2F&psig=AOvVaw2KMGmheuzDe_o8IwG6uQVu&ust=1647157222562000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCOCHmPuIwPYCFQAAAAAdAAAAABAD" + line;
             }
+            List<String> dataList = Arrays.asList(line.split(","));
+            Log.d(getString(R.string.TAG), "SIZE: " + dataList.size());
             data.add(dataList);
         }
-        Log.d(getString(R.string.TAG), data.get(0).get(0) + ", " + data.get(1).get(0) + ", " + data.get(2).get(0));
+        Log.d(getString(R.string.TAG), "User: " + data.get(0).get(0) + ", " + data.get(1).get(0) + ", " + data.get(2).get(0));
         User user = db.userDao().get(data.get(0).get(0)) == null ? new User(data.get(0).get(0), data.get(1).get(0), data.get(2).get(0)) : db.userDao().get(data.get(0).get(0));
         List<Course> courses = new ArrayList<>();
         for (int i = 3; i < data.size(); i++) {
