@@ -22,7 +22,7 @@ public class MockNearbyMessageActivity extends AppCompatActivity {
     public void onEnterMockNearbyMessageButtonClicked(View view) {
         TextView mockUserTextView = findViewById(R.id.userDetailMockNearbyMessageEditText);
 
-        MockNearbyMessageListener.addMessage(mockUserTextView.getText().toString());
+        MainActivity.mockMessageListener.addMessage(mockUserTextView.getText().toString());
         mockUserTextView.setText("");
 
         Toast.makeText(this, R.string.toast_add_mock_user, Toast.LENGTH_SHORT).show();

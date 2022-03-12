@@ -42,6 +42,7 @@ import java.util.UUID;
 public class MainActivity extends AppCompatActivity {
     public static Message message;
     public static Message newMessage;
+    public static MockNearbyMessageListener mockMessageListener;
     public String USER_ID;
     private AppDatabase db;
     private Map<Integer, String> quarterMap;
@@ -50,11 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private Map<Integer, String> quarterCodeMap;
     private Map<Double, String> classSizeMap;
     private MessageListener messageListener;
-    private MockNearbyMessageListener mockMessageListener;
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private Session session;
-    private UserPriorityAssigner priorityAssigner;
     private UsersViewAdapter usersViewAdapter;
 
     @Override
@@ -69,13 +68,11 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("UUID", UUID.randomUUID().toString());
             editor.apply();
         }
-
         this.USER_ID = preferences.getString("UUID", null);
         Log.d(getString(R.string.TAG), "App user ID: " + this.USER_ID);
 
         db = AppDatabase.singleton(this);
 
-        // TODO: Change key value
         quarterMap = new HashMap<>();
         quarterMap.put(1, "Winter");
         quarterMap.put(3, "Spring");
@@ -83,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
         quarterMap.put(8, "Summer Session 2");
         quarterMap.put(7, "Special Summer Session");
         quarterMap.put(9, "Fall");
-
-        // TODO: Change key value
         quarterMockingMap = new HashMap<>();
         quarterMockingMap.put("WI", 1);
         quarterMockingMap.put("SP", 3);
@@ -114,33 +109,32 @@ public class MainActivity extends AppCompatActivity {
         sizeMockingMap.put("Huge", 0.06);
         sizeMockingMap.put("Gigantic", 0.03);
 
-        mockMessageListener = new MockNearbyMessageListener(new MessageListener() {
-            @Override
-            public void onFound(@NonNull Message message) {
-                Log.d(getString(R.string.TAG), "Found mock user: " + new String(message.getContent()));
-                updateDatabase(new String(message.getContent()));
-            }
-
-            @Override
-            public void onLost(@NonNull Message message) {
-                Log.d(getString(R.string.TAG), "Lost user: " + new String(message.getContent()));
-            }
-
-        });
         messageListener = new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
-                Log.d(getString(R.string.TAG), "Message found");
+                Log.d(getString(R.string.TAG), "Message found: " + new String(message.getContent()));
                 updateDatabase(new String(message.getContent()));
             }
 
             @Override
             public void onLost(@NonNull Message message) {
-                Log.d(getString(R.string.TAG), "Lost user: " + new String(message.getContent()));
+                Log.d(getString(R.string.TAG), "Message lost: " + new String(message.getContent()));
             }
         };
+        mockMessageListener = new MockNearbyMessageListener(new MessageListener() {
+            @Override
+            public void onFound(@NonNull Message message) {
+                Log.d(getString(R.string.TAG), "Mock message found: " + new String(message.getContent()));
+                updateDatabase(new String(message.getContent()));
+            }
 
-        priorityAssigner = new SharedClassesPriorityAssigner();
+            @Override
+            public void onLost(@NonNull Message message) {
+                Log.d(getString(R.string.TAG), "Mock message lost: " + new String(message.getContent()));
+            }
+        });
+
+        ((TextView) findViewById(R.id.UUIDMainTextView)).setText("UUID: " + this.USER_ID);
 
         ArrayList<CharSequence> filterList = new ArrayList<>();
         for (String filter : getResources().getStringArray(R.array.filter_type)) {
@@ -149,8 +143,6 @@ public class MainActivity extends AppCompatActivity {
         for (Session session : db.sessionDao().getAll()) {
             filterList.add("Session: " + session.getName());
         }
-
-        ((TextView) findViewById(R.id.UUIDMainTextView)).setText("UUID: " + this.USER_ID);
 
         EditText sessionNameEditText = findViewById(R.id.sessionNameMainEditText);
         Button editSaveSessionNameButton = findViewById(R.id.editSaveSessionNameMainButton);
@@ -189,12 +181,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
-            mockMessageListener.start();
             publish();
             Nearby.getMessagesClient(this).subscribe(messageListener);
         }
-
-        //updateRecyclerView(); // Need to confirm that this goes here instead of other Lifecycle
     }
 
     @Override
@@ -223,13 +212,12 @@ public class MainActivity extends AppCompatActivity {
 
             this.message = new Message(message.getBytes());
             this.newMessage = new Message(newMessage.getBytes());
-            //updateRecyclerView();
         }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
 
         if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
             Log.d(getString(R.string.TAG), "New session " + session.getId() + " saved with default name: " + session.getName());
@@ -239,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
 //                user.addSessionId(session.getId());
 //                db.userDao().update(user);
 //            }
-            mockMessageListener.stop();
             unPublish();
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
         }
@@ -252,22 +239,20 @@ public class MainActivity extends AppCompatActivity {
             String defaultName = Utilities.getCurrentDateTime();
             db.sessionDao().insert(new Session(defaultName));
             this.session = db.sessionDao().get(defaultName);
-            Log.d(getString(R.string.TAG), "New session " + session.getId() + " saved with default name: " + session.getName());
-
-            mockMessageListener.start();
-            publish();
-            Nearby.getMessagesClient(this).subscribe(messageListener);
+            Log.d(getString(R.string.TAG), "New session " + session.getId() + " created with default name: " + session.getName());
 
             ((EditText) findViewById(R.id.sessionNameMainEditText)).setText("Session: " + defaultName, TextView.BufferType.NORMAL);
             startStopSessionButton.setText("Stop");
             findViewById(R.id.mockMessageMainButton).setVisibility(View.VISIBLE);
             ((Spinner) findViewById(R.id.sortMainSpinner)).setSelection(0);
-            updateFilterSpinner("Session: " + defaultName);
+            updateFilterSpinner(defaultName);
             findViewById(R.id.filterMainSpinner).setEnabled(false);
             updateRecyclerView();
+
+            publish();
+            Nearby.getMessagesClient(this).subscribe(messageListener);
         }
         else {
-            mockMessageListener.stop();
             unPublish();
             Nearby.getMessagesClient(this).unsubscribe(messageListener);
 
@@ -277,10 +262,9 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("Save", null);
             AlertDialog dialog = builder.create();
             dialog.setOnShowListener(dialogInterface -> {
-                Button BUTTON_POSITIVE = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 EditText newSessionNameEditText = dialog.findViewById(R.id.newSessionNameEditText);
+                Button BUTTON_POSITIVE = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
-                BUTTON_POSITIVE.setEnabled(false);
                 newSessionNameEditText.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -306,35 +290,39 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     this.session.setName(sessionName);
-                    Log.d(getString(R.string.TAG), "Session ID updating: " + this.session.getId());
+                    Log.d(getString(R.string.TAG), "New session " + this.session.getId() + " saved with name: " + session.getName());
                     db.sessionDao().update(this.session);
                     ((EditText) findViewById(R.id.sessionNameMainEditText)).setText("Session: " + this.session.getName());
 
-                    updateFilterSpinner("Session: " + this.session.getName());
+                    updateFilterSpinner(this.session.getName());
                     dialog.dismiss();
                 });
+                BUTTON_POSITIVE.setEnabled(false);
             });
             dialog.show();
 
-            startStopSessionButton.setText("Start");
             findViewById(R.id.filterMainSpinner).setEnabled(true);
             findViewById(R.id.mockMessageMainButton).setVisibility(View.INVISIBLE);
+            startStopSessionButton.setText("Start");
         }
     }
 
     public void onEditSaveSessionNameMainButtonClicked(View view) {
-        Button button = findViewById(R.id.editSaveSessionNameMainButton);
         EditText sessionNameEditText = findViewById(R.id.sessionNameMainEditText);
+        Button editSaveSessionNameButton = findViewById(R.id.editSaveSessionNameMainButton);
 
-        if (button.getText().toString().equals("Edit")) {
-            button.setText("Save");
+        if (editSaveSessionNameButton.getText().toString().equals("Edit")) {
+            if (Arrays.asList(getResources().getStringArray(R.array.filter_type)).contains(sessionNameEditText.getText().toString())) {
+                return;
+            }
+            editSaveSessionNameButton.setText("Save");
             sessionNameEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         }
         else {
-            button.setText("Edit");
+            editSaveSessionNameButton.setText("Edit");
             session.setName(sessionNameEditText.getText().toString().replaceFirst("Session: ", ""));
             db.sessionDao().update(session);
-            updateFilterSpinner(sessionNameEditText.getText().toString());
+            updateFilterSpinner(session.getName());
             /*Session updatedSession = db.sessionDao().get(currentSessionId);
             updatedSession.setName(sessionNameEditText.getText().toString());
             Log.d(getString(R.string.TAG), "Saving new name of session " + updatedSession.getName());
@@ -354,18 +342,17 @@ public class MainActivity extends AppCompatActivity {
         else {
             sortFilterLinearLayout.setVisibility(View.GONE);
 
-            boolean changeSessionNameMainEditText = true;
+            boolean changeSessionNameEditText = true;
             for (String filter : getResources().getStringArray(R.array.filter_type)) {
                 if (((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString().equals(filter)) {
-                    changeSessionNameMainEditText = false;
+                    changeSessionNameEditText = false;
                     ((EditText) findViewById(R.id.sessionNameMainEditText)).setText(filter);
                 }
             }
-            if (changeSessionNameMainEditText) {
-                EditText sessionNameMainEditText = findViewById(R.id.sessionNameMainEditText);
+            if (changeSessionNameEditText) {
                 String sessionName = ((Spinner) findViewById(R.id.filterMainSpinner)).getSelectedItem().toString();
                 session = db.sessionDao().get(sessionName.replaceFirst("Session: ", ""));
-                sessionNameMainEditText.setText(sessionName, TextView.BufferType.NORMAL);
+                ((EditText) findViewById(R.id.sessionNameMainEditText)).setText(sessionName, TextView.BufferType.NORMAL);
             }
             updateRecyclerView();
         }
@@ -390,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
 
         int position = 0;
         for (int i = 0; i < filterList.size(); i++) {
-            if (filterList.get(i).equals(selection)) {
+            if (filterList.get(i).equals("Session: " + selection)) {
                 position = i;
             }
         }
@@ -447,11 +434,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void publish() {
-        String newMessage = new String(this.newMessage.getContent());
-
         unPublish();
-        String message = new String(this.message.getContent()) + newMessage;
-        newMessage = "";
+        String message = new String(this.message.getContent()) + new String(this.newMessage.getContent());
+        String newMessage = "";
         Log.i(getString(R.string.TAG), "Publishing message: " + message);
         this.message = new Message(message.getBytes());
         this.newMessage = new Message(newMessage.getBytes());
@@ -487,8 +472,8 @@ public class MainActivity extends AppCompatActivity {
             case "Favorite":
                 return db.userDao().getFavorite(true);
             default:
-                this.session = db.sessionDao().get(filter.replaceFirst("Session: ", ""));
-                Log.d(getString(R.string.TAG), "Showing users in session " + this.session.getId() + ": " + this.session.getName());
+                Session session = db.sessionDao().get(filter.replaceFirst("Session: ", ""));
+                Log.d(getString(R.string.TAG), "Showing users in session " + session.getId() + ": " + session.getName());
                 return getUsersInSession(session.getId());
         }
     }
@@ -503,8 +488,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<UserPriority> sortUsers(List<User> users, String sort) {
         List<UserPriority> usersPriorities = new ArrayList<>();
-        PriorityQueue<UserPriority> userPrioritiesPQ = new PriorityQueue<>();
-        for (User user : users) {
+        PriorityQueue<UserPriority> usersPrioritiesPQ = new PriorityQueue<>();
+        /*for (User user : users) {
             double priority = 0;
             int sharedClasses = getSharedClasses(user);
             switch (sort) {
@@ -528,18 +513,55 @@ public class MainActivity extends AppCompatActivity {
                     priority = sharedClasses;
             }
             Log.d(getString(R.string.TAG), "User " + user.getName() + "with priority " + priority);
-            userPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
+            usersPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
+        }*/
+        switch (sort) {
+            case "Course Recency":
+                for (User user : users) {
+                    double priority = 0;
+                    int sharedClasses = getSharedClasses(user);
+                    String[] currentQuarterYear = Utilities.getCurrentQuarterYear();
+                    for (Course course : db.courseDao().getForUser(user.getId())) {
+                        if (db.courseDao().getForUser(USER_ID).contains(course)) {
+                            int age = Utilities.getCourseAge(Integer.toString(course.getYear()), quarterMap.get(course.getQuarter()).toLowerCase(), currentQuarterYear[1], currentQuarterYear[0]);
+                            age = 5 - age;
+                            if (age < 1) {
+                                age = 1;
+                            }
+                            priority += age;
+                        }
+                    }
+                    usersPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
+                }
+                break;
+            case "Course Size":
+                for (User user : users) {
+                    double priority = 0;
+                    int sharedClasses = getSharedClasses(user);
+                    for (Course course : db.courseDao().getForUser(user.getId())) {
+                        if (db.courseDao().getForUser(USER_ID).contains(course)) {
+                            priority += course.getSize();
+                        }
+                    }
+                    usersPrioritiesPQ.add(new UserPriority(user, priority, sharedClasses));
+                }
+                break;
+            default:
+                for (User user : users) {
+                    int sharedClasses = getSharedClasses(user);
+                    usersPrioritiesPQ.add(new UserPriority(user, sharedClasses, sharedClasses));
+                }
+                break;
         }
-        while (!userPrioritiesPQ.isEmpty()) {
-            usersPriorities.add(userPrioritiesPQ.poll());
+        while (!usersPrioritiesPQ.isEmpty()) {
+            usersPriorities.add(usersPrioritiesPQ.poll());
         }
         List<UserPriority> wavedUsers = new ArrayList<>();
         for (int i = 0; i < usersPriorities.size(); i++) {
             UserPriority userPriority = usersPriorities.get(i);
-            if (userPriority.getUser().isWave()) {
+            if (userPriority.getUser().isReceivedWave()) {
                 wavedUsers.add(userPriority);
-                usersPriorities.remove(i);
-                i--;
+                usersPriorities.remove(i--);
             }
         }
         usersPriorities.addAll(0, wavedUsers);
@@ -548,7 +570,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int getSharedClasses(User user) {
         int sharedClasses = 0;
-        for (Course course : db.courseDao().getForUser(getSharedPreferences(getString(R.string.TAG), MODE_PRIVATE).getString("UUID", null))) {
+        for (Course course : db.courseDao().getForUser(USER_ID)) {
             for (Course userCourse : db.courseDao().getForUser(user.getId())) {
                 if (course.equals(userCourse)) {
                     sharedClasses++;
