@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView usersRecyclerView;
     private RecyclerView.LayoutManager usersLayoutManager;
     private Session session;
-    private String sessionName;
-    private int currentSessionId;
     private UserPriorityAssigner priorityAssigner;
     private UsersViewAdapter usersViewAdapter;
 
@@ -74,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.USER_ID = preferences.getString("UUID", null);
         Log.d(getString(R.string.TAG), "App user ID: " + this.USER_ID);
-        this.currentSessionId = -1;
 
         db = AppDatabase.singleton(this);
 
@@ -152,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
         for (Session session : db.sessionDao().getAll()) {
             filterList.add("Session: " + session.getName());
         }
-
-        this.currentSessionId = 0;
 
         ((TextView) findViewById(R.id.UUIDMainTextView)).setText("UUID: " + this.USER_ID);
 
@@ -257,18 +252,17 @@ public class MainActivity extends AppCompatActivity {
             String defaultName = Utilities.getCurrentDateTime();
             db.sessionDao().insert(new Session(defaultName));
             this.session = db.sessionDao().get(defaultName);
-            this.currentSessionId = session.getId();
             Log.d(getString(R.string.TAG), "New session " + session.getId() + " saved with default name: " + session.getName());
 
             mockMessageListener.start();
             publish();
             Nearby.getMessagesClient(this).subscribe(messageListener);
 
-            ((EditText) findViewById(R.id.sessionNameMainEditText)).setText(defaultName, TextView.BufferType.NORMAL);
+            ((EditText) findViewById(R.id.sessionNameMainEditText)).setText("Session: " + defaultName, TextView.BufferType.NORMAL);
             startStopSessionButton.setText("Stop");
             findViewById(R.id.mockMessageMainButton).setVisibility(View.VISIBLE);
             ((Spinner) findViewById(R.id.sortMainSpinner)).setSelection(0);
-            updateFilterSpinner(defaultName);
+            updateFilterSpinner("Session: " + defaultName);
             findViewById(R.id.filterMainSpinner).setEnabled(false);
             updateRecyclerView();
         }
@@ -312,13 +306,11 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     this.session.setName(sessionName);
-                    Log.d(getString(R.string.TAG), "Current session ID: " + currentSessionId);
                     Log.d(getString(R.string.TAG), "Session ID updating: " + this.session.getId());
-                    Log.d(getString(R.string.TAG), "Name in db: " + db.sessionDao().get(currentSessionId).getName());
                     db.sessionDao().update(this.session);
-                    Log.d(getString(R.string.TAG), "Name in db: " + db.sessionDao().get(currentSessionId).getName());
                     ((EditText) findViewById(R.id.sessionNameMainEditText)).setText("Session: " + this.session.getName());
 
+                    updateFilterSpinner("Session: " + this.session.getName());
                     dialog.dismiss();
                 });
             });
@@ -341,15 +333,16 @@ public class MainActivity extends AppCompatActivity {
         else {
             button.setText("Edit");
             session.setName(sessionNameEditText.getText().toString().replaceFirst("Session: ", ""));
-            updateFilterSpinner(sessionNameEditText.getText().toString().replaceFirst("Session: ", ""));
             db.sessionDao().update(session);
+            updateFilterSpinner(sessionNameEditText.getText().toString());
             /*Session updatedSession = db.sessionDao().get(currentSessionId);
             updatedSession.setName(sessionNameEditText.getText().toString());
             Log.d(getString(R.string.TAG), "Saving new name of session " + updatedSession.getName());
             Log.d(getString(R.string.TAG), "Saving new name of session " + updatedSession.getId());
             db.sessionDao().update(updatedSession);
             Log.d(getString(R.string.TAG), "New name in database: " + db.sessionDao().get(currentSessionId).getName());
-*/            sessionNameEditText.setInputType(0);
+*/
+            sessionNameEditText.setInputType(0);
         }
     }
 
@@ -397,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
         int position = 0;
         for (int i = 0; i < filterList.size(); i++) {
-            if (filterList.get(position).equals(selection)) {
+            if (filterList.get(i).equals(selection)) {
                 position = i;
             }
         }
@@ -436,11 +429,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (db.userDao().get(user.getId()) == null) {
-            user.addSessionId(currentSessionId);
+            user.addSessionId(session.getId());
             db.userDao().insert(user);
         }
         else {
-            user.addSessionId(currentSessionId);
+            user.addSessionId(session.getId());
             db.userDao().update(user);
             Log.d(getString(R.string.TAG), "Session ids for user " + user.getName() + ", " + user.getId() + ": " + user.getSessionIds().toString());
         }
@@ -450,7 +443,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("`Stop`")) {
+        if (((Button) findViewById(R.id.startStopSessionMainButton)).getText().toString().equals("Stop")) {
             updateRecyclerView();
         }
     }
@@ -490,26 +483,16 @@ public class MainActivity extends AppCompatActivity {
     private List<User> filterUsers(String filter) {
         switch (filter) {
             case "None":
-                List<User> users = getUsersInSession(currentSessionId);
-                //users.remove(new User(USER_ID, "", ""));
+                List<User> users = db.userDao().getAll();
+                users.remove(new User(USER_ID, "", ""));
                 return users;
             case "Favorite":
                 return db.userDao().getFavorite(true);
             default:
-                Session currentSession = db.sessionDao().get(filter.replaceFirst("Session: ", ""));
-                Log.d(getString(R.string.TAG), "Showing users in session " + currentSession.getId() + ": " + currentSession.getName());
-                this.currentSessionId = currentSession.getId();
-                return getUsersInSession(currentSessionId);
+                this.session = db.sessionDao().get(filter.replaceFirst("Session: ", ""));
+                Log.d(getString(R.string.TAG), "Showing users in session " + this.session.getId() + ": " + this.session.getName());
+                return db.sessionDao().getUsersInSession(session.getId());
         }
-    }
-
-    private List<User> getUsersInSession(int sessionId) {
-        List<User> users = new ArrayList<>();
-        for (User user : db.userDao().getAll()) {
-            if (user.getSessionIds().contains(sessionId))
-                users.add(user);
-        }
-        return users;
     }
 
     private List<UserPriority> sortUsers(List<User> users, String sort) {
