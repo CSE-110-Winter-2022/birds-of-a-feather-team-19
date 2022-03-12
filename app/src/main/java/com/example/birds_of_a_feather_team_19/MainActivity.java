@@ -445,7 +445,7 @@ public class MainActivity extends AppCompatActivity {
                 case "Course Recency":
                     for (Course course : db.courseDao().getForUser(user.getId())) {
                         String[] currentQuarterYear = Utilities.getCurrentQuarterYear();
-                        int age = Utilities.getCourseAge(Integer.toString(course.getYear()), quarterMap.get(course.getQuarter()).toLowerCase(), currentQuarterYear[1], currentQuarterYear[2]);
+                        int age = Utilities.getCourseAge(Integer.toString(course.getYear()), quarterMap.get(course.getQuarter()).toLowerCase(), currentQuarterYear[1], currentQuarterYear[0]);
                         age = 5 - age;
                         if (age < 1) {
                             age = 1;
